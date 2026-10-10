@@ -1,0 +1,148 @@
+<!doctype html>
+
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>La Liga Analytics 2026–27</title>
+
+<style>
+
+:root{color-scheme:dark;--bg:#091321;--panel:#14243a;--line:#30445d;--txt:#f1f7ff;--muted:#aabbd0;--blue:#43baf6;--orange:#ffad70;--green:#5ee0ae}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px system-ui,Segoe UI,Arial,sans-serif}header,main{max-width:1450px;margin:auto;padding:22px}header{padding-bottom:8px}h1{margin:0;font-size:28px}h2{font-size:19px;margin:0 0 16px}p{line-height:1.55}.muted,.hint{color:var(--muted)}.hint{font-size:12px}.tabs,.controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}.tabs button{width:auto}.tabs button.active{background:#147bb5;border-color:#42bafa}.panel,.tile{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:18px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.tile span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}.tile strong{font-size:27px}.controls label{display:flex;flex-direction:column;gap:6px;min-width:170px;color:var(--muted);font-size:12px}select,input,button{background:#223651;color:var(--txt);border:1px solid #48627e;border-radius:8px;padding:11px;font:inherit}button{cursor:pointer;background:#176a9b}button:hover{border-color:var(--blue)}input{min-width:230px}.scroll{overflow:auto;max-height:650px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);position:sticky;top:0;background:var(--panel)}.hidden{display:none}.error{color:#ffb7b7}.good{color:var(--green)}.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bars{display:flex;gap:4px;height:10px;min-width:115px}.bars div{border-radius:3px}.bar1{background:var(--blue)}.bar2{background:var(--orange)}.rank{display:grid;grid-template-columns:minmax(105px,190px) 1fr 66px;gap:10px;align-items:center;margin:9px 0}.track{height:13px;background:#263b53;border-radius:4px;overflow:hidden}.fill{height:100%;background:var(--blue)}.right{text-align:right}.status{margin-bottom:18px;color:var(--muted)}@media(max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}}@media(max-width:520px){header,main{padding:13px}.tiles{grid-template-columns:1fr 1fr}.tile strong{font-size:21px}.controls label{flex:1;min-width:145px}.rank{grid-template-columns:105px 1fr 55px}}
+
+.site-logo {
+
+  width: 45px;
+
+  height: 45px;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+
+}
+
+
+
+.site-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 35px;
+
+}
+
+.site-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-logo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-fury {
+  color: #ffffff;
+}
+
+.brand-sports {
+  color: #43baf6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<header>
+  <h1 class="site-title">
+    <img src="fury-icon.png" alt="FurySports Logo" class="site-logo">
+    <span>
+      <span class="brand-fury">FURY</span><span class="brand-sports">SPORTS ANALYTICS</span>
+    </span>
+  </h1>
+  <p class="hint">La Liga 2026–27: Sports Analytics & Betting Analysis</p>
+</header>
+
+<main><div id="loadStatus" class="status" role="status">Loading your local JSON data...</div>
+
+<nav class="tabs" aria-label="Dashboard sections"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button></nav>
+
+<section id="teamsTab">
+
+<div class="panel"><div class="controls"><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option></select></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% is a full-season match hit rate.</p></div>
+
+<div class="tiles"><div class="tile"><span>Teams</span><strong id="teamCount">—</strong></div><div class="tile"><span>Corners for / game</span><strong id="teamCorners">—</strong></div><div class="tile"><span>Shots for / game</span><strong id="teamShots">—</strong></div><div class="tile"><span>Goals for / game</span><strong id="teamGoals">—</strong></div></div>
+
+<div class="panel"><h2>Team ranking</h2><div id="teamRanking"></div></div><div class="panel"><h2>Team statistics</h2><div class="scroll"><table><thead><tr><th>Team</th><th>Matches</th><th>Corners for</th><th>Corners against</th><th>Shots for</th><th>Shots against</th><th>SOT for</th><th>SOT against</th><th>Goals for</th><th>Goals against</th><th>Over 9.5 corners (season)</th></tr></thead><tbody id="teamRows"></tbody></table></div></div></section>
+
+<section id="playersTab" class="hidden"><div class="panel"><div class="controls"><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label></div></div>
+
+<div class="tiles"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
+
+<div class="panel"><h2>Top players</h2><div id="playerRanking"></div></div><div class="panel"><h2>Player statistics and recent shot trends</h2><div class="scroll"><table><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 over 1.5 shots</th></tr></thead><tbody id="playerRows"></tbody></table></div><p class="hint">Recent hit rates come from your player recent-form JSON. Season shots / 90 uses recorded minutes.</p></div></section>
+
+<section id="matchTab" class="hidden"><div class="panel"><h2>Advanced Match Analyzer</h2><div class="controls"><label>Home team<select id="homeTeam"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p id="matchStatus" class="hint"></p></div>
+
+<div class="tiles"><div class="tile"><span>Estimated total goals</span><strong id="matchGoals">—</strong></div><div class="tile"><span>Estimated total corners</span><strong id="matchCorners">—</strong></div><div class="tile"><span>Estimated total shots</span><strong id="matchShots">—</strong></div><div class="tile"><span>Estimated total SOT</span><strong id="matchSot">—</strong></div></div>
+
+<div class="panel"><h2>Attacking vs. defensive matchup</h2><div class="scroll"><table><thead><tr><th>Metric</th><th id="homeHead">Home</th><th id="awayHead">Away</th><th>Estimated total</th><th>Comparison</th></tr></thead><tbody id="matchComparison"></tbody></table></div><p class="hint">Each team's baseline = average of its own for-per-game and the opponent's against-per-game, using the selected home/away samples. Not a calibrated forecast.</p></div>
+
+<div class="panel"><h2>Historical betting-market hit rates</h2><div class="scroll"><table><thead><tr><th>Market</th><th id="homeRateHead">Home</th><th id="awayRateHead">Away</th></tr></thead><tbody id="matchRates"></tbody></table></div><p class="hint">Rates describe each team's sampled games, not the probability of the upcoming matchup. Sample sizes are shown.</p></div>
+
+<div class="split"><div class="panel"><h2 id="homeHistoryHead">Home results</h2><div class="scroll"><table><thead><tr><th>Date</th><th>Opponent</th><th>Score</th><th>Shots</th><th>SOT</th><th>Corners</th></tr></thead><tbody id="homeHistory"></tbody></table></div></div><div class="panel"><h2 id="awayHistoryHead">Away results</h2><div class="scroll"><table><thead><tr><th>Date</th><th>Opponent</th><th>Score</th><th>Shots</th><th>SOT</th><th>Corners</th></tr></thead><tbody id="awayHistory"></tbody></table></div></div></div>
+
+</section><p class="hint">Data: your local files. These are descriptive statistics; betting decisions also require reliable odds, lineups, opponent strength, and backtesting.</p></main>
+
+<script>
+
+'use strict';
+
+const $=id=>document.getElementById(id);let teams=[],players=[],matches=[],recent=[];
+
+function n(v){if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
+
+function f(v,d=2){const x=n(v);return x===null?'N/A':x.toFixed(d)}
+
+function avg(rows,key){const vals=rows.map(r=>n(r[key])).filter(v=>v!==null);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
+
+function sum(rows,key){return rows.reduce((a,r)=>a+(n(r[key])??0),0)}
+
+function cell(tr,v){const td=document.createElement('td');td.textContent=String(v??'—');tr.appendChild(td);return td}
+
+function row(body,values){const tr=document.createElement('tr');values.forEach(v=>cell(tr,v));body.appendChild(tr);return tr}
+
+function option(select,value){const o=document.createElement('option');o.value=value;o.textContent=value;select.appendChild(o)}
+
+function ranking(container,items,key,label){container.replaceChildren();const valid=items.filter(x=>n(x[key])!==null).slice(0,20);const max=Math.max(1,...valid.map(x=>n(x[key])));valid.forEach(item=>{const r=document.createElement('div');r.className='rank';const name=document.createElement('span');name.textContent=item[label];const track=document.createElement('div');track.className='track';const bar=document.createElement('div');bar.className='fill';bar.style.width=(100*n(item[key])/max)+'%';track.appendChild(bar);const val=document.createElement('span');val.className='right';val.textContent=f(item[key]);r.append(name,track,val);container.appendChild(r)})}
+
+function showTab(name){['teams','players','match'].forEach(t=>{$(t+'Tab').classList.toggle('hidden',t!==name);document.querySelector('[data-tab="'+t+'"]').classList.toggle('active',t===name)});if(name==='teams')renderTeams();if(name==='players')renderPlayers();if(name==='match')analyze()}
+
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+
+function renderTeams(){if(!teams.length)return;const filter=$('teamFilter').value,p=$('teamPeriod').value,m=$('teamMetric').value;const selected=teams.filter(r=>!filter||r.team===filter);$('teamCount').textContent=selected.length;function meanMetric(metric){const k=metric+'_for_'+p;if(p!=='avg')return avg(selected,k);const total=selected.reduce((a,r)=>a+(n(r[k])??0)*(n(r.matches)??0),0),games=sum(selected,'matches');return games?total/games:null}$('teamCorners').textContent=f(meanMetric('corners'));$('teamShots').textContent=f(meanMetric('shots'));$('teamGoals').textContent=f(meanMetric('goals'));const sorted=[...selected].sort((a,b)=>(n(b[m+'_for_'+p])??-1)-(n(a[m+'_for_'+p])??-1));ranking($('teamRanking'),sorted,m+'_for_'+p,'team');$('teamRows').replaceChildren();sorted.forEach(r=>row($('teamRows'),[r.team,r.matches,f(r['corners_for_'+p]),f(r['corners_against_'+p]),f(r['shots_for_'+p]),f(r['shots_against_'+p]),f(r['shots_on_target_for_'+p]),f(r['shots_on_target_against_'+p]),f(r['goals_for_'+p]),f(r['goals_against_'+p]),n(r['corners_over_9.5_pct'])===null?'N/A':f(r['corners_over_9.5_pct'],1)+'%']))}
+
+function renderPlayers(){if(!players.length)return;const filter=$('playerTeam').value,q=$('playerSearch').value.trim().toLowerCase(),sort=$('playerSort').value,p=$('playerPeriod').value;const found=players.filter(r=>(!filter||r.team===filter)&&String(r.player||'').toLowerCase().includes(q)).sort((a,b)=>(n(b[sort])??-1)-(n(a[sort])??-1));$('playerCount').textContent=found.length;$('playerShots').textContent=sum(found,'shots');$('playerGoals').textContent=sum(found,'goals');$('playerXg').textContent=f(sum(found,'xg'));ranking($('playerRanking'),found,sort,'player');$('recentShotsHead').textContent=p+' shots / game';$('recentHitHead').textContent=p+' over 1.5 shots';$('playerRows').replaceChildren();found.forEach(r=>{const rf=recent.find(x=>x.Team===r.team&&x.Player===r.player)||{};const minutes=n(r.minutes);row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',f(rf[p+'_Shots_Avg']),n(rf[p+'_Over_1.5_Shots'])===null?'N/A':f(rf[p+'_Over_1.5_Shots'],1)+'%'])})}
+
+function venueGames(team,venue,count){const found=matches.filter(r=>r.team===team&&r.venue===venue).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date));return count?found.slice(0,count):found}
+
+function hit(rows,keys,test){const valid=rows.filter(r=>keys.every(k=>n(r[k])!==null));if(!valid.length)return 'N/A';const wins=valid.filter(test).length;return (100*wins/valid.length).toFixed(1)+'% ('+wins+'/'+valid.length+')'}
+
+function history(id,rows){$(id).replaceChildren();rows.forEach(r=>row($(id),[String(r.date||'').slice(0,10),r.opponent,r.goals_for+'–'+r.goals_against,r.shots_for,r.shots_on_target_for,r.corners_for]))}
+
+function analyze(){if(!matches.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';$('homeHistoryHead').textContent=home+' — home results';$('awayHistoryHead').textContent=away+' — away results';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));history('homeHistory',h);history('awayHistory',a)}
+
+async function load(file){const response=await fetch('./'+file,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);return response.json()}
+
+async function init(){const failures=[];try{const t=await load('laliga_team_metrics.json');if(!Array.isArray(t))throw new Error('Expected array');teams=t;[...new Set(teams.map(r=>r.team).filter(Boolean))].sort().forEach(x=>option($('teamFilter'),x));['teamFilter','teamPeriod','teamMetric'].forEach(id=>$(id).addEventListener('change',renderTeams));renderTeams()}catch(e){failures.push('Teams: '+e.message)}try{const d=await load('laliga_data.json');if(!Array.isArray(d.season))throw new Error('Missing season array');players=d.season;recent=Array.isArray(d.recent)?d.recent:[];[...new Set(players.map(r=>r.team).filter(Boolean))].sort().forEach(x=>option($('playerTeam'),x));['playerTeam','playerSort','playerPeriod'].forEach(id=>$(id).addEventListener('change',renderPlayers));$('playerSearch').addEventListener('input',renderPlayers);renderPlayers()}catch(e){failures.push('Players: '+e.message)}try{const d=await load('laliga_team_matches.json');if(!Array.isArray(d))throw new Error('Expected array');matches=d;const names=[...new Set(matches.map(r=>r.team).filter(Boolean))].sort();names.forEach(x=>{option($('homeTeam'),x);option($('awayTeam'),x)});if(names.length>1)$('awayTeam').selectedIndex=1;['homeTeam','awayTeam','matchPeriod'].forEach(id=>$(id).addEventListener('change',analyze));$('analyzeButton').addEventListener('click',analyze);analyze()}catch(e){failures.push('Match analysis: '+e.message)}$('loadStatus').textContent=failures.length?'Some files could not load: '+failures.join(' | ')+' · Serve this folder using python -m http.server 8000 and open http\://127.0.0.1:8000/index.html':'Loaded '+teams.length+' teams · '+players.length+' players · '+matches.length+' team-match records';$('loadStatus').className=failures.length?'status error':'status good'}
+
+init();
+
+</script></body></html>
