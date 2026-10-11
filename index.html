@@ -155,6 +155,41 @@
 
 
 .league-switch{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);padding:16px 20px;border-radius:13px;margin-bottom:18px}.league-switch label{font-weight:800;letter-spacing:1.5px;color:var(--muted);font-size:12px}.league-switch select{min-width:245px;border-color:var(--blue)}
+
+/* Sportsbook-inspired projection layout */
+.projection{background:linear-gradient(125deg,#1d2429,#151820 60%,#14181e);border:1px solid #303944;border-radius:18px;padding:22px;margin-bottom:18px;color:#f5f7fc}
+.projection *{box-sizing:border-box}
+.projection-topline{display:flex;justify-content:space-between;gap:12px;color:#92abc3;font-size:12px;margin-bottom:20px}
+.projection-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,2fr) minmax(0,1fr);align-items:center;gap:12px;margin:12px 0 28px}
+.projection-side{display:flex;flex-direction:column;gap:7px;align-items:flex-start;min-width:0}
+.projection-side:last-child{align-items:flex-end;text-align:right}
+.projection-team-icon{width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:#20313c;border:1px solid #32556a;color:#b7edfa;font-size:23px;font-weight:900;box-shadow:0 0 18px #00c6b524}
+.projection-name{font-weight:800;font-size:clamp(13px,2vw,18px);overflow-wrap:anywhere}
+.projection-center{text-align:center}
+.projection-total{color:#8396ac;font-size:13px;margin-bottom:4px}
+.projection-numbers{font-size:clamp(28px,5vw,54px);font-weight:850;letter-spacing:.4px;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.projection-numbers .dash{color:#8594a5;font-size:.7em;font-weight:400}
+.projection-caption{color:#2ce7a5;font-size:clamp(13px,2vw,19px);margin-top:6px}
+.projection-scoreline{font-size:12px;color:#a0b3c5;margin-top:9px}
+.projection-market{background:#171b22;border-radius:16px;padding:17px;margin:11px 0}
+.projection-market-title{color:#9daec1;margin-bottom:9px;font-size:13px}
+.projection-market-labels{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:clamp(12px,1.9vw,17px);font-weight:800;margin-bottom:13px}
+.projection-market-labels span:last-child{text-align:right}
+.projection-market-labels.three span:nth-child(2){text-align:center}
+.projection-bar{display:flex;overflow:hidden;border-radius:20px;height:9px;background:#263b53}
+.projection-bar>div{height:100%;transition:width .35s ease}
+.projection-odds-title{text-align:center;color:#74899f;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin:22px 0 12px}
+.projection-odds-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;text-align:center}
+.projection-odds-grid>div{min-width:0}
+.projection-odds-grid small{display:block;color:#96a8bb;font-size:12px;margin-bottom:8px}
+.projection-odds-grid strong{font-size:clamp(14px,2.5vw,21px)}
+.projection-sub{color:#93a9be;font-size:12px;margin-top:14px;line-height:1.5}
+.projection-foot{border-top:1px solid #303944;margin-top:20px;padding-top:14px}
+.projection-corners-hero{text-align:center;padding:14px 10px 18px;border-top:1px solid #303944;margin-top:14px}.projection-corners-hero>span{display:block;color:#91a5bb;font-size:12px;letter-spacing:1.8px}.projection-corners-hero strong{display:block;font-size:clamp(28px,4vw,40px);margin:5px 0;color:#f7fafc;font-variant-numeric:tabular-nums}.projection-corners-hero em{color:#8392a5;font-style:normal;font-weight:400}.projection-corners-hero small{color:#46dfb1;font-size:13px}.projection-corners-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.projection-corners-title label{white-space:nowrap}.projection-corners-title select{background:#27303d;color:#f7fafc;border:1px solid #46566a;border-radius:7px;padding:4px}
+@media(max-width:520px){.projection{padding:12px}.projection-hero{grid-template-columns:minmax(0,1fr) minmax(135px,2fr) minmax(0,1fr);gap:5px}.projection-team-icon{width:38px;height:38px;font-size:18px}.projection-market{padding:13px}.projection-market-labels{font-size:12px}.projection-odds-grid{gap:5px}}
+
+/* Interactive player game log */
+.player-detail{background:#151b25;border:1px solid #303c4c;border-radius:16px;padding:20px;margin:0 0 18px}.player-detail.hidden{display:none}.pd-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.pd-header h2{margin:0}.pd-filters{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.pd-filters label{display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:12px}.pd-filters select{min-width:130px}.pd-kpis{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:16px 0}.pd-hit{font-size:30px;font-weight:800;color:#16dc85}.pd-chart{display:flex;align-items:end;gap:8px;min-height:235px;border-bottom:1px solid #344254;padding:18px 5px 0;overflow-x:auto}.pd-chart-track{position:relative;display:flex;align-items:flex-end;gap:8px;min-width:100%;height:210px}.pd-average-line{position:absolute;left:0;right:0;border-top:2px dashed #ffca63;z-index:3;pointer-events:none}.pd-average-label{position:absolute;right:0;top:0;background:#ffca63;color:#19212c;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:800;white-space:nowrap;transform:translateY(-2px)}.pd-col{flex:1 0 42px;min-width:42px;max-width:115px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:210px}.pd-bar{width:75%;border-radius:5px 5px 0 0;min-height:3px}.pd-value{font-size:12px;font-weight:700}.pd-label{font-size:10px;color:var(--muted);white-space:nowrap}.pd-table{margin-top:18px}.pd-table th{background:#202a37}.pd-player-link{background:none;border:0;padding:0;color:#73cfff;font:inherit;text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.pd-empty{padding:25px;color:var(--muted);text-align:center}@media(max-width:600px){.player-detail{padding:12px}.pd-filters label{flex:1 1 120px}.pd-chart{gap:4px}}
 </style>
 
 
@@ -215,6 +250,13 @@
 
 
 
+<div id="playerDetail" class="player-detail hidden">
+  <div class="pd-header"><div><div class="hint">FURYSPORTS AI · PLAYER GAME LOG</div><h2 id="pdName">Player</h2><div id="pdTeam" class="hint"></div></div><button id="pdClose" type="button">✕ Close player</button></div>
+  <div class="pd-filters"><label>Statistic<select id="pdStat"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="assists">Assists</option></select></label><label>Line<select id="pdLine"></select></label><label>Games<select id="pdGames"><option value="5">Last 5</option><option value="10" selected>Last 10</option><option value="0">All available</option></select></label><label>Venue<select id="pdVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label></div>
+  <div id="pdSummary" class="pd-kpis"></div><div id="pdChart" class="pd-chart"></div><div id="pdMessage" class="hint"></div>
+  <div class="scroll pd-table"><table><thead><tr><th>Date</th><th>Opponent / Match</th><th>Venue</th><th>Minutes</th><th>Shots</th><th>Goals</th><th>xG</th><th>Selected stat</th><th>Over line?</th></tr></thead><tbody id="pdRows"></tbody></table></div>
+</div>
+
 <div class="tiles"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
 
 
@@ -226,6 +268,24 @@
 <section id="matchTab" class="hidden"><div class="panel"><h2>Advanced Match Analyzer</h2><div class="controls"><label>Home team<select id="homeTeam"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p id="matchStatus" class="hint"></p></div>
 
 
+
+
+<div id="projectionPanel" class="projection" aria-live="polite">
+  <div class="projection-topline"><span>◷ FURYSPORTS AI · MATCH PROJECTION</span><span>◉ Poisson model</span></div>
+  <div class="projection-hero">
+    <div class="projection-side"><div id="projectionHomeIcon" class="projection-team-icon">H</div><div id="projectionHome" class="projection-name">Home</div></div>
+    <div class="projection-center"><div id="projectionTotal" class="projection-total">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div id="projectionScoreline" class="projection-scoreline">Most likely score: —</div></div>
+    <div class="projection-side"><div id="projectionAwayIcon" class="projection-team-icon">A</div><div id="projectionAway" class="projection-name">Away</div></div>
+  </div>
+  <div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
+  <div id="projectionCornersMarket" class="projection-market"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option value="9.5" selected>9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
+  <div class="projection-market"><div class="projection-market-title">Moneyline · 1X2 model probability</div><div class="projection-market-labels three"><span id="projectionWinHome">Home —</span><span id="projectionDraw">Draw —</span><span id="projectionWinAway">Away —</span></div><div class="projection-bar"><div id="projectionBarHome" style="background:#ff652e"></div><div id="projectionBarDraw" style="background:#8592a4"></div><div id="projectionBarAway" style="background:#0a8f9f"></div></div></div>
+  <div class="projection-market"><div class="projection-market-title">Over / Under % (2.5 goals)</div><div class="projection-market-labels"><span id="projectionOver">Over —</span><span id="projectionUnder">Under —</span></div><div class="projection-bar"><div id="projectionBarOver" style="background:#088e49"></div><div id="projectionBarUnder" style="background:#a92437"></div></div></div>
+  <div class="projection-market"><div class="projection-market-title">Both Teams to Score</div><div class="projection-market-labels"><span id="projectionBttsYes">Yes —</span><span id="projectionBttsNo">No —</span></div><div class="projection-bar"><div id="projectionBarBttsYes" style="background:#088e49"></div><div id="projectionBarBttsNo" style="background:#a92437"></div></div></div>
+  <div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
+  <div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
+  <div class="projection-foot"><div id="projectionSample" class="projection-sub"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
+</div>
 
 <div class="tiles"><div class="tile"><span>Estimated total goals</span><strong id="matchGoals">—</strong></div><div class="tile"><span>Estimated total corners</span><strong id="matchCorners">—</strong></div><div class="tile"><span>Estimated total shots</span><strong id="matchShots">—</strong></div><div class="tile"><span>Estimated total SOT</span><strong id="matchSot">—</strong></div></div>
 
@@ -255,7 +315,7 @@
 
 
 
-const $=id=>document.getElementById(id);let teams=[],players=[],matches=[],recent=[];
+const $=id=>document.getElementById(id);let teams=[],players=[],matches=[],recent=[],playerMatchData=[],selectedPlayer=null;
 
 
 
@@ -303,7 +363,7 @@ function renderTeams(){if(!teams.length)return;const filter=$('teamFilter').valu
 
 
 
-function renderPlayers(){if(!players.length)return;const filter=$('playerTeam').value,q=$('playerSearch').value.trim().toLowerCase(),sort=$('playerSort').value,p=$('playerPeriod').value;const found=players.filter(r=>(!filter||r.team===filter)&&String(r.player||'').toLowerCase().includes(q)).sort((a,b)=>(n(b[sort])??-1)-(n(a[sort])??-1));$('playerCount').textContent=found.length;$('playerShots').textContent=sum(found,'shots');$('playerGoals').textContent=sum(found,'goals');$('playerXg').textContent=f(sum(found,'xg'));ranking($('playerRanking'),found,sort,'player');$('recentShotsHead').textContent=p+' shots / game';$('recentHitHead').textContent=p+' over 1.5 shots';$('playerRows').replaceChildren();found.forEach(r=>{const rf=recent.find(x=>x.Team===r.team&&x.Player===r.player)||{};const minutes=n(r.minutes);row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',f(rf[p+'_Shots_Avg']),n(rf[p+'_Over_1.5_Shots'])===null?'N/A':f(rf[p+'_Over_1.5_Shots'],1)+'%'])})}
+function renderPlayers(){if(!players.length){$('playerCount').textContent='0';$('playerRows').replaceChildren();$('playerRanking').replaceChildren();return;}const filter=$('playerTeam').value,q=$('playerSearch').value.trim().toLowerCase(),sort=$('playerSort').value,p=$('playerPeriod').value;const found=players.filter(r=>(!filter||r.team===filter)&&String(r.player||'').toLowerCase().includes(q)).sort((a,b)=>(n(b[sort])??-1)-(n(a[sort])??-1));$('playerCount').textContent=found.length;$('playerShots').textContent=sum(found,'shots');$('playerGoals').textContent=sum(found,'goals');$('playerXg').textContent=f(sum(found,'xg'));ranking($('playerRanking'),found,sort,'player');$('recentShotsHead').textContent=p+' shots / game';$('recentHitHead').textContent=p+' over 1.5 shots';$('playerRows').replaceChildren();found.forEach(r=>{const rf=recent.find(x=>x.Team===r.team&&x.Player===r.player)||{};const minutes=n(r.minutes);const tr=row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',f(rf[p+'_Shots_Avg']),n(rf[p+'_Over_1.5_Shots'])===null?'N/A':f(rf[p+'_Over_1.5_Shots'],1)+'%']);const link=document.createElement('button');link.className='pd-player-link';link.textContent=r.player;link.title='View player game log';link.addEventListener('click',()=>openPlayer(r));tr.cells[0].replaceChildren(link)})}
 
 
 
@@ -319,7 +379,101 @@ function history(id,rows){$(id).replaceChildren();rows.forEach(r=>row($(id),[Str
 
 
 
-function analyze(){if(!matches.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';$('homeHistoryHead').textContent=home+' — home results';$('awayHistoryHead').textContent=away+' — away results';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));history('homeHistory',h);history('awayHistory',a)}
+
+function poissonProbability(k,lambda){
+  let p=Math.exp(-lambda);
+  for(let i=1;i<=k;i++)p*=lambda/i;
+  return p;
+}
+function poissonProjection(homeExpected,awayExpected){
+  // Compute through 20 goals per side and normalize any tiny truncated tail.
+  let home=0,draw=0,away=0,over=0,btts=0,mass=0,best={h:0,a:0,p:0};
+  for(let h=0;h<=20;h++)for(let a=0;a<=20;a++){
+    const p=poissonProbability(h,homeExpected)*poissonProbability(a,awayExpected);
+    mass+=p;
+    if(h>a)home+=p;else if(h===a)draw+=p;else away+=p;
+    if(h+a>=3)over+=p;
+    if(h>0&&a>0)btts+=p;
+    if(p>best.p)best={h,a,p};
+  }
+  return {home:home/mass,draw:draw/mass,away:away/mass,
+          over:over/mass,under:1-over/mass,btts:btts/mass,
+          noBtts:1-btts/mass,best};
+}
+function cornersOverProbability(expectedTotal,line){
+  // Poisson total-corners approximation; return P(total corners > selected half-goal line).
+  const cutoff=Math.floor(line);
+  let term=Math.exp(-expectedTotal),cdf=term;
+  for(let k=1;k<=cutoff;k++){term*=expectedTotal/k;cdf+=term;}
+  return Math.max(0,Math.min(1,1-cdf));
+}
+function updateCornersMarket(){
+  const panel=$('projectionCornersMarket');
+  const expected=Number(panel.dataset.expected);
+  if(!Number.isFinite(expected)){panel.hidden=true;return;}
+  panel.hidden=false;
+  const line=Number($('projectionCornersLine').value);
+  const over=cornersOverProbability(expected,line),under=1-over;
+  $('projectionCornersOver').textContent='Over '+line.toFixed(1)+' · '+(over*100).toFixed(1)+'%';
+  $('projectionCornersUnder').textContent='Under '+line.toFixed(1)+' · '+(under*100).toFixed(1)+'%';
+  $('projectionCornersBarOver').style.width=(over*100).toFixed(1)+'%';
+  $('projectionCornersBarUnder').style.width=(under*100).toFixed(1)+'%';
+}
+function renderProjection(home,away,homeGames,awayGames){
+  const chf=avg(homeGames,'corners_for'),cha=avg(homeGames,'corners_against');
+  const caf=avg(awayGames,'corners_for'),caa=avg(awayGames,'corners_against');
+  const validCorners=[chf,cha,caf,caa].every(v=>v!==null);
+  $('projectionPanel').querySelector('.projection-corners-hero').hidden=!validCorners;
+  delete $('projectionCornersMarket').dataset.expected;
+  $('projectionCornersMarket').hidden=!validCorners;
+  if(validCorners){
+    const homeCorners=Math.max(0,(chf+caa)/2),awayCorners=Math.max(0,(caf+cha)/2);
+    $('projectionCornersHome').textContent=homeCorners.toFixed(1);
+    $('projectionCornersAway').textContent=awayCorners.toFixed(1);
+    $('projectionCornersTotal').textContent=(homeCorners+awayCorners).toFixed(1)+' total expected corners';
+    $('projectionCornersMarket').dataset.expected=String(homeCorners+awayCorners);
+    updateCornersMarket();
+  }
+  const hf=avg(homeGames,'goals_for'),ha=avg(homeGames,'goals_against');
+  const af=avg(awayGames,'goals_for'),aa=avg(awayGames,'goals_against');
+  $('projectionHome').textContent=home;
+  $('projectionAway').textContent=away;
+  if([hf,ha,af,aa].some(v=>v===null)){
+    $('projectionTotal').textContent='Not enough goals data to project';
+    $('projectionPanel').querySelectorAll('.projection-market,.projection-scoreline,.projection-foot,.projection-odds-title,.projection-odds-grid').forEach(e=>e.hidden=true);
+    $('projectionPanel').querySelector('.projection-corners-hero').hidden=!validCorners;
+    $('projectionCornersMarket').hidden=!validCorners;
+    return;
+  }
+  $('projectionPanel').querySelectorAll('.projection-market,.projection-scoreline,.projection-foot,.projection-odds-title,.projection-odds-grid').forEach(e=>e.hidden=false);
+  $('projectionCornersMarket').hidden=!validCorners;
+  const eh=Math.max(0,(hf+aa)/2),ea=Math.max(0,(af+ha)/2);
+  const p=poissonProjection(eh,ea);
+  const pct=x=>(100*x).toFixed(1)+'%';
+  const odds=x=>x>0?(1/x).toFixed(2):'N/A';
+  $('projectionHomeXg').textContent=String(p.best.h);
+  $('projectionAwayXg').textContent=String(p.best.a);
+  $('projectionTotal').textContent='Expected goals: '+eh.toFixed(2)+' – '+ea.toFixed(2)+' · '+(eh+ea).toFixed(2)+' total';
+  $('projectionHomeIcon').textContent=home.trim().charAt(0).toUpperCase();
+  $('projectionAwayIcon').textContent=away.trim().charAt(0).toUpperCase();
+  $('projectionWinHome').textContent=home+' '+pct(p.home);
+  $('projectionDraw').textContent='Draw '+pct(p.draw);
+  $('projectionWinAway').textContent=away+' '+pct(p.away);
+  $('projectionOver').textContent='Over '+pct(p.over);
+  $('projectionUnder').textContent='Under '+pct(p.under);
+  $('projectionBttsYes').textContent='Yes '+pct(p.btts);
+  $('projectionBttsNo').textContent='No '+pct(p.noBtts);
+  for(const [id,value] of [['projectionBarHome',p.home],['projectionBarDraw',p.draw],['projectionBarAway',p.away],['projectionBarOver',p.over],['projectionBarUnder',p.under],['projectionBarBttsYes',p.btts],['projectionBarBttsNo',p.noBtts]])$(id).style.width=pct(value);
+  $('projectionScoreline').textContent='Most likely exact score · Poisson model';
+  $('projectionOddsHome').textContent=odds(p.home);
+  $('projectionOddsDraw').textContent=odds(p.draw);
+  $('projectionOddsAway').textContent=odds(p.away);
+  $('projectionSample').textContent='Sample: '+homeGames.length+' home matches / '+awayGames.length+' away matches. Small samples increase uncertainty.';
+}
+
+$('projectionCornersLine').addEventListener('change',updateCornersMarket);
+
+function analyze(){if(!matches.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';$('homeHistoryHead').textContent=home+' — home results';$('awayHistoryHead').textContent=away+' — away results';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));history('homeHistory',h);history('awayHistory',a)}
 
 
 
@@ -328,7 +482,7 @@ async function load(file){const response=await fetch('./'+file,{cache:'no-store'
 
 
 const LEAGUES = {
-  laliga: {label:'La Liga', player:'laliga_data.json'},
+  laliga: {label:'La Liga', player:'la_liga_data.json'},
   premier_league: {label:'Premier League', player:'premier_league_data.json'},
   bundesliga: {label:'Bundesliga', player:'bundesliga_data.json'},
   serie_a: {label:'Serie A', player:'serie_a_data.json'},
@@ -343,6 +497,97 @@ function fillOptions(id, values, allLabel) {
   }
   values.forEach(value => option(select,value));
 }
+// Normalize player exports from different Understat/soccerdata versions.
+function firstField(record, names) {
+  for (const key of names) {
+    if (record[key] !== undefined && record[key] !== null && record[key] !== '') return record[key];
+  }
+  return null;
+}
+function normalizePlayers(data) {
+  const raw = Array.isArray(data) ? data :
+    (Array.isArray(data?.season) ? data.season :
+    (Array.isArray(data?.players) ? data.players : []));
+  return raw.map(r => {
+    const player = firstField(r,['player','player_name','Player','name','player_title']);
+    const team = firstField(r,['team','team_name','Team','team_title']);
+    return {
+      ...r, player: typeof player === 'string' ? player.trim() : '',
+      team: typeof team === 'string' ? team.trim() : '',
+      matches: firstField(r,['matches','games','appearances','Apps','MP']),
+      minutes: firstField(r,['minutes','time','mins','minutes_played']),
+      goals: firstField(r,['goals','Goals']),
+      assists: firstField(r,['assists','Assists']),
+      shots: firstField(r,['shots','Shots']),
+      xg: firstField(r,['xg','xG','expected_goals','expectedGoals'])
+    };
+  }).filter(r => r.player && r.team);
+}
+function normalizeRecent(data) {
+  const raw = Array.isArray(data?.recent) ? data.recent : [];
+  return raw.map(r => ({...r,
+    Team: firstField(r,['Team','team','team_name','team_title']),
+    Player: firstField(r,['Player','player','player_name'])
+  }));
+}
+
+function readableOpponent(value){
+  if(value===null||value===undefined)return null;
+  if(typeof value==='object')value=value.title??value.name??value.team??null;
+  const label=String(value??'').trim();
+  if(!label||/^\d+(?:\.0+)?$/.test(label)||/^(null|undefined|nan)$/i.test(label))return null;
+  return label;
+}
+function normalizePlayerMatches(data){
+  const raw=Array.isArray(data?.matches)?data.matches:[];
+  return raw.map(r=>({
+    player:String(firstField(r,['player','player_name','Player','name'])??'').trim(),
+    team:String(firstField(r,['team','team_name','Team'])??'').trim(),
+    date:firstField(r,['date','match_date','Date','kickoff']),
+    opponent:readableOpponent(firstField(r,['opponent','opponent_team','against','Opponent','opponent_name','opponent_title','rival'])),
+    homeAway:firstField(r,['venue','home_away','h_a','side']),
+    game_id:firstField(r,['game_id','match_id','id']),
+    minutes:firstField(r,['minutes','time','mins']),
+    shots:firstField(r,['shots','Shots']),goals:firstField(r,['goals','Goals']),
+    xg:firstField(r,['xg','xG','expected_goals']),assists:firstField(r,['assists','Assists'])
+  })).filter(r=>r.player);
+}
+function openPlayer(r){selectedPlayer={player:r.player,team:r.team};$('playerDetail').classList.remove('hidden');$('pdName').textContent=r.player;$('pdTeam').textContent=r.team;renderPlayerDetail();$('playerDetail').scrollIntoView({behavior:'smooth',block:'start'});}
+function updatePlayerLines(){const stat=$('pdStat').value;const lines=stat==='xg'?[0.25,0.5,0.75,1,1.5]:[0.5,1.5,2.5,3.5,4.5,5.5];const sel=$('pdLine');sel.replaceChildren();for(const line of lines){const opt=document.createElement('option');opt.value=String(line);opt.textContent='Over '+line;sel.appendChild(opt)}sel.value=stat==='shots'?'1.5':stat==='xg'?'0.5':'0.5';}
+function renderPlayerDetail(){
+ if(!selectedPlayer)return;
+ const {player,team}=selectedPlayer,stat=$('pdStat').value,line=Number($('pdLine').value),count=Number($('pdGames').value),venue=$('pdVenue').value;
+ let rows=playerMatchData.filter(r=>r.player.toLowerCase()===player.toLowerCase()&&r.team.toLowerCase()===team.toLowerCase());
+ if(venue!=='all')rows=rows.filter(r=>{const v=String(r.homeAway??'').toLowerCase();return venue==='home'?['home','h'].includes(v):['away','a'].includes(v)});
+ rows.sort((a,b)=>{const da=Date.parse(a.date),db=Date.parse(b.date);if(Number.isFinite(da)&&Number.isFinite(db))return db-da;return 0});
+ if(count)rows=rows.slice(0,count);
+ const valid=rows.filter(r=>n(r[stat])!==null),hits=valid.filter(r=>n(r[stat])>line).length,mean=valid.length?valid.reduce((a,r)=>a+n(r[stat]),0)/valid.length:null;
+ $('pdSummary').replaceChildren();$('pdChart').replaceChildren();$('pdRows').replaceChildren();
+ const summary=document.createElement('div');summary.innerHTML='<span class="hint">HIT RATE</span><div class="pd-hit">'+(valid.length?(100*hits/valid.length).toFixed(0)+'%':'N/A')+'</div><span class="hint">'+hits+' / '+valid.length+' over '+line+' · Avg: '+f(mean,stat==='xg'?2:1)+'</span>';$('pdSummary').appendChild(summary);
+ const msg=$('pdMessage');msg.textContent='';
+ if(!rows.length){$('pdChart').innerHTML='<div class="pd-empty">No individual game records available for this player and filter. Upload a player JSON with a populated matches array to enable the chart.</div>';msg.textContent='Season totals alone cannot provide game-by-game hit rates.';return;}
+ if(!valid.length){msg.textContent='The selected statistic is unavailable in the match records.';return;}
+ const max=Math.max(line+0.5,...valid.map(r=>n(r[stat])),mean??0);
+ const track=document.createElement('div');track.className='pd-chart-track';$('pdChart').appendChild(track);
+ if(mean!==null){
+  const avgLine=document.createElement('div');avgLine.className='pd-average-line';
+  avgLine.style.bottom=(25+155*mean/max)+'px';
+  const avgLabel=document.createElement('span');avgLabel.className='pd-average-label';
+  avgLabel.textContent='AVG '+mean.toFixed(stat==='xg'?2:1);
+  avgLine.appendChild(avgLabel);track.appendChild(avgLine);
+ }
+ [...rows].reverse().forEach(r=>{
+  const value=n(r[stat]),hit=value!==null&&value>line;
+  const col=document.createElement('div');col.className='pd-col';
+  const val=document.createElement('span');val.className='pd-value';val.textContent=value===null?'—':stat==='xg'?value.toFixed(2):value;
+  const bar=document.createElement('div');bar.className='pd-bar';bar.style.height=(value===null?2:Math.max(3,155*value/max))+'px';bar.style.background=value===null?'#526073':hit?'linear-gradient(#25db77,#087e46)':'linear-gradient(#ff7272,#a72835)';
+  const label=document.createElement('span');label.className='pd-label';const date=r.date?new Date(r.date):null;label.textContent=date&&!isNaN(date)?(date.getMonth()+1)+'/'+date.getDate():String(r.opponent??'Game').slice(0,10);
+  col.title=[r.opponent??'Match',r.date??'',stat+': '+(value??'N/A')].join(' · ');col.append(val,bar,label);track.appendChild(col);
+ });
+ rows.forEach(r=>row($('pdRows'),[r.date?String(r.date).slice(0,10):'—',r.opponent??'Opponent unavailable',r.homeAway??'—',r.minutes??'—',r.shots??'—',r.goals??'—',f(r.xg),n(r[stat])===null?'N/A':f(r[stat],stat==='xg'?2:0),n(r[stat])===null?'—':n(r[stat])>line?'✓':'✕']));
+ if(rows.some(r=>!r.date))msg.textContent='Some match records have no date; ordering may be incomplete.';
+}
+
 async function changeLeague() {
   const generation = ++loadGeneration;
   const league = $('leagueSelect').value;
@@ -359,9 +604,11 @@ async function changeLeague() {
   const [t,p,m]=results;
   teams = t.status==='fulfilled' && Array.isArray(t.value) ? t.value : [];
   if (!teams.length) failures.push('team metrics');
-  players = p.status==='fulfilled' && Array.isArray(p.value.season) ? p.value.season : [];
-  recent = p.status==='fulfilled' && Array.isArray(p.value.recent) ? p.value.recent : [];
-  if (!players.length) failures.push('player data');
+  players = p.status==='fulfilled' ? normalizePlayers(p.value) : [];
+  recent = p.status==='fulfilled' ? normalizeRecent(p.value) : [];
+  playerMatchData = p.status==='fulfilled' ? normalizePlayerMatches(p.value) : [];
+  selectedPlayer=null;$('playerDetail').classList.add('hidden');
+  if (!players.length) failures.push(p.status==='rejected' ? 'player file '+config.player+' ('+p.reason.message+')' : 'player data missing or unsupported fields in '+config.player);
   matches = m.status==='fulfilled' && Array.isArray(m.value) ? m.value : [];
   if (!matches.length) failures.push('match history');
   const teamNames = [...new Set(teams.map(r=>r.team).filter(Boolean))].sort();
@@ -387,6 +634,10 @@ function init(){
   ['homeTeam','awayTeam','matchPeriod'].forEach(id=>$(id).addEventListener('change',analyze));
   $('analyzeButton').addEventListener('click',analyze);
   $('leagueSelect').addEventListener('change',changeLeague);
+  $('pdClose').addEventListener('click',()=>{$('playerDetail').classList.add('hidden');selectedPlayer=null});
+  $('pdStat').addEventListener('change',()=>{updatePlayerLines();renderPlayerDetail()});
+  ['pdLine','pdGames','pdVenue'].forEach(id=>$(id).addEventListener('change',renderPlayerDetail));
+  updatePlayerLines();
   changeLeague();
 }
 
