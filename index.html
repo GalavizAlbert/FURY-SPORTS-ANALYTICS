@@ -205,6 +205,30 @@
 #teamRanking .rank{grid-template-columns:minmax(105px,190px) 1fr 66px}#teamRanking .rank .fill{background:linear-gradient(90deg,#1389ca,#60dbbc)}
 #teamRows tr:hover{background:#1a314a}#teamRows td:first-child{font-weight:700;color:#8dd8ff}
 @media(max-width:900px){.team-insights{grid-template-columns:1fr}}@media(max-width:540px){.team-compare{grid-template-columns:1fr 1fr}.team-metric-main strong{font-size:19px}}
+
+/* Complete match histories at the bottom of Match Analysis */
+.full-match-history{margin-top:20px}
+.full-history-heading h2{margin-bottom:5px}
+.history-team{min-width:0}
+.history-team h3{margin:0 0 5px;font-size:1.05rem}
+.all-games-table{width:100%;white-space:nowrap}
+.all-games-table td,.all-games-table th{padding:10px 9px}
+.history-result{font-weight:800;border-radius:5px;padding:3px 7px;display:inline-block;min-width:25px;text-align:center}
+.history-result.win{background:rgba(22,163,74,.16);color:#4ade80}
+.history-result.draw{background:rgba(148,163,184,.17);color:#cbd5e1}
+.history-result.loss{background:rgba(239,68,68,.15);color:#f87171}
+
+/* FurySports player analytics redesign */
+.player-hero{position:relative;overflow:hidden;border:1px solid #2c5574;border-radius:18px;background:radial-gradient(ellipse at 92% 0%,#174968 0%,transparent 47%),linear-gradient(120deg,#102339,#101b2c);padding:25px 26px;margin-bottom:16px}
+.player-hero:after{content:"";position:absolute;width:180px;height:180px;right:-65px;top:-100px;border:1px solid #3a86a655;border-radius:50%;pointer-events:none}
+.player-eyebrow{font-size:11px;letter-spacing:2.2px;font-weight:800;color:#62d9ff;margin-bottom:10px}.player-hero h2{font:800 clamp(24px,3.5vw,36px)/1.12 'Outfit',sans-serif;margin:0 0 9px}.player-hero p{color:#b1c7db;max-width:660px;margin:0}.player-hero-tag{display:inline-flex;align-items:center;gap:6px;background:#133b50;border:1px solid #276585;color:#a3edff;border-radius:30px;padding:7px 12px;font-size:11px;font-weight:700;margin-top:14px}
+.player-filter-panel{background:#101e31;border-color:#29435e}.player-filter-panel .controls{margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.player-filter-panel .controls label{min-width:0;font-weight:700;color:#bed0e4}.player-filter-panel select,.player-filter-panel input{width:100%;min-width:0;background:#172c43;border-color:#36536f;outline-offset:2px}.player-filter-panel select:focus,.player-filter-panel input:focus{border-color:#55c9f9;outline:2px solid #55c9f933}
+.player-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.player-kpis .tile{position:relative;background:linear-gradient(145deg,#152b43,#101e30);border-color:#2b4761;border-radius:15px;padding:18px 19px;overflow:hidden}.player-kpis .tile:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#38bdf8,#48d8ad)}.player-kpis .tile span{font-weight:700;letter-spacing:.2px}.player-kpis .tile strong{font:800 clamp(23px,3vw,33px)/1.25 'Outfit',sans-serif;letter-spacing:-.5px}
+.player-layout{display:grid;grid-template-columns:minmax(255px,.85fr) minmax(0,1.65fr);gap:16px;align-items:start}.player-layout>.panel{min-width:0}.player-layout .panel{background:#111f32;border-color:#29445f;border-radius:16px}.player-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px;flex-wrap:wrap}.player-panel-head h2{margin:0}.player-panel-kicker{color:#70d6fc;font-size:11px;font-weight:800;letter-spacing:1px}.player-layout #playerRanking .rank{grid-template-columns:minmax(0,1fr) minmax(65px,1fr) 53px;gap:8px}.player-layout #playerRanking .rank .fill{background:linear-gradient(90deg,#0789cc,#49d9bd)}.player-layout #playerRanking{max-height:590px;overflow:auto}.player-table-wrap{max-height:660px;border:1px solid #29435b;border-radius:12px}.player-table-wrap table{font-variant-numeric:tabular-nums}.player-table-wrap th{background:#1c3047;color:#b6cce0;font-size:11px;letter-spacing:.3px;padding:13px 11px;z-index:1}.player-table-wrap td{padding:12px 11px;border-color:#233a52}.player-table-wrap tbody tr:nth-child(even){background:#14263a}.player-table-wrap tbody tr:hover{background:#203e57}.player-table-wrap td:nth-child(2){color:#b9cde0}.player-table-wrap td:nth-child(7),.player-table-wrap td:nth-child(9){font-weight:800;color:#9ce5ff}.player-table-wrap td:last-child{font-weight:800;color:#72e1b2}.pd-player-link{color:#86d8ff;text-decoration:none;font-weight:800;border-radius:4px}.pd-player-link:hover{text-decoration:underline;color:#d1f4ff}.pd-player-link:focus-visible{outline:2px solid #66cfff;outline-offset:3px}.player-table-hint{margin:12px 2px 0}
+.player-detail{border-color:#2b536b;background:radial-gradient(ellipse at 95% 0%,#17425a 0%,transparent 40%),#111e30;box-shadow:0 15px 38px #0002}.pd-header h2{font:800 clamp(23px,3vw,32px) 'Outfit',sans-serif}.pd-header .hint:first-child{color:#65d6fc;letter-spacing:1.5px;font-weight:800}.pd-filters{padding:14px;background:#13283d;border:1px solid #2d4a64;border-radius:12px}.pd-filters label{flex:1 1 140px}.pd-filters select{width:100%;background:#1a3249}.pd-kpis{background:#122b3d;border:1px solid #28506a;border-radius:13px;padding:14px 18px}.pd-hit{font-size:39px}.pd-chart{background:#0f1b2b;border:1px solid #294159;border-radius:13px;padding:18px 13px 10px;min-height:240px}.pd-table{border:1px solid #29435b;border-radius:12px}.pd-table tbody tr:nth-child(even){background:#14263a}
+@media(max-width:980px){.player-layout{grid-template-columns:1fr}.player-filter-panel .controls{grid-template-columns:repeat(2,minmax(0,1fr))}.player-layout #playerRanking{max-height:330px}}
+@media(max-width:560px){.player-hero{padding:20px}.player-filter-panel .controls{grid-template-columns:1fr 1fr;gap:10px}.player-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.player-kpis .tile{padding:14px}.player-layout .panel{padding:13px}}
+
 </style>
 
 
@@ -265,7 +289,9 @@
 
 
 
-<section id="playersTab" class="hidden"><div class="panel"><div class="controls"><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label></div></div>
+<section id="playersTab" class="hidden">
+<div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / PLAYER INTELLIGENCE</div><h2>Player Performance Center</h2><p>Compare season leaders, explore shooting trends, and select a player to inspect individual match results, hit rates and recent form.</p><span class="player-hero-tag">● Five leagues · Season 2026–27</span></div>
+<div class="panel player-filter-panel"><div class="controls"><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label></div></div>
 
 
 
@@ -276,11 +302,12 @@
   <div class="scroll pd-table"><table><thead><tr><th>Date</th><th>Opponent / Match</th><th>Venue</th><th>Minutes</th><th>Shots</th><th>Goals</th><th>xG</th><th>Selected stat</th><th>Over line?</th></tr></thead><tbody id="pdRows"></tbody></table></div>
 </div>
 
-<div class="tiles"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
+<p id="playerDataStatus" class="hint" role="status" style="margin:12px 2px;color:#9fd6f7"></p>
+<div class="tiles player-kpis"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
 
 
 
-<div class="panel"><h2>Top players</h2><div id="playerRanking"></div></div><div class="panel"><h2>Player statistics and recent shot trends</h2><div class="scroll"><table><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 over 1.5 shots</th></tr></thead><tbody id="playerRows"></tbody></table></div><p class="hint">Recent hit rates come from your player recent-form JSON. Season shots / 90 uses recorded minutes.</p></div></section>
+<div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 over 1.5 shots</th></tr></thead><tbody id="playerRows"></tbody></table></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
 
 
 
@@ -319,9 +346,13 @@
 
 
 
-<div class="split"><div class="panel"><h2 id="homeHistoryHead">Home results</h2><div class="scroll"><table><thead><tr><th>Date</th><th>Opponent</th><th>Score</th><th>Shots</th><th>SOT</th><th>Corners</th></tr></thead><tbody id="homeHistory"></tbody></table></div></div><div class="panel"><h2 id="awayHistoryHead">Away results</h2><div class="scroll"><table><thead><tr><th>Date</th><th>Opponent</th><th>Score</th><th>Shots</th><th>SOT</th><th>Corners</th></tr></thead><tbody id="awayHistory"></tbody></table></div></div></div>
-
-
+<div class="panel full-match-history">
+  <div class="full-history-heading"><div><h2>Complete Team Match History</h2><p class="hint">Every available league match for both selected teams, home and away. Most recent first. This list is independent of the L5/L10 projection filter.</p></div></div>
+  <div class="split">
+    <div class="history-team"><h3 id="allHomeHistoryTitle">Home team · All matches</h3><p id="allHomeHistoryCount" class="hint"></p><div class="scroll"><table class="all-games-table"><thead><tr><th>Date</th><th>H/A</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners</th><th>Shots</th></tr></thead><tbody id="allHomeHistory"></tbody></table></div></div>
+    <div class="history-team"><h3 id="allAwayHistoryTitle">Away team · All matches</h3><p id="allAwayHistoryCount" class="hint"></p><div class="scroll"><table class="all-games-table"><thead><tr><th>Date</th><th>H/A</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners</th><th>Shots</th></tr></thead><tbody id="allAwayHistory"></tbody></table></div></div>
+  </div>
+</div>
 
 </section><p class="hint">Data: your local files. These are descriptive statistics; betting decisions also require reliable odds, lineups, opponent strength, and backtesting.</p></main>
 
@@ -420,7 +451,7 @@ function renderTeams(){
   $('teamRows').replaceChildren();sorted.forEach(r=>{const tr=row($('teamRows'),[r.team,r.matches,f(r['corners_for_'+p]),f(r['corners_against_'+p]),f(r['shots_for_'+p]),f(r['shots_against_'+p]),f(r['shots_on_target_for_'+p]),f(r['shots_on_target_against_'+p]),f(r['goals_for_'+p]),f(r['goals_against_'+p]),n(r['corners_over_9.5_pct'])===null?'N/A':f(r['corners_over_9.5_pct'],1)+'%']);tr.title='Click to inspect '+r.team;tr.style.cursor='pointer';tr.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()})});
 }
 
-function renderPlayers(){if(!players.length){$('playerCount').textContent='0';$('playerRows').replaceChildren();$('playerRanking').replaceChildren();return;}const filter=$('playerTeam').value,q=$('playerSearch').value.trim().toLowerCase(),sort=$('playerSort').value,p=$('playerPeriod').value;const found=players.filter(r=>(!filter||r.team===filter)&&String(r.player||'').toLowerCase().includes(q)).sort((a,b)=>(n(b[sort])??-1)-(n(a[sort])??-1));$('playerCount').textContent=found.length;$('playerShots').textContent=sum(found,'shots');$('playerGoals').textContent=sum(found,'goals');$('playerXg').textContent=f(sum(found,'xg'));ranking($('playerRanking'),found,sort,'player');$('recentShotsHead').textContent=p+' shots / game';$('recentHitHead').textContent=p+' over 1.5 shots';$('playerRows').replaceChildren();found.forEach(r=>{const rf=recent.find(x=>x.Team===r.team&&x.Player===r.player)||{};const minutes=n(r.minutes);const tr=row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',f(rf[p+'_Shots_Avg']),n(rf[p+'_Over_1.5_Shots'])===null?'N/A':f(rf[p+'_Over_1.5_Shots'],1)+'%']);const link=document.createElement('button');link.className='pd-player-link';link.textContent=r.player;link.title='View player game log';link.addEventListener('click',()=>openPlayer(r));tr.cells[0].replaceChildren(link)})}
+function renderPlayers(){if(!players.length){$('playerCount').textContent='0';$('playerShots').textContent='0';$('playerGoals').textContent='0';$('playerXg').textContent='0';$('playerRows').replaceChildren();$('playerRanking').replaceChildren();return;}const filter=$('playerTeam').value,q=$('playerSearch').value.trim().toLowerCase(),sort=$('playerSort').value,p=$('playerPeriod').value;const found=players.filter(r=>(!filter||r.team===filter)&&String(r.player||'').toLowerCase().includes(q)).sort((a,b)=>(n(b[sort])??-1)-(n(a[sort])??-1));$('playerCount').textContent=found.length;$('playerShots').textContent=sum(found,'shots');$('playerGoals').textContent=sum(found,'goals');$('playerXg').textContent=f(sum(found,'xg'));ranking($('playerRanking'),found,sort,'player');$('recentShotsHead').textContent=p+' shots / game';$('recentHitHead').textContent=p+' over 1.5 shots';$('playerRows').replaceChildren();found.forEach(r=>{const rf=recent.find(x=>x.Team===r.team&&x.Player===r.player)||{};const minutes=n(r.minutes);const tr=row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',f(rf[p+'_Shots_Avg']),n(rf[p+'_Over_1.5_Shots'])===null?'N/A':f(rf[p+'_Over_1.5_Shots'],1)+'%']);const link=document.createElement('button');link.className='pd-player-link';link.textContent=r.player;link.title='View player game log';link.addEventListener('click',()=>openPlayer(r));tr.cells[0].replaceChildren(link)})}
 
 
 
@@ -432,7 +463,24 @@ function hit(rows,keys,test){const valid=rows.filter(r=>keys.every(k=>n(r[k])!==
 
 
 
-function history(id,rows){$(id).replaceChildren();rows.forEach(r=>row($(id),[String(r.date||'').slice(0,10),r.opponent,r.goals_for+'–'+r.goals_against,r.shots_for,r.shots_on_target_for,r.corners_for]))}
+function renderCompleteMatchHistory(home,away){
+  const formatValue=value=>value===null||value===undefined||value===''?'—':String(value);
+  for(const [team,bodyId,titleId,countId] of [[home,'allHomeHistory','allHomeHistoryTitle','allHomeHistoryCount'],[away,'allAwayHistory','allAwayHistoryTitle','allAwayHistoryCount']]){
+    const body=$(bodyId);body.replaceChildren();
+    $(titleId).textContent=team+' · All matches';
+    const games=matches.filter(r=>r.team===team).sort((a,b)=>(Date.parse(b.date)||0)-(Date.parse(a.date)||0));
+    $(countId).textContent=games.length+' recorded matches (home and away)';
+    if(!games.length){row(body,['No games available','—','—','—','—','—','—']);continue;}
+    games.forEach(r=>{
+      const gf=Number(r.goals_for),ga=Number(r.goals_against);
+      const hasScore=r.goals_for!==null&&r.goals_for!==undefined&&r.goals_against!==null&&r.goals_against!==undefined&&Number.isFinite(gf)&&Number.isFinite(ga);
+      const outcome=hasScore?(gf>ga?'W':gf<ga?'L':'D'):'—';
+      const tr=row(body,[String(r.date||'').slice(0,10)||'—',r.venue==='Home'?'H':r.venue==='Away'?'A':'—',formatValue(r.opponent),hasScore?gf+'–'+ga:'—',outcome,formatValue(r.corners_for),formatValue(r.shots_for)]);
+      if(hasScore){const cell=tr.children[4];cell.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;cell.appendChild(badge);}
+    });
+  }
+}
+
 
 
 
@@ -533,7 +581,7 @@ $('projectionCornersLine').addEventListener('change',updateCornersMarket);
 
 
 
-function analyze(){if(!matches.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';$('homeHistoryHead').textContent=home+' — home results';$('awayHistoryHead').textContent=away+' — away results';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));history('homeHistory',h);history('awayHistory',a)}
+function analyze(){if(!matches.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));renderCompleteMatchHistory(home,away)}
 
 
 
@@ -582,6 +630,24 @@ function normalizePlayers(data) {
       xg: firstField(r,['xg','xG','expected_goals','expectedGoals'])
     };
   }).filter(r => r.player && r.team);
+}
+// When a league export contains match logs but no usable season rows,
+// build a season summary from actual player-match records (never invented data).
+function playersFromMatchLogs(data) {
+  const logs = normalizePlayerMatches(data);
+  const groups = new Map();
+  for (const r of logs) {
+    if (!r.player || !r.team) continue;
+    const key = r.team + '\u0000' + r.player;
+    if (!groups.has(key)) groups.set(key, {player:r.player,team:r.team,matches:0,minutes:0,goals:0,assists:0,shots:0,xg:0});
+    const item=groups.get(key);item.matches++;
+    for (const k of ['minutes','goals','assists','shots','xg']) item[k] += n(r[k]) ?? 0;
+  }
+  return [...groups.values()];
+}
+function getUsablePlayers(data) {
+  const season = normalizePlayers(data);
+  return season.length ? season : playersFromMatchLogs(data);
 }
 function normalizeRecent(data) {
   const raw = Array.isArray(data?.recent) ? data.recent : [];
@@ -655,7 +721,7 @@ async function loadLeaguePlayers(league, config) {
   for (const filename of candidates) {
     try {
       const data = await load(filename);
-      if (normalizePlayers(data).length || normalizePlayerMatches(data).length)
+      if (getUsablePlayers(data).length || normalizePlayerMatches(data).length)
         return {data, source:filename, errors};
       errors.push(filename+': no usable player rows');
     } catch (e) { errors.push(filename+': '+e.message); }
@@ -664,7 +730,7 @@ async function loadLeaguePlayers(league, config) {
     const combined = await load('all_leagues_data.json');
     const key = league === 'laliga' ? 'la_liga' : league;
     const data = combined[key] || combined[league];
-    if (data && (normalizePlayers(data).length || normalizePlayerMatches(data).length))
+    if (data && (getUsablePlayers(data).length || normalizePlayerMatches(data).length))
       return {data, source:'all_leagues_data.json ['+key+']', errors};
     errors.push('all_leagues_data.json: no '+key+' player data');
   } catch (e) { errors.push('all_leagues_data.json: '+e.message); }
@@ -687,7 +753,7 @@ async function changeLeague() {
   teams = t.status==='fulfilled' && Array.isArray(t.value) ? t.value : [];
   if (!teams.length) failures.push('team metrics');
   const playerResult = p.status==='fulfilled' ? p.value : {data:null,source:null,errors:[String(p.reason)]};
-  players = playerResult.data ? normalizePlayers(playerResult.data) : [];
+  players = playerResult.data ? getUsablePlayers(playerResult.data) : [];
   recent = playerResult.data ? normalizeRecent(playerResult.data) : [];
   playerMatchData = playerResult.data ? normalizePlayerMatches(playerResult.data) : [];
   selectedPlayer=null;$('playerDetail').classList.add('hidden');
@@ -703,7 +769,8 @@ async function changeLeague() {
   fillOptions('awayTeam',matchNames,null);
   if (matchNames.length>1) $('awayTeam').selectedIndex=1;
   $('playerSearch').value='';
-  for (const id of ['teamRows','playerRows','matchComparison','matchRates','homeHistory','awayHistory','teamRanking','playerRanking']) $(id).replaceChildren();
+  $('playerDataStatus').textContent = players.length ? `${config.label}: ${players.length} player profiles and ${playerMatchData.length} match logs loaded from ${playerResult.source}.` : `${config.label}: No player profiles loaded. ${playerResult.errors.join(' | ') || 'Check that the league player JSON is uploaded to the same directory as index.html.'}`;
+  for (const id of ['teamRows','playerRows','matchComparison','matchRates','allHomeHistory','allAwayHistory','teamRanking','playerRanking']) $(id).replaceChildren();
   for (const id of ['teamCount','teamCorners','teamShots','teamGoals','playerCount','playerShots','playerGoals','playerXg','matchGoals','matchCorners','matchShots','matchSot']) $(id).textContent='—';
   $('matchStatus').textContent='';
   renderTeams(); renderPlayers(); analyze();
