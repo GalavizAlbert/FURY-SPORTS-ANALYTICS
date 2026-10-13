@@ -710,7 +710,7 @@ function cornersOverProbability(expectedTotal,line){
 }
 function updateCornersMarket(){
   const panel=$('projectionCornersMarket');
-  const expected=Number(panel.dataset.expected);
+  const expected=panel.dataset.expected===undefined?NaN:Number(panel.dataset.expected);
   if(!Number.isFinite(expected)){panel.hidden=true;return;}
   panel.hidden=false;
   const line=Number($('projectionCornersLine').value);
@@ -777,7 +777,7 @@ $('projectionCornersLine').addEventListener('change',updateCornersMarket);
 
 
 
-function analyze(){if(!matchPool.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));renderCompleteMatchHistory(home,away)}
+function analyze(){if(!matchPool.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games'+(avg(h,'corners_for')===null||avg(a,'corners_for')===null?' · Corner records missing for one or both selected leagues; upload their *_team_matches.json files.':'');$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));renderCompleteMatchHistory(home,away)}
 
 
 
@@ -986,6 +986,38 @@ async function setupCrossLeagueMatchData(){
     }
     matchTeamsByLeague[league]=[...new Set([...gameMap.values()].map(g=>g.team))].sort();
   }
+  // Prefer official team-match exports for corners and other team-level stats.
+  // Understat player logs do not contain corner counts; keep their derived
+  // matches only as a fallback for leagues without an export.
+  const matchFiles = {
+    laliga:['la_liga_team_matches.json','laliga_team_matches.json'],
+    premier_league:['premier_league_team_matches.json'],
+    bundesliga:['bundesliga_team_matches.json'],
+    serie_a:['serie_a_team_matches.json'],
+    ligue_1:['ligue_1_team_matches.json']
+  };
+  const loadedLeagues=[];
+  for(const league of leagueKeys){
+    let records=null;
+    for(const filename of matchFiles[league]){
+      try{const data=await load(filename);if(Array.isArray(data)&&data.length){records=data;break;}}
+      catch(e){/* Try the next supported export filename. */}
+    }
+    if(!records)continue;
+    const suffix=' ('+LEAGUES[league].label+')';
+    const official=records.filter(r=>r&&r.team&&r.venue).map(r=>({
+      ...r,team:String(r.team)+suffix,
+      opponent:r.opponent?String(r.opponent)+suffix:'',
+      source:'team-match export'
+    }));
+    // Replace derived player-match rows for this league, rather than append
+    // duplicate matches with null corners.
+    matchPool=matchPool.filter(r=>!r.team.endsWith(suffix));
+    matchPool.push(...official);
+    matchTeamsByLeague[league]=[...new Set(official.map(r=>r.team))].sort();
+    loadedLeagues.push(league);
+  }
+  $('matchStatus').dataset.cornerSources=loadedLeagues.map(k=>LEAGUES[k].label).join(', ');
   for(const id of ['homeLeague','awayLeague']){
     const sel=$(id);const old=sel.value;sel.replaceChildren();
     for(const key of leagueKeys){if(matchTeamsByLeague[key]?.length){const o=document.createElement('option');o.value=key;o.textContent=LEAGUES[key].label;sel.appendChild(o)}}
@@ -1041,7 +1073,7 @@ async function changeLeague() {
   const results = await Promise.allSettled([
     load(league+'_team_metrics.json'),
     loadLeaguePlayers(league, config),
-    load(league+'_team_matches.json'),
+    load(league==='laliga'?'la_liga_team_matches.json':league+'_team_matches.json'),
     load('all_leagues_data.json')
   ]);
   if (generation !== loadGeneration) return;
