@@ -446,7 +446,7 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 
 
 
-<section id="matchTab" class="hidden"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Configure match analysis</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home team<select id="homeTeam"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p id="matchStatus" class="hint"></p></div>
+<section id="matchTab" class="hidden"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Configure match analysis</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p id="matchStatus" class="hint"></p><p class="hint">Cross-league projections compare domestic league performances; they are estimates, not head-to-head results, and do not adjust for league strength.</p></div>
 
 
 
@@ -651,7 +651,7 @@ function renderFuryPlayerTrend(r){const target=$('furyPlayerTrends');target.repl
 }
 
 
-function venueGames(team,venue,count){const found=matches.filter(r=>r.team===team&&r.venue===venue).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date));return count?found.slice(0,count):found}
+function venueGames(team,venue,count){const found=matchPool.filter(r=>r.team===team&&r.venue===venue).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date));return count?found.slice(0,count):found}
 
 
 
@@ -664,7 +664,7 @@ function renderCompleteMatchHistory(home,away){
   for(const [team,bodyId,titleId,countId] of [[home,'allHomeHistory','allHomeHistoryTitle','allHomeHistoryCount'],[away,'allAwayHistory','allAwayHistoryTitle','allAwayHistoryCount']]){
     const body=$(bodyId);body.replaceChildren();
     $(titleId).textContent=team+' · All matches';
-    const games=matches.filter(r=>r.team===team).sort((a,b)=>(Date.parse(b.date)||0)-(Date.parse(a.date)||0));
+    const games=matchPool.filter(r=>r.team===team).sort((a,b)=>(Date.parse(b.date)||0)-(Date.parse(a.date)||0));
     $(countId).textContent=games.length+' recorded matches (home and away)';
     if(!games.length){row(body,['No games available','—','—','—','—','—','—']);continue;}
     games.forEach(r=>{
@@ -777,7 +777,7 @@ $('projectionCornersLine').addEventListener('change',updateCornersMarket);
 
 
 
-function analyze(){if(!matches.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));renderCompleteMatchHistory(home,away)}
+function analyze(){if(!matchPool.length)return;const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);if(!home||!away||home===away){$('matchStatus').textContent='Choose two different teams.';return}const h=venueGames(home,'Home',count),a=venueGames(away,'Away',count);if(!h.length||!a.length){$('matchStatus').textContent='Not enough home/away match data for this selection.';return}$('matchStatus').textContent=home+': '+h.length+' home games · '+away+': '+a.length+' away games';$('homeHead').textContent=home+' (home)';$('awayHead').textContent=away+' (away)';$('homeRateHead').textContent=home+' (home)';$('awayRateHead').textContent=away+' (away)';const defs=[['Goals','goals'],['Shots','shots'],['Shots on target','shots_on_target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow_cards'],['Red cards','red_cards']];const estimates={};$('matchComparison').replaceChildren();defs.forEach(([label,key])=>{const hf=avg(h,key+'_for'),ha=avg(h,key+'_against'),af=avg(a,key+'_for'),aa=avg(a,key+'_against');const he=hf===null||aa===null?null:(hf+aa)/2,ae=af===null||ha===null?null:(af+ha)/2,total=he===null||ae===null?null:he+ae;estimates[key]=total;const tr=row($('matchComparison'),[label,f(he),f(ae),f(total)]);const td=document.createElement('td');if(he!==null&&ae!==null&&total>0){const bars=document.createElement('div');bars.className='bars';const b1=document.createElement('div');b1.className='bar1';b1.style.width=100*he/total+'%';const b2=document.createElement('div');b2.className='bar2';b2.style.width=100*ae/total+'%';bars.append(b1,b2);td.appendChild(bars)}else td.textContent='—';tr.appendChild(td)});renderProjection(home,away,h,a);$('matchGoals').textContent=f(estimates.goals);$('matchCorners').textContent=f(estimates.corners);$('matchShots').textContent=f(estimates.shots);$('matchSot').textContent=f(estimates.shots_on_target);const markets=[['Over 1.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>1.5],['Over 2.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>2.5],['Over 3.5 goals',['goals_for','goals_against'],r=>n(r.goals_for)+n(r.goals_against)>3.5],['Both teams to score',['goals_for','goals_against'],r=>n(r.goals_for)>0&&n(r.goals_against)>0],['Over 8.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>8.5],['Over 9.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>9.5],['Over 10.5 corners',['corners_for','corners_against'],r=>n(r.corners_for)+n(r.corners_against)>10.5],['Team 5+ corners',['corners_for'],r=>n(r.corners_for)>=5],['Team 6+ corners',['corners_for'],r=>n(r.corners_for)>=6],['Team 10+ shots',['shots_for'],r=>n(r.shots_for)>=10],['Team 4+ SOT',['shots_on_target_for'],r=>n(r.shots_on_target_for)>=4]];$('matchRates').replaceChildren();markets.forEach(([label,keys,test])=>row($('matchRates'),[label,hit(h,keys,test),hit(a,keys,test)]));renderCompleteMatchHistory(home,away)}
 
 
 
@@ -931,13 +931,77 @@ function derivedTeams(){const names=[...new Set([...qualityGames.values()].map(g
 function derivedMatchHistory(){return [...qualityGames.values()].map(g=>({team:g.team,opponent:g.opponent,venue:g.venue,date:g.date,game_id:g.game_id,goals_for:g.goals,goals_against:qualityGames.get(g.game_id+'|'+g.opponent)?.goals??null,shots_for:g.shots,shots_against:qualityGames.get(g.game_id+'|'+g.opponent)?.shots??null,shots_on_target_for:g.sot,shots_on_target_against:qualityGames.get(g.game_id+'|'+g.opponent)?.sot??null,xg_for:g.xg,xg_against:g.xga}))}
 function renderFuryMatch(){
  const home=$('homeTeam').value,away=$('awayTeam').value,count=Number($('matchPeriod').value);
- const sample=(team,venue)=>[...qualityGames.values()].filter(g=>g.team===team&&g.venue===venue).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,count||undefined);
+ const sample=(team,venue)=>[...matchQualityPool.values()].filter(g=>g.team===team&&g.venue===venue).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,count||undefined);
  const h=sample(home,'Home'),a=sample(away,'Away'),grid=$('furyQualityGrid');grid.replaceChildren();
  for(const [team,rows] of [[home,h],[away,a]]){const xg=avg(rows,'xg'),xga=avg(rows,'xga'),shots=sum(rows,'shots'),sot=sum(rows,'sot');for(const [label,value] of [['xG / match',f(xg)],['xGA / match',f(xga)],['xG / shot',shots?f(sum(rows,'xg')/shots,3):'N/A'],['SOT / match',rows.length?f(sot/rows.length):'N/A']]){const box=document.createElement('div');box.className='fury-stat';const small=document.createElement('small');small.textContent=team+' · '+label;const strong=document.createElement('strong');strong.textContent=value;box.append(small,strong);grid.appendChild(box)}}
  const sel=$('furyMatchPlayerTeam'),old=sel.value;sel.replaceChildren();for(const t of [home,away])option(sel,t);sel.value=[home,away].includes(old)?old:home;fillMatchPlayerChoices();
 }
-function fillMatchPlayerChoices(){const team=$('furyMatchPlayerTeam').value,sel=$('furyMatchPlayer'),old=sel.value;const names=[...new Set(playerMatchData.filter(x=>x.team===team).map(x=>x.player))].sort();sel.replaceChildren();names.forEach(x=>option(sel,x));if(names.includes(old))sel.value=old;renderMatchPlayer()}
-function renderMatchPlayer(){const team=$('furyMatchPlayerTeam').value,player=$('furyMatchPlayer').value,logs=playerMatchData.filter(x=>x.team===team&&x.player===player).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))),grid=$('furyPlayerVenue');grid.replaceChildren();for(const venue of ['Home','Away']){const rows=logs.filter(x=>String(x.homeAway).toLowerCase()===venue.toLowerCase());for(const [label,key] of [['Shots','shots'],['SOT','sot'],['xG','xg'],['xA','xa']]){const box=document.createElement('div');box.className='fury-stat';const small=document.createElement('small');small.textContent=venue+' · '+label+' / match ('+rows.length+')';const strong=document.createElement('strong');strong.textContent=f(avg(rows,key));box.append(small,strong);grid.appendChild(box)}}const chart=$('furyMatchTrend');chart.replaceChildren();logs.slice(0,10).reverse().forEach((r,i)=>{const col=document.createElement('div');col.className='fury-col';const val=document.createElement('span');val.textContent=(r.shots??'—')+' / '+(r.sot??'—');const bar=document.createElement('div');bar.className='fury-bar';bar.style.height=Math.max(3,(n(r.shots)??0)*12)+'px';const label=document.createElement('span');label.textContent=r.date?String(r.date).slice(5,10):'G'+(i+1);col.append(val,bar,label);chart.appendChild(col)})}
+function fillMatchPlayerChoices(){const team=$('furyMatchPlayerTeam').value,sel=$('furyMatchPlayer'),old=sel.value;const names=[...new Set(matchPlayerPool.filter(x=>x.team===team).map(x=>x.player))].sort();sel.replaceChildren();names.forEach(x=>option(sel,x));if(names.includes(old))sel.value=old;renderMatchPlayer()}
+function renderMatchPlayer(){const team=$('furyMatchPlayerTeam').value,player=$('furyMatchPlayer').value,logs=matchPlayerPool.filter(x=>x.team===team&&x.player===player).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))),grid=$('furyPlayerVenue');grid.replaceChildren();for(const venue of ['Home','Away']){const rows=logs.filter(x=>String(x.homeAway).toLowerCase()===venue.toLowerCase());for(const [label,key] of [['Shots','shots'],['SOT','sot'],['xG','xg'],['xA','xa']]){const box=document.createElement('div');box.className='fury-stat';const small=document.createElement('small');small.textContent=venue+' · '+label+' / match ('+rows.length+')';const strong=document.createElement('strong');strong.textContent=f(avg(rows,key));box.append(small,strong);grid.appendChild(box)}}const chart=$('furyMatchTrend');chart.replaceChildren();logs.slice(0,10).reverse().forEach((r,i)=>{const col=document.createElement('div');col.className='fury-col';const val=document.createElement('span');val.textContent=(r.shots??'—')+' / '+(r.sot??'—');const bar=document.createElement('div');bar.className='fury-bar';bar.style.height=Math.max(3,(n(r.shots)??0)*12)+'px';const label=document.createElement('span');label.textContent=r.date?String(r.date).slice(5,10):'G'+(i+1);col.append(val,bar,label);chart.appendChild(col)})}
+
+
+// Cross-league matchup dataset is independent from the league used in Team/Player tabs.
+let matchPool=[],matchQualityPool=new Map(),matchPlayerPool=[],matchTeamsByLeague={};
+async function setupCrossLeagueMatchData(){
+  let combined;
+  try{combined=await load('all_leagues_data.json')}catch(e){$('matchStatus').textContent='Upload all_leagues_data.json to enable cross-league comparisons.';return}
+  const leagueKeys=Object.keys(LEAGUES);
+  matchPool=[];matchQualityPool=new Map();matchPlayerPool=[];matchTeamsByLeague={};
+  for(const league of leagueKeys){
+    const data=combined[league==='laliga'?'la_liga':league];
+    if(!data)continue;
+    const tag=LEAGUES[league].label;
+    const teamName=name=>String(name||'')+' ('+tag+')';
+    const rawLogs=Array.isArray(data.matches)?data.matches:[];
+    const shots=Array.isArray(data.shots)?data.shots:[];
+    const gameMap=new Map();
+    for(const r of rawLogs){
+      if(!r.team||r.game_id==null)continue;
+      const key=String(r.game_id)+'|'+r.team;
+      if(!gameMap.has(key))gameMap.set(key,{game_id:String(r.game_id),team:teamName(r.team),opponent:teamName(r.opponent),venue:r.venue,date:r.date||null,xg:0,shots:0,sot:0,goals:0,xa:0,key_passes:0});
+      const g=gameMap.get(key);
+      for(const k of ['xg','shots','goals','xa','key_passes'])g[k]+=n(r[k])??0;
+    }
+    const shotsByPlayerGame=new Map();
+    for(const sh of shots){
+      const key=String(sh.game_id)+'|'+sh.team;
+      const g=gameMap.get(key);
+      if(g){g.date=g.date||sh.date||null;if(['Saved Shot','Goal'].includes(sh.result))g.sot++}
+      const playerKey=String(sh.game_id)+'|'+sh.team+'|'+sh.player;
+      if(!shotsByPlayerGame.has(playerKey))shotsByPlayerGame.set(playerKey,0);
+      if(['Saved Shot','Goal'].includes(sh.result))shotsByPlayerGame.set(playerKey,shotsByPlayerGame.get(playerKey)+1);
+    }
+    for(const [key,g] of gameMap){
+      const rawTeam=key.slice(key.indexOf('|')+1);
+      const opponent=gameMap.get(g.game_id+'|'+(g.opponent.endsWith(' ('+tag+')')?g.opponent.slice(0,-(' ('+tag+')').length):g.opponent));
+      g.xga=opponent?opponent.xg:null;
+      matchQualityPool.set(league+'|'+key,g);
+      matchPool.push({team:g.team,opponent:g.opponent,venue:g.venue,date:g.date,game_id:g.game_id,goals_for:g.goals,goals_against:opponent?.goals??null,shots_for:g.shots,shots_against:opponent?.shots??null,shots_on_target_for:g.sot,shots_on_target_against:opponent?.sot??null,xg_for:g.xg,xg_against:g.xga,corners_for:null,corners_against:null,fouls_for:null,fouls_against:null,yellow_cards_for:null,yellow_cards_against:null,red_cards_for:null,red_cards_against:null});
+    }
+    const logs=normalizePlayerMatches(data);
+    for(const r of logs){
+      const gameInfo=gameMap.get(String(r.game_id)+'|'+r.team);
+      const v={...r,date:r.date||gameInfo?.date||null,team:teamName(r.team),sot:shotsByPlayerGame.get(String(r.game_id)+'|'+r.team+'|'+r.player)??null};
+      matchPlayerPool.push(v);
+    }
+    matchTeamsByLeague[league]=[...new Set([...gameMap.values()].map(g=>g.team))].sort();
+  }
+  for(const id of ['homeLeague','awayLeague']){
+    const sel=$(id);const old=sel.value;sel.replaceChildren();
+    for(const key of leagueKeys){if(matchTeamsByLeague[key]?.length){const o=document.createElement('option');o.value=key;o.textContent=LEAGUES[key].label;sel.appendChild(o)}}
+    if([...sel.options].some(o=>o.value===old))sel.value=old;
+  }
+  if(!$('awayLeague').dataset.initialized){$('awayLeague').selectedIndex=Math.min(1,$('awayLeague').options.length-1);$('awayLeague').dataset.initialized='1'}
+  refreshCrossLeagueTeams();analyze();renderFuryMatch();
+}
+function refreshCrossLeagueTeams(){
+  for(const [leagueId,teamId] of [['homeLeague','homeTeam'],['awayLeague','awayTeam']]){
+    const select=$(teamId),old=select.value;
+    fillOptions(teamId,matchTeamsByLeague[$(leagueId).value]||[],null);
+    if([...select.options].some(o=>o.value===old))select.value=old;
+  }
+  if($('homeTeam').value===$('awayTeam').value&&$('awayTeam').options.length>1)$('awayTeam').selectedIndex=1;
+}
 
 async function loadLeaguePlayers(league, config) {
   // Support both La Liga export filenames and the combined Understat export.
@@ -1001,9 +1065,7 @@ async function changeLeague() {
   const matchNames = [...new Set(matches.map(r=>r.team).filter(Boolean))].sort();
   fillOptions('teamFilter',teamNames,'All teams');
   fillOptions('playerTeam',playerNames,'All teams');
-  fillOptions('homeTeam',matchNames,null);
-  fillOptions('awayTeam',matchNames,null);
-  if (matchNames.length>1) $('awayTeam').selectedIndex=1;
+  if(!matchPool.length) await setupCrossLeagueMatchData();
   $('playerSearch').value='';
   $('playerDataStatus').textContent = players.length ? `${config.label}: ${players.length} player profiles and ${playerMatchData.length} match logs loaded from ${playerResult.source}.` : `${config.label}: No player profiles loaded. ${playerResult.errors.join(' | ') || 'Check that the league player JSON is uploaded to the same directory as index.html.'}`;
   for (const id of ['teamRows','playerRows','matchComparison','matchRates','allHomeHistory','allAwayHistory','teamRanking','playerRanking']) $(id).replaceChildren();
@@ -1018,6 +1080,7 @@ function init(){
   $('teamSearch').addEventListener('input',renderTeams);
   ['playerTeam','playerSort','playerPeriod'].forEach(id=>$(id).addEventListener('change',renderPlayers));
   $('playerSearch').addEventListener('input',renderPlayers);
+  ['homeLeague','awayLeague'].forEach(id=>$(id).addEventListener('change',()=>{refreshCrossLeagueTeams();analyze();renderFuryMatch()}));
   ['homeTeam','awayTeam','matchPeriod'].forEach(id=>$(id).addEventListener('change',analyze));
   $('analyzeButton').addEventListener('click',()=>{analyze();renderFuryMatch()});
   ['homeTeam','awayTeam','matchPeriod'].forEach(id=>$(id).addEventListener('change',renderFuryMatch));
