@@ -390,6 +390,41 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
 .fury-extra h3{margin:0 0 12px;color:#b9eaff;font-size:17px}.fury-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.fury-stat{background:#14283b;padding:14px;border-radius:10px;border:1px solid #24445c}.fury-stat small{display:block;color:#9bb5c9}.fury-stat strong{display:block;font-size:24px;color:#fff;margin:5px 0}.fury-note{color:#a9c3d3;font-size:12px;margin-top:10px}.fury-hit{font-weight:700;border-radius:5px;padding:3px 7px;white-space:nowrap}.fury-hit.good{background:#154f36;color:#8af2ae}.fury-hit.mid{background:#60471a;color:#ffdc8a}.fury-hit.low{background:#59272d;color:#ffaaaa}.fury-chart{display:flex;align-items:end;gap:6px;overflow-x:auto;min-height:125px;padding:10px 0}.fury-col{min-width:42px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#bdd5e3}.fury-bar{width:28px;min-height:3px;border-radius:4px 4px 0 0;background:linear-gradient(#45c5ff,#1681be)}.fury-extra .controls{margin-bottom:12px}
+
+/* FURY iPhone/mobile responsive layout — preserves desktop table */
+@media (max-width: 680px) {
+ html,body{width:100%;max-width:100%;overflow-x:hidden}
+ header,main{max-width:100%;padding-left:12px!important;padding-right:12px!important}
+ header{padding-right:70px!important}
+ .app-shell,.app-main,.panel,#oddsTab{min-width:0;max-width:100%}
+ #oddsTab .odds-filter-panel{padding:13px}
+ #oddsTab .odds-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ #oddsTab .odds-controls label{min-width:0;width:100%}
+ #oddsTab .odds-controls select,#oddsTab .odds-controls input{width:100%;min-width:0;max-width:100%;font-size:16px;min-height:44px}
+ #oddsTab .odds-controls button{min-height:44px}
+ #oddsTab .odds-table-wrap{overflow:visible;max-height:none;border:0;background:transparent}
+ #oddsTab .odds-table{display:block;min-width:0;width:100%}
+ #oddsTab .odds-table thead{display:none}
+ #oddsTab .odds-table tbody{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+ #oddsTab .odds-table tbody tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;background:#10283e;border:1px solid #35516b;border-radius:14px;padding:13px;min-width:0}
+ #oddsTab .odds-table tbody td{display:flex;flex-direction:column;justify-content:center;min-width:0;white-space:normal;overflow-wrap:anywhere;border:0;padding:4px 3px;font-size:13px}
+ #oddsTab .odds-table tbody td::before{content:attr(data-label);display:block;color:#9fb9ce;font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;font-weight:650}
+ #oddsTab .odds-table tbody td:nth-child(1){grid-column:1 / 3;grid-row:1}
+ #oddsTab .odds-table tbody td:nth-child(2){grid-column:3;grid-row:1;text-align:right;align-items:flex-end}
+ #oddsTab .odds-table tbody td:nth-child(3){grid-column:1 / -1;grid-row:2;font-size:16px;line-height:1.35}
+ #oddsTab .odds-table tbody td:nth-child(4){grid-column:1 / -1;grid-row:3;color:#a6bdd0}
+ #oddsTab .odds-table tbody td:nth-child(5){grid-column:1 / -1;grid-row:4}
+ #oddsTab .odds-table tbody td:nth-child(6),#oddsTab .odds-table tbody td:nth-child(7),#oddsTab .odds-table tbody td:nth-child(8){grid-row:5;background:#172f48;border-radius:8px;text-align:center;align-items:center;padding:10px 3px;font-size:17px}
+ #oddsTab .odds-table tbody td:nth-child(9),#oddsTab .odds-table tbody td:nth-child(10){grid-row:6;background:#172f48;border-radius:8px;align-items:center;text-align:center;padding:10px 3px}
+ #oddsTab .odds-table tbody td:nth-child(9){grid-column:1 / 2}
+ #oddsTab .odds-table tbody td:nth-child(10){grid-column:2 / 3}
+ #oddsTab .odds-table tbody td.odds-empty{grid-column:1 / -1;grid-row:auto;display:block;text-align:center;padding:22px}
+ #oddsTab .market-prob{width:100%;max-width:none;min-width:0}
+ #oddsTab .market-prob-labels{display:flex;justify-content:space-between;gap:5px;font-size:12px}
+ #oddsTab .market-prob-bar{width:100%}
+ #oddsTab .odds-summary{font-size:12px}
+}
+@media(max-width:370px){#oddsTab .odds-controls{grid-template-columns:minmax(0,1fr)}#oddsTab .odds-table tbody tr{padding:10px;gap:6px}}
 </style><style id="team-history-style">#teamHistoryPanel .team-section-head{align-items:center}#teamHistoryPanel .team-history-selector{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:800;color:#b7d0e5;min-width:185px}#teamHistoryPanel .team-history-selector select{background:#172d45;border:1px solid #385976;border-radius:10px;color:#f0f8ff;min-height:42px}#teamHistoryPanel .history-result{font-weight:800}#teamHistoryPanel .player-table-wrap{max-height:640px}@media(max-width:600px){#teamHistoryPanel .team-history-selector{width:100%}}
 /* Prevent any dashboard content from showing before authorization. */
 body:not(.fury-authorized) header,body:not(.fury-authorized) main{display:none!important}
@@ -1388,11 +1423,11 @@ function renderOddsSchedule(){
  for(const e of filtered){
   const tr=document.createElement('tr');
   const values=[oddsKickoff(e),oddsLeagueLabels[e.league]||e.league,`${e.home_team} vs ${e.away_team}`,e.bookmaker||'—',oddsPrice(e.h2h?.home),oddsPrice(e.h2h?.draw),oddsPrice(e.h2h?.away),oddsPrice(e.totals?.over),oddsPrice(e.totals?.under)];
-  values.forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===2)td.className='fixture';else if(i>=4)td.className='price';else if(i===1||i===3)td.className='muted';tr.appendChild(td)});
-  const probTd=document.createElement('td');probTd.appendChild(oddsProbabilityIndicator(e.h2h));tr.insertBefore(probTd,tr.children[4]);
+  values.forEach((v,i)=>{const td=document.createElement('td');td.dataset.label=['Kickoff','League','Fixture','Bookmaker','Home','Draw','Away','Over 2.5','Under 2.5'][i];td.textContent=v;if(i===2)td.className='fixture';else if(i>=4)td.className='price';else if(i===1||i===3)td.className='muted';tr.appendChild(td)});
+  const probTd=document.createElement('td');probTd.dataset.label='1X2 probability';probTd.className='probability-cell';probTd.appendChild(oddsProbabilityIndicator(e.h2h));tr.insertBefore(probTd,tr.children[4]);
   oddsRowsEl.appendChild(tr);
  }
- if(!filtered.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=10;td.textContent=oddsScheduleData.length?'No fixtures match these filters.':'No upcoming fixtures with bookmaker odds were returned.';tr.appendChild(td);oddsRowsEl.appendChild(tr)}
+ if(!filtered.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=10;td.className='odds-empty';td.textContent=oddsScheduleData.length?'No fixtures match these filters.':'No upcoming fixtures with bookmaker odds were returned.';tr.appendChild(td);oddsRowsEl.appendChild(tr)}
  document.getElementById('oddsSummary').textContent=`${filtered.length} fixture${filtered.length===1?'':'s'} shown · ${new Set(filtered.map(e=>e.league)).size} league${new Set(filtered.map(e=>e.league)).size===1?'':'s'}`;
 }
 async function loadOddsSchedule(force=false){
