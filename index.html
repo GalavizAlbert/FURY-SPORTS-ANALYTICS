@@ -375,11 +375,21 @@ body.fury-authorized #furyAuthGate{display:none}
 .fury-account{display:none;align-items:center;gap:10px;font-size:12px;color:#b5cadd;margin-left:auto}
 body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px 12px;font-size:12px}
 
+/* Compact, always-fixed hamburger menu; sign-in/out remain inside dropdown. */
+.fury-account-menu{width:52px!important;right:18px!important;top:14px!important;z-index:9999}
+.fury-account-trigger{width:52px;height:48px;justify-content:center!important;padding:10px!important}
+.fury-hamburger{display:flex;flex-direction:column;gap:5px;width:23px}
+.fury-hamburger span{display:block;height:2px;width:100%;border-radius:4px;background:#e9f8ff}
+.fury-account-dropdown{right:0}
+@media(max-width:650px){.fury-account-menu{width:48px!important;right:12px!important;top:10px!important}.fury-account-trigger{width:48px;height:44px}header{padding-top:22px!important;padding-right:72px!important}}
+@media(min-width:651px){header{padding-right:88px!important}}
+/* Hide raw JSON/data-loading diagnostics above Team Statistics. Keep errors visible. */
+#loadStatus:not(.error){display:none!important}
 /* Account actions appear only after My account is clicked. */
 #furySignedInMenu[hidden],#furySignedOutMenu[hidden]{display:none!important}
 #furyAccountMenu:not([open]) .fury-account-dropdown{display:none!important}
 /* Fixed top-right account menu: works on desktop and mobile. */
-.fury-account-menu{position:fixed;right:22px;top:17px;z-index:9999;width:235px;font-family:'Outfit',sans-serif}
+.fury-account-menu{position:fixed;right:18px;top:14px;z-index:9999;width:52px;font-family:'Outfit',sans-serif}
 .fury-account-trigger{display:flex;align-items:center;justify-content:space-between;gap:9px;list-style:none;cursor:pointer;padding:12px 15px;background:#152c43;border:1px solid #386080;border-radius:12px;color:#e9f8ff;font-weight:800;box-shadow:0 8px 26px #0006}
 .fury-account-trigger::-webkit-details-marker{display:none}
 .fury-account-trigger:hover,.fury-account-menu[open] .fury-account-trigger{border-color:#43baf6;background:#1b3954}
@@ -394,16 +404,16 @@ body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px
 .fury-welcome-brand{font:900 clamp(32px,5vw,56px) 'Outfit',sans-serif;letter-spacing:-1px}
 .fury-welcome-brand span{color:#43baf6}
 .fury-welcome p{color:#b5cadd;font-size:15px}
-header{padding-right:270px}
-@media(max-width:650px){.fury-account-menu{right:12px;top:10px;width:150px}.fury-account-trigger{padding:10px;font-size:12px}header{padding-right:13px;padding-top:75px}.fury-account-dropdown{padding:15px}}
+header{padding-right:88px}
+@media(max-width:650px){.fury-account-dropdown{padding:15px}}
 </style></head>
 
 
 
 <body>
-<div id="furyAuthGate" aria-hidden="true"><div class="fury-welcome"><div class="fury-welcome-brand">FURY <span>SPORTS AI</span></div><p>Private sports analytics · Select Account → Sign in in the upper-right corner.</p></div></div>
+<div id="furyAuthGate" aria-hidden="true"><div class="fury-welcome"><div class="fury-welcome-brand">FURY <span>SPORTS AI</span></div><p>Private sports analytics · Open the menu in the upper-right corner to sign in.</p></div></div>
 <details id="furyAccountMenu" class="fury-account-menu">
-  <summary class="fury-account-trigger" aria-label="Account menu">◉ <span id="furyMenuLabel">Account</span> <span aria-hidden="true">▾</span></summary>
+  <summary class="fury-account-trigger" aria-label="Open account menu" title="Account menu"><span class="fury-hamburger" aria-hidden="true"><span></span><span></span><span></span></span><span id="furyMenuLabel" class="visually-hidden">Account</span></summary>
   <div class="fury-account-dropdown">
     <div id="furySignedOutMenu">
       <div class="fury-menu-heading">Member sign in</div>
@@ -790,7 +800,7 @@ function renderCompleteMatchHistory(home,away){
       const gf=Number(r.goals_for),ga=Number(r.goals_against);
       const hasScore=r.goals_for!==null&&r.goals_for!==undefined&&r.goals_against!==null&&r.goals_against!==undefined&&Number.isFinite(gf)&&Number.isFinite(ga);
       const outcome=hasScore?(gf>ga?'W':gf<ga?'L':'D'):'—';
-      const tr=row(body,[String(r.date||'').slice(0,10)||'—',r.venue==='Home'?'H':r.venue==='Away'?'A':'—',formatValue(r.opponent),hasScore?gf+'–'+ga:'—',outcome,formatValue(r.corners_for),formatValue(r.shots_for)]);
+      const tr=row(body,[String(r.date||'').slice(0,10)||'—',r.venue==='Home'?'H':r.venue==='Away'?'A':'—',formatValue(r.opponent),hasScore?(r.venue==='Away'?ga+'–'+gf:gf+'–'+ga):'—',outcome,formatValue(r.corners_for),formatValue(r.shots_for)]);
       if(hasScore){const cell=tr.children[4];cell.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;cell.appendChild(badge);}
     });
   }
