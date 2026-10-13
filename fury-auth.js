@@ -165,3 +165,16 @@ if (SUPABASE_PUBLISHABLE_KEY.startsWith('PASTE_')) {
 document.addEventListener('click', (event) => {
   if (accountMenu.open && !accountMenu.contains(event.target)) accountMenu.open = false;
 });
+
+// Protected odds endpoint. The secret API key lives only in Supabase Edge Function secrets.
+window.furyOddsRequest = async (league) => {
+  if (!authorized) throw new Error('Please sign in');
+  const token = await getToken();
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/fury-odds?league=${encodeURIComponent(league)}`, {
+    headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_PUBLISHABLE_KEY },
+    cache: 'no-store'
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+  return result;
+};

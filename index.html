@@ -535,6 +535,7 @@ header{padding-right:88px}
   <div class="projection-market"><div class="projection-market-title">Moneyline · 1X2 model probability</div><div class="projection-market-labels three"><span id="projectionWinHome">Home —</span><span id="projectionDraw">Draw —</span><span id="projectionWinAway">Away —</span></div><div class="projection-bar"><div id="projectionBarHome" style="background:#ff652e"></div><div id="projectionBarDraw" style="background:#8592a4"></div><div id="projectionBarAway" style="background:#0a8f9f"></div></div></div>
   <div class="projection-market"><div class="projection-market-title">Over / Under % (2.5 goals)</div><div class="projection-market-labels"><span id="projectionOver">Over —</span><span id="projectionUnder">Under —</span></div><div class="projection-bar"><div id="projectionBarOver" style="background:#088e49"></div><div id="projectionBarUnder" style="background:#a92437"></div></div></div>
   <div class="projection-market"><div class="projection-market-title">Both Teams to Score</div><div class="projection-market-labels"><span id="projectionBttsYes">Yes —</span><span id="projectionBttsNo">No —</span></div><div class="projection-bar"><div id="projectionBarBttsYes" style="background:#088e49"></div><div id="projectionBarBttsNo" style="background:#a92437"></div></div></div>
+  <div class="panel match-center-panel" id="furyBookmakerOdds" style="margin:20px 0"><div class="player-panel-head"><h2>Live bookmaker odds</h2><span class="player-panel-kicker">THE ODDS API · DECIMAL</span></div><p id="furyOddsStatus" class="hint">Choose a matchup to load upcoming bookmaker odds.</p><div id="furyOddsResults" class="fury-grid"></div><p class="hint">Only upcoming fixtures returned by the provider. Scores and historical matches are not betting lines. Market availability varies by league, region and bookmaker. Implied probabilities include bookmaker margin.</p></div>
   <div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
   <div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
   <div class="projection-foot"><div id="projectionSample" class="projection-sub"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
@@ -1273,4 +1274,39 @@ window.startFuryDashboard = init;
 
 </script>
 <script type="module" src="./fury-auth.js"></script>
+<script>
+// The Odds API integration. Access tokens and bookmaker API key never enter the page source.
+let furyOddsGeneration=0;
+function furyOddsNormalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\b(fc|cf|afc|sc|club|football|de|the)\b/g,'').replace(/[^a-z0-9]/g,'').replace(/^(atletico)(madrid)$/,'atleticomadrid');}
+function furyOddsMatch(a,b){const x=furyOddsNormalize(a),y=furyOddsNormalize(b);return !!x&&!!y&&(x===y || (x.length>=7&&y.length>=7&&(x.includes(y)||y.includes(x))));}
+function furyOddsCard(label,price,modelPct){const el=document.createElement('div');el.className='tile';const p=Number(price);const prob=p>1?100/p:null;const value=(modelPct!==null&&prob!==null)?modelPct-prob:null;const title=document.createElement('span');title.textContent=label;const strong=document.createElement('strong');strong.textContent=p>1?p.toFixed(2):'—';const detail=document.createElement('small');detail.style.color='#a9c3d9';detail.textContent=prob!==null?'Implied '+prob.toFixed(1)+'%'+(value!==null?' · Model edge '+(value>=0?'+':'')+value.toFixed(1)+' pp':''):'Not offered';el.append(title,strong,detail);return el;}
+async function furyLoadBookmakerOdds(){
+ const id=++furyOddsGeneration,status=document.getElementById('furyOddsStatus'),grid=document.getElementById('furyOddsResults');
+ if(!status||!grid)return;
+ const home=document.getElementById('homeTeam')?.value,away=document.getElementById('awayTeam')?.value;
+ const league=document.getElementById('homeLeague')?.value,awayLeague=document.getElementById('awayLeague')?.value;
+ grid.replaceChildren();if(!home||!away||home===away)return;
+ if(league!==awayLeague){status.textContent='Bookmaker odds require both teams in the same league.';return;}
+ if(typeof window.furyOddsRequest!=='function'){status.textContent='Odds connection not ready. Sign in and try again.';return;}
+ status.textContent='Searching upcoming bookmaker fixtures…';
+ try{
+  const data=await window.furyOddsRequest(league);
+  if(id!==furyOddsGeneration)return;
+  const events=Array.isArray(data.events)?data.events:[];
+  const event=events.find(e=>furyOddsMatch(e.home_team,home)&&furyOddsMatch(e.away_team,away));
+  if(!event){status.textContent='No matching upcoming fixture with available odds. Team names may differ between providers.';return;}
+  const date=new Date(event.commence_time);
+  status.textContent=event.home_team+' vs '+event.away_team+' · '+(Number.isNaN(date.getTime())?'Kickoff TBD':date.toLocaleString())+' · '+event.bookmaker+' · '+(data.region||'us')+' region';
+  const h2h=event.h2h||{},totals=event.totals||{};
+  const modelHome=parseFloat(document.getElementById('projectionWinHome')?.textContent?.match(/[\d.]+(?=%)/)?.[0]||'');
+  const modelDraw=parseFloat(document.getElementById('projectionDraw')?.textContent?.match(/[\d.]+(?=%)/)?.[0]||'');
+  const modelAway=parseFloat(document.getElementById('projectionWinAway')?.textContent?.match(/[\d.]+(?=%)/)?.[0]||'');
+  grid.append(furyOddsCard('Home win',h2h.home,Number.isFinite(modelHome)?modelHome:null),furyOddsCard('Draw',h2h.draw,Number.isFinite(modelDraw)?modelDraw:null),furyOddsCard('Away win',h2h.away,Number.isFinite(modelAway)?modelAway:null));
+  if(totals.over||totals.under){grid.append(furyOddsCard('Over '+totals.point,totals.over,null),furyOddsCard('Under '+totals.point,totals.under,null));}
+  if(h2h.home>1&&h2h.draw>1&&h2h.away>1){const margin=(1/h2h.home+1/h2h.draw+1/h2h.away-1)*100;const note=document.createElement('p');note.className='hint';note.textContent='1X2 bookmaker margin: '+margin.toFixed(1)+'%. Model edges are uncalibrated estimates, not guaranteed value.';grid.appendChild(note);}
+ }catch(err){if(id===furyOddsGeneration)status.textContent='Odds unavailable: '+(err?.message||'Request failed');}
+}
+['homeTeam','awayTeam','homeLeague','awayLeague'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>{void furyLoadBookmakerOdds()}));
+document.getElementById('analyzeButton')?.addEventListener('click',()=>{void furyLoadBookmakerOdds()});
+</script>
 </body></html>
