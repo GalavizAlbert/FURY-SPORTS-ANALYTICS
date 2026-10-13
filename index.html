@@ -416,7 +416,7 @@ body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px
 
 
 <main class="app-shell">
-<div class="app-content"><div id="loadStatus" class="status" role="status">Loading your local JSON data...</div>
+<div class="app-content"><div id="loadStatus" class="status" role="status">Loading your private Supabase statistics...</div>
 
 
 
@@ -1150,7 +1150,7 @@ async function changeLeague() {
   $('loadStatus').textContent = 'Loading '+config.label+' statistics...';
   $('loadStatus').className='status';
   const results = await Promise.allSettled([
-    load(league+'_team_metrics.json'),
+    load(league === 'laliga' ? 'la_liga_team_metrics.json' : league+'_team_metrics.json'),
     loadLeaguePlayers(league, config),
     load(league==='laliga'?'la_liga_team_matches.json':league+'_team_matches.json'),
     load('all_leagues_data.json')
@@ -1178,7 +1178,7 @@ async function changeLeague() {
   fillOptions('playerTeam',playerNames,'All teams');
   if(!matchPool.length) await setupCrossLeagueMatchData();
   $('playerSearch').value='';
-  $('playerDataStatus').textContent = players.length ? `${config.label}: ${players.length} player profiles and ${playerMatchData.length} match logs loaded from ${playerResult.source}.` : `${config.label}: No player profiles loaded. ${playerResult.errors.join(' | ') || 'Check that the league player JSON is uploaded to the same directory as index.html.'}`;
+  $('playerDataStatus').textContent = players.length ? `${config.label}: ${players.length} player profiles and ${playerMatchData.length} match logs loaded from ${playerResult.source}.` : `${config.label}: No player profiles loaded. ${playerResult.errors.join(' | ') || 'Check that the league player JSON exists in Supabase private storage.'}`;
   for (const id of ['teamRows','playerRows','matchComparison','matchRates','allHomeHistory','allAwayHistory','teamRanking','playerRanking']) $(id).replaceChildren();
   for (const id of ['teamCount','teamCorners','teamShots','teamGoals','playerCount','playerShots','playerGoals','playerXg','matchGoals','matchCorners','matchShots','matchSot']) $(id).textContent='—';
   $('matchStatus').textContent='';
