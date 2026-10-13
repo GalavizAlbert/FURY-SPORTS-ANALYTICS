@@ -8,16 +8,31 @@ const signInButton = document.getElementById('furySignIn');
 const message = document.getElementById('furyAuthMessage');
 const logoutButton = document.getElementById('furyLogout');
 const accountEmail = document.getElementById('furyAccountEmail');
+const accountMenu = document.getElementById('furyAccountMenu');
+accountMenu.open = false;
+const menuLabel = document.getElementById('furyMenuLabel');
+const signedInMenu = document.getElementById('furySignedInMenu');
+const signedOutMenu = document.getElementById('furySignedOutMenu');
+function updateAccountMenu(signedIn) {
+  signedInMenu.hidden = !signedIn;
+  signedOutMenu.hidden = signedIn;
+  menuLabel.textContent = signedIn ? 'My account' : 'Sign in';
+}
 let client = null;
 let authorized = false;
 let initializedDashboard = false;
 let authGeneration = 0;
+let currentToken = null;
+const sessionJSONCache = new Map();
 
 function showMessage(text) { message.textContent = text || ''; }
 function lockDashboard() {
   authorized = false;
+  currentToken = null;
+  sessionJSONCache.clear();
   document.body.classList.remove('fury-authorized');
   accountEmail.textContent = '';
+  updateAccountMenu(false);
 }
 function friendlyError(error) {
   return error?.message || 'Unable to connect. Please try again.';
@@ -41,14 +56,24 @@ async function requestPrivateJSON(filename, accessToken) {
   return response.json();
 }
 async function getToken() {
+  // Use the current session token; refresh it when Supabase rotates the JWT.
   const { data, error } = await client.auth.getSession();
   if (error || !data.session?.access_token) throw new Error('Please sign in again.');
-  return data.session.access_token;
+  if (currentToken !== data.session.access_token) {
+    currentToken = data.session.access_token;
+  }
+  return currentToken;
 }
 // Called by the dashboard's existing load(file) function.
 window.furyPrivateLoad = async (filename) => {
   if (!authorized) throw new Error('Not authorized');
-  return requestPrivateJSON(filename, await getToken());
+  const token = await getToken();
+  if (sessionJSONCache.has(filename)) {
+    const cached = sessionJSONCache.get(filename);
+    sessionJSONCache.delete(filename);
+    return cached;
+  }
+  return requestPrivateJSON(filename, token);
 };
 
 async function authorizeSession(session) {
@@ -58,10 +83,16 @@ async function authorizeSession(session) {
   showMessage('Checking account approval...');
   try {
     // Server-side function verifies the token AND fury_members.active.
-    await requestPrivateJSON('all_leagues_data.json', session.access_token);
+    // Verify server-side membership with a small file, not the large all-leagues dataset.
+    const probeFile = 'la_liga_team_metrics.json';
+    const probeData = await requestPrivateJSON(probeFile, session.access_token);
     if (generation !== authGeneration) return;
+    currentToken = session.access_token;
+    sessionJSONCache.set(probeFile, probeData);
     authorized = true;
     accountEmail.textContent = session.user?.email || '';
+    updateAccountMenu(true);
+    accountMenu.open = false;
     document.body.classList.add('fury-authorized');
     showMessage('');
     if (!initializedDashboard) {
@@ -104,6 +135,7 @@ logoutButton.addEventListener('click', async () => {
   ++authGeneration;
   lockDashboard();
   showMessage('');
+  accountMenu.open = false;
   if (client) await client.auth.signOut();
 });
 
@@ -120,9 +152,16 @@ if (SUPABASE_PUBLISHABLE_KEY.startsWith('PASTE_')) {
         ++authGeneration;
         lockDashboard();
       }
-      // TOKEN_REFRESHED does not require a new dashboard initialization.
+      if (event === 'TOKEN_REFRESHED') {
+        // Updated token will be read by getToken() on the next data request.
+      }
     });
   } catch (error) {
     showMessage(friendlyError(error));
   }
 }
+
+// Close the account dropdown when clicking outside it.
+document.addEventListener('click', (event) => {
+  if (accountMenu.open && !accountMenu.contains(event.target)) accountMenu.open = false;
+});

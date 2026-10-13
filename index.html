@@ -374,13 +374,53 @@ body.fury-authorized #furyAuthGate{display:none}
 .fury-auth-card .auth-error{min-height:20px;margin-top:12px;color:#ffb7b7;font-size:12px}
 .fury-account{display:none;align-items:center;gap:10px;font-size:12px;color:#b5cadd;margin-left:auto}
 body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px 12px;font-size:12px}
+
+/* Account actions appear only after My account is clicked. */
+#furySignedInMenu[hidden],#furySignedOutMenu[hidden]{display:none!important}
+#furyAccountMenu:not([open]) .fury-account-dropdown{display:none!important}
+/* Fixed top-right account menu: works on desktop and mobile. */
+.fury-account-menu{position:fixed;right:22px;top:17px;z-index:9999;width:235px;font-family:'Outfit',sans-serif}
+.fury-account-trigger{display:flex;align-items:center;justify-content:space-between;gap:9px;list-style:none;cursor:pointer;padding:12px 15px;background:#152c43;border:1px solid #386080;border-radius:12px;color:#e9f8ff;font-weight:800;box-shadow:0 8px 26px #0006}
+.fury-account-trigger::-webkit-details-marker{display:none}
+.fury-account-trigger:hover,.fury-account-menu[open] .fury-account-trigger{border-color:#43baf6;background:#1b3954}
+.fury-account-dropdown{position:absolute;right:0;top:calc(100% + 9px);width:min(350px,calc(100vw - 26px));background:#101f32;border:1px solid #365773;border-radius:15px;padding:20px;box-shadow:0 22px 45px #000a}
+.fury-menu-heading{font-weight:800;color:#8bdefe;margin-bottom:12px}
+.fury-account-dropdown label{display:block;color:#b5cadd;font-size:12px;font-weight:700;margin:12px 0 7px}
+.fury-account-dropdown input{width:100%;min-width:0}
+.fury-account-dropdown button{width:100%;margin-top:15px;font-weight:800;background:linear-gradient(110deg,#1384bb,#16a4b0)}
+.fury-account-dropdown .auth-error{color:#ffb7b7;font-size:12px;margin-top:10px;min-height:0}
+.fury-menu-email{color:#d4e9f7;overflow-wrap:anywhere;font-size:13px}
+.fury-welcome{text-align:center;max-width:540px;padding:25px}
+.fury-welcome-brand{font:900 clamp(32px,5vw,56px) 'Outfit',sans-serif;letter-spacing:-1px}
+.fury-welcome-brand span{color:#43baf6}
+.fury-welcome p{color:#b5cadd;font-size:15px}
+header{padding-right:270px}
+@media(max-width:650px){.fury-account-menu{right:12px;top:10px;width:150px}.fury-account-trigger{padding:10px;font-size:12px}header{padding-right:13px;padding-top:75px}.fury-account-dropdown{padding:15px}}
 </style></head>
 
 
 
 <body>
-<div id="furyAuthGate"><div class="fury-auth-card"><h1>FURY<span>SPORTS AI</span></h1><p>Authorized members only · Sign in to view private sports analytics.</p><form id="furyLoginForm"><label for="furyEmail">Email</label><input id="furyEmail" type="email" autocomplete="username" required placeholder="you@example.com"><label for="furyPassword">Password</label><input id="furyPassword" type="password" autocomplete="current-password" required placeholder="Password"><button id="furySignIn" type="submit">Sign in</button><div id="furyAuthMessage" class="auth-error" role="alert"></div></form></div></div>
-
+<div id="furyAuthGate" aria-hidden="true"><div class="fury-welcome"><div class="fury-welcome-brand">FURY <span>SPORTS AI</span></div><p>Private sports analytics · Select Account → Sign in in the upper-right corner.</p></div></div>
+<details id="furyAccountMenu" class="fury-account-menu">
+  <summary class="fury-account-trigger" aria-label="Account menu">◉ <span id="furyMenuLabel">Account</span> <span aria-hidden="true">▾</span></summary>
+  <div class="fury-account-dropdown">
+    <div id="furySignedOutMenu">
+      <div class="fury-menu-heading">Member sign in</div>
+      <form id="furyLoginForm">
+        <label for="furyEmail">Email</label><input id="furyEmail" type="email" autocomplete="username" required placeholder="you@example.com">
+        <label for="furyPassword">Password</label><input id="furyPassword" type="password" autocomplete="current-password" required placeholder="Password">
+        <button id="furySignIn" type="submit">Sign in</button>
+        <div id="furyAuthMessage" class="auth-error" role="alert" aria-live="polite"></div>
+      </form>
+    </div>
+    <div id="furySignedInMenu" hidden>
+      <div class="fury-menu-heading">Signed in as</div>
+      <div id="furyAccountEmail" class="fury-menu-email"></div>
+      <button id="furyLogout" type="button" class="fury-menu-logout">Log out</button>
+    </div>
+  </div>
+</details>
 
 
 <header>
@@ -408,7 +448,7 @@ body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px
   <select id="leagueSelect" class="visually-hidden" aria-label="Selected league"><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option></select>
 </details>
   </div>
-  <div class="fury-account"><span id="furyAccountEmail"></span><button id="furyLogout" type="button">Log out</button></div>
+  
   <p class="hint">2026–27: Sports Analytics · Five Leagues</p>
 
 </header>
