@@ -348,6 +348,13 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 .stat-hit-above{color:#75cfff;background:#17374c;border-color:#2c6380}
 .stat-hit-mid{color:#ffd17b;background:#463a28;border-color:#79603b}
 .stat-hit-low{color:#ff9c9c;background:#422b37;border-color:#754251}
+
+.team-filter-panel .team-venue-bar{display:flex;align-items:center;flex-wrap:wrap;gap:9px;background:#111f32;border:1px solid #29445f;border-radius:13px;padding:12px 15px;margin-bottom:16px}
+.team-venue-bar>span:first-child{font-weight:800;color:#b7d0e5;margin-right:8px}
+.team-venue-btn{display:inline-flex;align-items:center;justify-content:center;padding:7px 15px;border:1px solid #276585;border-radius:30px;background:#133b50;color:#a3edff;font-size:11px;font-weight:700;letter-spacing:.2px;min-width:74px;transition:background .2s,border-color .2s,color .2s,box-shadow .2s}
+.team-venue-btn:hover{background:#18536a;border-color:#4eb6d9;color:#e3faff}.team-venue-btn.active{background:#1d647a;border-color:#5ad7f0;color:#ffffff;box-shadow:0 0 0 1px #4bb8d244}
+.team-venue-bar .hint{margin-left:auto}
+@media(max-width:600px){.team-venue-bar .hint{width:100%;margin-left:0}}
 </style>
 
 
@@ -355,11 +362,24 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
 .fury-extra h3{margin:0 0 12px;color:#b9eaff;font-size:17px}.fury-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.fury-stat{background:#14283b;padding:14px;border-radius:10px;border:1px solid #24445c}.fury-stat small{display:block;color:#9bb5c9}.fury-stat strong{display:block;font-size:24px;color:#fff;margin:5px 0}.fury-note{color:#a9c3d3;font-size:12px;margin-top:10px}.fury-hit{font-weight:700;border-radius:5px;padding:3px 7px;white-space:nowrap}.fury-hit.good{background:#154f36;color:#8af2ae}.fury-hit.mid{background:#60471a;color:#ffdc8a}.fury-hit.low{background:#59272d;color:#ffaaaa}.fury-chart{display:flex;align-items:end;gap:6px;overflow-x:auto;min-height:125px;padding:10px 0}.fury-col{min-width:42px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#bdd5e3}.fury-bar{width:28px;min-height:3px;border-radius:4px 4px 0 0;background:linear-gradient(#45c5ff,#1681be)}.fury-extra .controls{margin-bottom:12px}
+</style><style id="team-history-style">#teamHistoryPanel .team-section-head{align-items:center}#teamHistoryPanel .team-history-selector{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:800;color:#b7d0e5;min-width:185px}#teamHistoryPanel .team-history-selector select{background:#172d45;border:1px solid #385976;border-radius:10px;color:#f0f8ff;min-height:42px}#teamHistoryPanel .history-result{font-weight:800}#teamHistoryPanel .player-table-wrap{max-height:640px}@media(max-width:600px){#teamHistoryPanel .team-history-selector{width:100%}}
+/* Prevent any dashboard content from showing before authorization. */
+body:not(.fury-authorized) header,body:not(.fury-authorized) main{display:none!important}
+#furyAuthGate{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 85% 10%,#123e5b,#091321 55%)}
+body.fury-authorized #furyAuthGate{display:none}
+.fury-auth-card{width:min(100%,440px);background:#111f32;border:1px solid #31516b;border-radius:20px;padding:32px;box-shadow:0 24px 60px #0005}
+.fury-auth-card h1{font:900 30px 'Outfit',sans-serif;margin:0 0 7px}.fury-auth-card h1 span{color:#43baf6}
+.fury-auth-card p{color:#b5cadd;margin:0 0 22px}.fury-auth-card label{display:block;color:#b5cadd;font-size:12px;font-weight:700;margin:12px 0 7px}
+.fury-auth-card input{width:100%;min-width:0}.fury-auth-card button{width:100%;margin-top:20px;background:linear-gradient(110deg,#1384bb,#16a4b0);font-weight:800}
+.fury-auth-card .auth-error{min-height:20px;margin-top:12px;color:#ffb7b7;font-size:12px}
+.fury-account{display:none;align-items:center;gap:10px;font-size:12px;color:#b5cadd;margin-left:auto}
+body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px 12px;font-size:12px}
 </style></head>
 
 
 
 <body>
+<div id="furyAuthGate"><div class="fury-auth-card"><h1>FURY<span>SPORTS AI</span></h1><p>Authorized members only · Sign in to view private sports analytics.</p><form id="furyLoginForm"><label for="furyEmail">Email</label><input id="furyEmail" type="email" autocomplete="username" required placeholder="you@example.com"><label for="furyPassword">Password</label><input id="furyPassword" type="password" autocomplete="current-password" required placeholder="Password"><button id="furySignIn" type="submit">Sign in</button><div id="furyAuthMessage" class="auth-error" role="alert"></div></form></div></div>
 
 
 
@@ -388,6 +408,7 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
   <select id="leagueSelect" class="visually-hidden" aria-label="Selected league"><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option></select>
 </details>
   </div>
+  <div class="fury-account"><span id="furyAccountEmail"></span><button id="furyLogout" type="button">Log out</button></div>
   <p class="hint">2026–27: Sports Analytics · Five Leagues</p>
 
 </header>
@@ -408,7 +429,7 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 
 
 
-<div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div class="controls"><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input id="teamSearch" placeholder="Search club name" autocomplete="off"></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% is a full-season match hit rate.</p></div>
+<div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div class="team-venue-bar" role="group" aria-label="Team statistics venue"><span>Match venue</span><button type="button" class="team-venue-btn active" data-venue="all" aria-pressed="true">All</button><button type="button" class="team-venue-btn" data-venue="home" aria-pressed="false">Home</button><button type="button" class="team-venue-btn" data-venue="away" aria-pressed="false">Away</button><span id="teamVenueNote" class="hint">All matches</span></div><div class="controls"><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input id="teamSearch" placeholder="Search club name" autocomplete="off"></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% uses the selected venue across the full season.</p></div>
 
 
 
@@ -420,7 +441,8 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
  <div class="panel team-spotlight team-center-panel"><div class="team-section-head"><h2 id="teamSpotlightTitle">Team performance snapshot</h2><span id="teamSpotlightBadge" class="team-pill">Season</span></div><p id="teamSpotlightHint" class="hint">Choose a team to compare its attack and defense with league averages.</p><div id="teamSpotlight" class="team-compare"></div></div>
  <div class="panel team-center-panel"><div class="team-section-head"><h2>League leaders</h2><span class="team-pill">Top 3</span></div><div id="teamLeaders" class="team-leaders"></div></div>
 </div>
-<div class="panel team-center-panel"><div class="team-section-head"><h2 id="teamRankTitle">Team ranking</h2><span class="hint">Click a club to inspect it</span></div><div id="teamRanking"></div></div><div class="panel team-center-panel"><div class="team-section-head"><h2>Team statistics</h2><span id="teamTableCount" class="hint"></span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Team</th><th>Matches</th><th>Corners for</th><th>Corners against</th><th>Shots for</th><th>Shots against</th><th>SOT for</th><th>SOT against</th><th>Goals for</th><th>Goals against</th><th>Over 9.5 corners (season)</th><th>xG / game</th><th>xGA / game</th><th>xG diff / game</th></tr></thead><tbody id="teamRows"></tbody></table></div></div><div class="fury-note">xG metrics are calculated from recorded player-match xG; missing matches are not estimated.</div></section>
+<div class="panel team-center-panel"><div class="team-section-head"><h2 id="teamRankTitle">Team ranking</h2><span class="hint">Click a club to inspect it</span></div><div id="teamRanking"></div></div><div class="panel team-center-panel"><div class="team-section-head"><h2>Team statistics</h2><span id="teamTableCount" class="hint"></span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Team</th><th>Matches</th><th>Corners for</th><th>Corners against</th><th>Shots for</th><th>Shots against</th><th>SOT for</th><th>SOT against</th><th>Goals for</th><th>Goals against</th><th>Over 9.5 corners (season)</th><th>xG / game</th><th>xGA / game</th><th>xG diff / game</th></tr></thead><tbody id="teamRows"></tbody></table></div></div><div class="fury-note">xG metrics are calculated from recorded player-match xG; missing matches are not estimated.</div>
+<div class="panel team-center-panel" id="teamHistoryPanel"><div class="team-section-head"><div><h2>Last 15 Matches · Historical Results</h2><p class="hint" id="teamHistoryDescription">Select a club to review its latest recorded results, corners and shooting data.</p></div><label class="team-history-selector">Team<select id="teamHistoryTeam" aria-label="Select team for last 15 matches"></select></label></div><div class="scroll player-table-wrap"><table><thead><tr><th>Date</th><th>Venue</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners For</th><th>Corners Against</th><th>Shots For</th><th>Shots Against</th><th>SOT For</th><th>SOT Against</th></tr></thead><tbody id="teamHistoryRows"></tbody></table></div><p class="hint" id="teamHistoryCount"></p></div></section>
 
 
 
@@ -589,10 +611,67 @@ function insertStatLegend(tableBodyId){
   wrap.before(legend);
 }
 
+let teamVenue='all';
+function teamVenueRows(){
+  if(teamVenue==='all')return teams;
+  const metrics=['corners','shots','shots_on_target','goals','fouls','yellow_cards','red_cards'];
+  const byTeam=new Map();
+  for(const r of matches){
+    if(!r?.team||String(r.venue||'').toLowerCase()!==teamVenue)continue;
+    if(!byTeam.has(r.team))byTeam.set(r.team,[]);
+    byTeam.get(r.team).push(r);
+  }
+  return teams.map(original=>{
+    const games=(byTeam.get(original.team)||[]).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+    const result={team:original.team,matches:games.length};
+    for(const [period,subset] of [['avg',games],['L5',games.slice(0,5)],['L10',games.slice(0,10)]]){
+      for(const metric of metrics)for(const dir of ['for','against'])result[metric+'_'+dir+'_'+period]=avg(subset,metric+'_'+dir);
+      const quality=subset.map(game=>{
+        const q=[...qualityGames.values()].find(g=>g.team===original.team&&((game.game_id!=null&&String(g.game_id)===String(game.game_id))||(g.date&&game.date&&String(g.date).slice(0,10)===String(game.date).slice(0,10))));
+        return {xg_for:n(game.xg_for)??n(q?.xg),xg_against:n(game.xg_against)??n(q?.xga)};
+      });
+      result['xg_for_'+period]=avg(quality,'xg_for');
+      result['xg_against_'+period]=avg(quality,'xg_against');
+      result['xg_diff_'+period]=result['xg_for_'+period]===null||result['xg_against_'+period]===null?null:result['xg_for_'+period]-result['xg_against_'+period];
+    }
+    const totals=games.filter(g=>n(g.corners_for)!==null&&n(g.corners_against)!==null);
+    result.corners_over_9_5_pct=totals.length?100*totals.filter(g=>n(g.corners_for)+n(g.corners_against)>9.5).length/totals.length:null;
+    return result;
+  });
+}
+function renderTeamLast15(){
+  const selector=$('teamHistoryTeam'),body=$('teamHistoryRows');
+  if(!selector||!body)return;
+  const names=[...new Set(teams.map(t=>t.team).filter(Boolean))].sort();
+  const filter=$('teamFilter').value;
+  const previous=selector.value;
+  const wanted=filter||((names.includes(previous))?previous:names[0]);
+  if(selector.options.length!==names.length||names.some((name,i)=>selector.options[i]?.value!==name)){
+    selector.replaceChildren();names.forEach(name=>option(selector,name));
+  }
+  if(wanted)selector.value=wanted;
+  const club=selector.value;
+  const games=matches.filter(g=>g.team===club&&(teamVenue==='all'||String(g.venue||'').toLowerCase()===teamVenue))
+    .sort((a,b)=>(Date.parse(b.date)||0)-(Date.parse(a.date)||0));
+  const recentGames=games.slice(0,15);
+  const venueLabel=teamVenue==='all'?'home and away':teamVenue==='home'?'home only':'away only';
+  $('teamHistoryDescription').textContent=club?club+' · latest results ('+venueLabel+')':'No team available';
+  $('teamHistoryCount').textContent='Showing '+recentGames.length+' of '+games.length+' recorded '+venueLabel+' matches. Only actual historical records are displayed.';
+  body.replaceChildren();
+  if(!recentGames.length){row(body,['No match history available','—','—','—','—','—','—','—','—','—','—']);return;}
+  recentGames.forEach(g=>{
+    const gf=n(g.goals_for),ga=n(g.goals_against),outcome=gf===null||ga===null?'—':gf>ga?'W':gf<ga?'L':'D';
+    const tr=row(body,[String(g.date||'').slice(0,10)||'—',g.venue||'—',g.opponent||'—',gf===null||ga===null?'—':gf+'–'+ga,outcome,f(g.corners_for,0),f(g.corners_against,0),f(g.shots_for,0),f(g.shots_against,0),f(g.shots_on_target_for,0),f(g.shots_on_target_against,0)]);
+    if(outcome!=='—'){const td=tr.children[4];td.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;td.appendChild(badge);}
+  });
+}
+
 function renderTeams(){
   const search=($('teamSearch').value||'').trim().toLowerCase();
   const filter=$('teamFilter').value,p=$('teamPeriod').value,m=$('teamMetric').value,d=$('teamDirection').value;
-  const selected=teams.filter(r=>(!filter||r.team===filter)&&String(r.team||'').toLowerCase().includes(search));
+  const venueTeams=teamVenueRows();
+  $('teamVenueNote').textContent=teamVenue==='all'?'All matches':(teamVenue==='home'?'Home matches only':'Away matches only');
+  const selected=venueTeams.filter(r=>(!filter||r.team===filter)&&String(r.team||'').toLowerCase().includes(search));
   const key=(metric,dir=d)=>metric==='xg_diff'?'xg_diff_'+p:metric+'_'+dir+'_'+p;
   const mean=(items,metric,dir='for')=>{
     const k=key(metric,dir),valid=items.filter(r=>n(r[k])!==null);
@@ -605,8 +684,8 @@ function renderTeams(){
   $('teamCorners').textContent=f(mean(selected,'corners'));
   $('teamShots').textContent=f(mean(selected,'shots'));
   $('teamGoals').textContent=f(mean(selected,'goals'));
-  $('teamTableCount').textContent=selected.length+' teams · per match';
-  $('teamSpotlightBadge').textContent=p==='avg'?'Season':p;
+  $('teamTableCount').textContent=selected.length+' teams · '+(teamVenue==='all'?'all venues':teamVenue)+' · per match';
+  $('teamSpotlightBadge').textContent=(p==='avg'?'Season':p)+' · '+(teamVenue==='all'?'All':teamVenue==='home'?'Home':'Away');
   const sorted=[...selected].sort((a,b)=>(n(b[key(m)])??-Infinity)-(n(a[key(m)])??-Infinity));
   $('teamRankTitle').textContent=(d==='against'?'Allowed':'Produced')+' · '+$('teamMetric').selectedOptions[0].textContent+' ranking';
   const rankBox=$('teamRanking');rankBox.replaceChildren();
@@ -621,14 +700,14 @@ function renderTeams(){
   $('teamSpotlightHint').textContent=focus?'Team averages compared with the league baseline for the same period.':'Select a club to compare its numbers against the league average.';
   const cards=$('teamSpotlight');cards.replaceChildren();
   [['goals','Goals'],['shots','Shots'],['shots_on_target','Shots on target'],['corners','Corners'],['fouls','Fouls'],['yellow_cards','Yellow cards']].forEach(([metric,label])=>{
-    const value=mean(focus?[focus]:selected,metric),baseline=mean(teams,metric),card=document.createElement('div');card.className='team-metric-card';
+    const value=mean(focus?[focus]:selected,metric),baseline=mean(venueTeams,metric),card=document.createElement('div');card.className='team-metric-card';
     const title=document.createElement('div');title.className='team-metric-title';title.textContent=label+' / game';
     const main=document.createElement('div');main.className='team-metric-main';const strong=document.createElement('strong');strong.textContent=f(value);const comparison=document.createElement('span');comparison.textContent='League: '+f(baseline);
     main.append(strong,comparison);const meter=document.createElement('div');meter.className='team-meter';const fill=document.createElement('div');fill.style.width=(value===null||baseline===null?'0':Math.min(100,Math.max(0,value/Math.max(0.1,baseline*1.6)*100)))+'%';meter.appendChild(fill);
     const note=document.createElement('div');note.className='hint';note.textContent=focus&&value!==null&&baseline!==null?(value>=baseline?'+':'')+f(value-baseline)+' vs league':'Selected teams average';card.append(title,main,meter,note);cards.appendChild(card);
   });
   $('teamRows').replaceChildren();sorted.forEach(r=>{const tr=row($('teamRows'),[r.team,r.matches,f(r['corners_for_'+p]),f(r['corners_against_'+p]),f(r['shots_for_'+p]),f(r['shots_against_'+p]),f(r['shots_on_target_for_'+p]),f(r['shots_on_target_against_'+p]),f(r['goals_for_'+p]),f(r['goals_against_'+p]),n(r['corners_over_9.5_pct'])===null?'N/A':f(r['corners_over_9.5_pct'],1)+'%',f(r['xg_for_'+p]),f(r['xg_against_'+p]),f(r['xg_diff_'+p])]);tr.title='Click to inspect '+r.team;tr.style.cursor='pointer';tr.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()})});
-  applyStatIndicators('teamRows',2,[3,5,7,9]);insertStatLegend('teamRows');
+  applyStatIndicators('teamRows',2,[3,5,7,9]);insertStatLegend('teamRows');renderTeamLast15();
 }
 
 function renderPlayers(){
@@ -781,7 +860,7 @@ function analyze(){if(!matchPool.length)return;const home=$('homeTeam').value,aw
 
 
 
-async function load(file){const response=await fetch('./'+file,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);return response.json()}
+async function load(file){if(!window.furyPrivateLoad)throw new Error('Authentication required');return window.furyPrivateLoad(file)}
 
 
 
@@ -1108,6 +1187,8 @@ async function changeLeague() {
   $('loadStatus').className = failures.length?'status error':'status good';
 }
 function init(){
+  $('teamHistoryTeam').addEventListener('change',()=>{ $('teamFilter').value='';renderTeamLast15(); });
+  document.querySelectorAll('.team-venue-btn').forEach(button=>button.addEventListener('click',()=>{teamVenue=button.dataset.venue;document.querySelectorAll('.team-venue-btn').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});renderTeams()}));
   ['teamFilter','teamPeriod','teamMetric','teamDirection'].forEach(id=>$(id).addEventListener('change',renderTeams));
   $('teamSearch').addEventListener('input',renderTeams);
   ['playerTeam','playerSort','playerPeriod'].forEach(id=>$(id).addEventListener('change',renderPlayers));
@@ -1135,8 +1216,11 @@ function init(){
 
 
 
-init();
+// Dashboard initialization is triggered only after verified authentication.
+window.startFuryDashboard = init;
 
 
 
-</script></body></html>
+</script>
+<script type="module" src="./fury-auth.js"></script>
+</body></html>
