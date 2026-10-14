@@ -397,7 +397,25 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 .projection-card-numbers em{font-style:normal;color:#7d91a9;font-weight:400}
 .projection-card-total{font-size:13px;font-weight:750;color:#9edfff}
 .projection-card-detail{font-size:11px;color:#8ca4bd;margin-top:7px;line-height:1.4}
-@media(max-width:560px){.projection-disciplinary{grid-template-columns:1fr;gap:10px}.projection-card-box{padding:13px 10px}}
+/* Compact disciplinary cards: stay side by side on iPhone */
+.projection-disciplinary{gap:10px;margin:12px 0}
+.projection-card-box{padding:12px 10px;border-radius:11px}
+.projection-card-heading{gap:6px;font-size:10px;letter-spacing:.35px;line-height:1.25}
+.projection-card-symbol{width:10px;height:15px}
+.projection-card-numbers{font-size:clamp(19px,2.8vw,28px);margin:7px 0 3px}
+.projection-card-total{font-size:11px;line-height:1.3}
+.projection-card-detail{font-size:10px;margin-top:5px;line-height:1.35}
+@media(max-width:560px){
+ .projection-disciplinary{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}
+ .projection-card-box{padding:10px 6px;border-radius:9px}
+ .projection-card-heading{font-size:9px;letter-spacing:0;gap:4px;justify-content:center}
+ .projection-card-symbol{width:8px;height:12px}
+ .projection-card-numbers{font-size:clamp(17px,5vw,23px);margin:6px 0 3px;white-space:nowrap}
+ .projection-card-total{font-size:10px;overflow-wrap:anywhere}
+ .projection-card-detail{font-size:9px;overflow-wrap:anywhere}
+}
+@media(max-width:360px){.projection-card-heading{font-size:8px}.projection-card-box{padding:9px 4px}.projection-card-numbers{font-size:17px}}
+
 </style>
 
 
@@ -687,15 +705,15 @@ body.fury-side-closed .fury-side-toggle svg{transform:rotate(180deg)}
     <div class="projection-center"><div id="projectionTotal" class="projection-total">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div id="projectionScoreline" class="projection-scoreline">Most likely score: —</div></div>
     <div class="projection-side"><div id="projectionAwayIcon" class="projection-team-icon">A</div><div id="projectionAway" class="projection-name">Away</div></div>
   </div>
-  <div class="projection-disciplinary" aria-label="Expected disciplinary cards">
-    <div class="projection-card-box yellow"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED YELLOW CARDS</span></div><div class="projection-card-numbers"><span id="projectionYellowHome">N/A</span><em>–</em><span id="projectionYellowAway">N/A</span></div><div class="projection-card-total" id="projectionYellowTotal">No card data available</div><div class="projection-card-detail" id="projectionYellowProb"></div></div>
-    <div class="projection-card-box red"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED RED CARDS</span></div><div class="projection-card-numbers"><span id="projectionRedHome">N/A</span><em>–</em><span id="projectionRedAway">N/A</span></div><div class="projection-card-total" id="projectionRedTotal">No card data available</div><div class="projection-card-detail" id="projectionRedProb"></div></div>
-  </div>
   <div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
   <div id="projectionCornersMarket" class="projection-market"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option value="9.5" selected>9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
   <div class="projection-market"><div class="projection-market-title">Moneyline · 1X2 model probability</div><div class="projection-market-labels three"><span id="projectionWinHome">Home —</span><span id="projectionDraw">Draw —</span><span id="projectionWinAway">Away —</span></div><div class="projection-bar"><div id="projectionBarHome" style="background:#ff652e"></div><div id="projectionBarDraw" style="background:#8592a4"></div><div id="projectionBarAway" style="background:#0a8f9f"></div></div></div>
   <div class="projection-market"><div class="projection-market-title">Over / Under % (2.5 goals)</div><div class="projection-market-labels"><span id="projectionOver">Over —</span><span id="projectionUnder">Under —</span></div><div class="projection-bar"><div id="projectionBarOver" style="background:#088e49"></div><div id="projectionBarUnder" style="background:#a92437"></div></div></div>
   <div class="projection-market"><div class="projection-market-title">Both Teams to Score</div><div class="projection-market-labels"><span id="projectionBttsYes">Yes —</span><span id="projectionBttsNo">No —</span></div><div class="projection-bar"><div id="projectionBarBttsYes" style="background:#088e49"></div><div id="projectionBarBttsNo" style="background:#a92437"></div></div></div>
+  <div class="projection-disciplinary" aria-label="Expected disciplinary cards">
+    <div class="projection-card-box yellow"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED YELLOW CARDS</span></div><div class="projection-card-numbers"><span id="projectionYellowHome">N/A</span><em>–</em><span id="projectionYellowAway">N/A</span></div><div class="projection-card-total" id="projectionYellowTotal">No card data available</div><div class="projection-card-detail" id="projectionYellowProb"></div></div>
+    <div class="projection-card-box red"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED RED CARDS</span></div><div class="projection-card-numbers"><span id="projectionRedHome">N/A</span><em>–</em><span id="projectionRedAway">N/A</span></div><div class="projection-card-total" id="projectionRedTotal">No card data available</div><div class="projection-card-detail" id="projectionRedProb"></div></div>
+  </div>
   <div class="panel match-center-panel" id="furyBookmakerOdds" style="margin:20px 0"><div class="player-panel-head"><h2>Live bookmaker odds</h2><span class="player-panel-kicker">THE ODDS API · DECIMAL</span></div><p id="furyOddsStatus" class="hint">Choose a matchup to load upcoming bookmaker odds.</p><div id="furyOddsResults" class="fury-grid"></div><p class="hint">Only upcoming fixtures returned by the provider. Scores and historical matches are not betting lines. Market availability varies by league, region and bookmaker. Implied probabilities include bookmaker margin.</p></div>
   <div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
   <div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
