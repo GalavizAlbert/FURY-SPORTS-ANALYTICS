@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>FURY Sports Analytics</title>
-<link href="fury-icon.png" rel="icon" type="image/png"/>
-<link href="fury-icon.png" rel="apple-touch-icon"/>
+<link rel="icon" href="favicon.ico?v=4" sizes="any">
+<link rel="icon" type="image/png" href="fury-icon.png?v=4">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=4">
+<meta name="apple-mobile-web-app-title" content="FURY Sports AI">
+
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
@@ -410,6 +413,13 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 }
 @media(max-width:360px){.projection-card-heading{font-size:8px}.projection-card-box{padding:9px 4px}.projection-card-numbers{font-size:17px}}
 
+
+/* FS AI mark beside the top navigation brand */
+header .site-title{display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important}
+header .fury-header-mark{display:block!important;width:42px;height:42px;object-fit:contain;flex:none;border-radius:7px}
+header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
+@media(max-width:600px){header .site-title{gap:7px!important}header .fury-header-mark{width:31px;height:31px}header .brand-fury{font-size:19px!important}header .brand-sports{font-size:17px!important}}
+@media(max-width:390px){header .brand-fury{font-size:17px!important}header .brand-sports{font-size:15px!important}}
 </style>
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
@@ -634,6 +644,7 @@ header .brand-sports{color:#67d5ff!important;-webkit-text-fill-color:#67d5ff!imp
 <div class="header-top">
 <h1 class="site-title">
 
+<img class="fury-header-mark" src="fury-header-logo.png" alt="FS AI logo" width="42" height="42"/>
 <span>
 <span class="brand-fury">FURY</span> <span class="brand-sports">SPORTS AI</span>
 </span>
