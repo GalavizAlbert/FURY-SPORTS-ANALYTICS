@@ -3,6 +3,8 @@
 
 
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FURY Sports Analytics</title>
+<link rel="icon" type="image/png" href="fury-icon.png">
+<link rel="apple-touch-icon" href="fury-icon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -469,11 +471,90 @@ body.fury-authorized .fury-account{display:flex}.fury-account button{padding:7px
 .fury-welcome p{color:#b5cadd;font-size:15px}
 header{padding-right:88px}
 @media(max-width:650px){.fury-account-dropdown{padding:15px}}
+</style><style id="fury-collapsible-sidebar-css">
+:root{--fury-side-width:258px}
+body{padding-left:var(--fury-side-width);transition:padding-left .25s ease}
+body.fury-side-closed{padding-left:0}
+.fury-side-panel{position:fixed;top:0;bottom:0;left:0;width:var(--fury-side-width);z-index:8000;background:#0d131c;border-right:1px solid #2a3544;display:flex;flex-direction:column;box-shadow:8px 0 35px #0002;transition:transform .25s ease;font-family:'Outfit',sans-serif}
+body.fury-side-closed .fury-side-panel{transform:translateX(-100%)}
+.fury-side-brand{padding:27px 19px 20px;border-bottom:1px solid #26313f;font-size:20px;font-weight:900;letter-spacing:-.5px;color:#fff}
+.fury-side-brand span{color:#43baf6}
+.fury-side-brand{display:flex;align-items:center;justify-content:center;padding:18px 14px 15px}
+.fury-side-logo{display:block;width:100%;max-width:218px;height:auto;max-height:180px;object-fit:contain}
+.fury-side-scroll{overflow-y:auto;overflow-x:hidden;flex:1;padding:18px 12px}
+.fury-side-label{color:#748ba1;font-size:10px;font-weight:800;letter-spacing:1.6px;margin:16px 12px 10px;text-transform:uppercase}
+.fury-side-link{width:100%;display:flex;align-items:center;gap:13px;text-align:left;border:1px solid transparent;background:transparent;color:#aebed0;padding:13px 15px;border-radius:12px;font:600 13px 'Outfit',sans-serif;margin:3px 0;cursor:pointer}
+.fury-side-link .side-icon{width:23px;text-align:center;font-size:17px;color:#91a9bf}
+.fury-side-link:hover{background:#172b3b;color:#fff}
+.fury-side-link.active{background:#10352f;color:#43e7b4;border-color:#146f59}
+.fury-side-link.active .side-icon{color:#43e7b4}
+.fury-side-sub{margin-left:14px;padding-left:9px;border-left:1px solid #293d4d}
+.fury-side-footer{padding:15px 13px;border-top:1px solid #293443;color:#7e95a8;font-size:11px}
+.fury-side-toggle{position:fixed;left:calc(var(--fury-side-width) - 15px);top:96px;width:34px;height:34px;z-index:8100;border:1px solid #3a4a60;background:#111b29;color:#e6f4ff;border-radius:50%;padding:0;display:grid;place-items:center;box-shadow:0 3px 12px #0007;transition:left .25s ease;cursor:pointer}
+body.fury-side-closed .fury-side-toggle{left:13px}
+.fury-side-toggle svg{width:18px;height:18px;transition:transform .25s ease}
+body.fury-side-closed .fury-side-toggle svg{transform:rotate(180deg)}
+.fury-side-backdrop{display:none}
+@media(max-width:900px){body{padding-left:0!important}.fury-side-panel{box-shadow:10px 0 45px #0009}body:not(.fury-side-closed) .fury-side-backdrop{display:block;position:fixed;inset:0;background:#0009;z-index:7900}.fury-side-toggle{top:84px}body.fury-side-closed .fury-side-toggle{left:12px}}
+@media(max-width:650px){.fury-side-toggle{top:80px}body.fury-side-closed header{padding-left:57px!important}}
+
+/* Sortable player statistics and compact iPhone presentation */
+#furyPlayerStatsTable thead th{cursor:pointer;user-select:none;white-space:nowrap;transition:color .15s,background .15s;padding-right:20px}
+#furyPlayerStatsTable thead th:hover,#furyPlayerStatsTable thead th:focus-visible{color:#65dcff;background:#203d55}
+#furyPlayerStatsTable thead th[data-sort-dir="asc"],#furyPlayerStatsTable thead th[data-sort-dir="desc"]{color:#5de3b5}
+#furyPlayerStatsTable thead th::after{content:" ↕";color:#7296af;font-size:11px}
+#furyPlayerStatsTable thead th[data-sort-dir="asc"]::after{content:" ↑";color:#5de3b5}
+#furyPlayerStatsTable thead th[data-sort-dir="desc"]::after{content:" ↓";color:#5de3b5}
+.fury-player-table-scroll{max-height:690px;overflow:auto}
+#furyPlayerStatsTable{min-width:1180px}
+@media(max-width:680px){
+ #playersTab .player-layout{display:flex;flex-direction:column}
+ #playersTab .player-layout>.panel{width:100%;min-width:0;padding:12px}
+ #playersTab .fury-player-table-scroll{max-height:none;overflow:visible;border:0}
+ #furyPlayerStatsTable{display:block;width:100%;min-width:0}
+ #furyPlayerStatsTable thead{display:block;position:static}
+ #furyPlayerStatsTable thead tr{display:flex;gap:6px;overflow-x:auto;padding:0 0 12px;scrollbar-width:thin}
+ #furyPlayerStatsTable thead th{position:static;display:block;flex:0 0 auto;background:#1a3349;border:1px solid #315772;border-radius:9px;padding:9px 11px;font-size:11px;color:#bdd9ed;white-space:nowrap}
+ #furyPlayerStatsTable tbody{display:grid;gap:12px}
+ #furyPlayerStatsTable tbody tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:linear-gradient(135deg,#132b42,#101f32);border:1px solid #34546e;border-radius:13px;padding:10px;min-width:0}
+ #furyPlayerStatsTable tbody td{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-width:0;padding:8px 5px!important;border-bottom:1px solid #2a4055;white-space:normal;overflow-wrap:anywhere;font-size:13px}
+ #furyPlayerStatsTable tbody td::before{content:attr(data-label);display:block;color:#91b1c9;font-size:10px;font-weight:700;letter-spacing:.2px;margin-bottom:5px}
+ #furyPlayerStatsTable tbody td:first-child{grid-column:1/3;border-bottom:1px solid #385a74}
+ #furyPlayerStatsTable tbody td:nth-child(2){grid-column:3;border-bottom:1px solid #385a74}
+ #furyPlayerStatsTable tbody td:first-child::before,#furyPlayerStatsTable tbody td:nth-child(2)::before{color:#69d9ff}
+ #furyPlayerStatsTable tbody td:first-child button{font-size:15px;font-weight:800;text-align:left;white-space:normal}
+ #furyPlayerStatsTable tbody td.fury-hit{padding:8px 5px!important}
+ #furyPlayerStatsTable tbody td.fury-hit .stat-indicator{min-width:0;white-space:normal;font-size:12px}
+ #furyPlayerStatsTable tbody td:nth-child(10),#furyPlayerStatsTable tbody td:nth-child(11){background:#1c3b48!important}
+ #furyPlayerStatsTable tbody td:nth-child(16){border-bottom:0}
+ #playersTab .player-table-hint{font-size:11px}
+}
 </style></head>
 
 
 
-<body>
+<body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
+<aside class="fury-side-panel" id="furySidePanel" aria-label="Sports analytics navigation">
+  <div class="fury-side-brand"><img class="fury-side-logo" src="fury-icon.png" alt="FURY Sports logo"></div>
+  <div class="fury-side-scroll">
+    <div class="fury-side-label">Dashboard</div>
+    <button class="fury-side-link active" data-side-tab="teams"><span class="side-icon">▤</span> Team Statistics</button>
+    <button class="fury-side-link" data-side-tab="players"><span class="side-icon">♙</span> Player Statistics</button>
+    <button class="fury-side-link" data-side-tab="match"><span class="side-icon">⚔</span> Match Analysis</button>
+    <button class="fury-side-link" data-side-tab="odds"><span class="side-icon">◈</span> Odds &amp; Schedule</button>
+    <div class="fury-side-label">Soccer leagues</div>
+    <div class="fury-side-sub">
+      <button class="fury-side-link active" data-side-league="laliga"><span class="side-icon">🇪🇸</span> La Liga</button>
+      <button class="fury-side-link" data-side-league="premier_league"><span class="side-icon">🇬🇧</span> Premier League</button>
+      <button class="fury-side-link" data-side-league="bundesliga"><span class="side-icon">🇩🇪</span> Bundesliga</button>
+      <button class="fury-side-link" data-side-league="serie_a"><span class="side-icon">🇮🇹</span> Serie A</button>
+      <button class="fury-side-link" data-side-league="ligue_1"><span class="side-icon">🇫🇷</span> Ligue 1</button>
+    </div>
+  </div>
+  <div class="fury-side-footer">2026–27 · Sports Intelligence</div>
+</aside>
+<button class="fury-side-toggle" id="furySideToggle" aria-label="Hide navigation" aria-expanded="true" aria-controls="furySidePanel" title="Show or hide navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+
 <div id="furyAuthGate" aria-hidden="true"><div class="fury-welcome"><div class="fury-welcome-brand">FURY <span>SPORTS AI</span></div><p>Private sports analytics · Open the menu in the upper-right corner to sign in.</p></div></div>
 <details id="furyAccountMenu" class="fury-account-menu">
   <summary class="fury-account-trigger" aria-label="Open account menu" title="Account menu"><span class="fury-hamburger" aria-hidden="true"><span></span><span></span><span></span></span><span id="furyMenuLabel" class="visually-hidden">Account</span></summary>
@@ -577,7 +658,7 @@ header{padding-right:88px}
 
 
 
-<div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div id="furyPlayerTrends" class="fury-extra"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
+<div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap fury-player-table-scroll"><table id="furyPlayerStatsTable"><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div id="furyPlayerTrends" class="fury-extra"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
 
 
 
@@ -854,7 +935,7 @@ function renderPlayers(){
   const tr=row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',f(shotAvg),hitRate===null?'N/A':f(hitRate,0)+'% ('+valid.filter(x=>n(x[stat])>line).length+'/'+valid.length+')',r.sot??'N/A',f(r.xa),r.key_passes??'N/A',f(r.np_xg),minutes>0?f(90*(n(r.sot)??0)/minutes):'N/A']);
   if(hitRate!==null){const cell=tr.cells[10],badge=document.createElement('span');badge.className='stat-indicator '+(hitRate>=80?'stat-hit-good':hitRate>=60?'stat-hit-above':hitRate>=40?'stat-hit-mid':'stat-hit-low');badge.textContent=cell.textContent;badge.title='Hit rate over '+line+' '+stat+' · '+valid.length+' games';cell.classList.add('fury-hit',hitRate>=80?'stat-hit-good':hitRate>=60?'stat-hit-above':hitRate>=40?'stat-hit-mid':'stat-hit-low');cell.replaceChildren(badge)}
   const link=document.createElement('button');link.className='pd-player-link';link.textContent=r.player;link.addEventListener('click',()=>{openPlayer(r);renderFuryPlayerTrend(r)});tr.cells[0].replaceChildren(link);
- });applyStatIndicators('playerRows',4,[/* none */], [10]);insertStatLegend('playerRows');
+ });applyStatIndicators('playerRows',4,[/* none */], [10]);insertStatLegend('playerRows');furyApplyPlayerColumnSort();
 }
 function renderFuryPlayerTrend(r){const target=$('furyPlayerTrends');target.replaceChildren();const h=document.createElement('h3');h.textContent=r.player+' · recent shooting';target.appendChild(h);const logs=playerMatchData.filter(x=>x.player===r.player&&x.team===r.team).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
  for(const count of [5,10]){const sample=logs.slice(0,count);const title=document.createElement('p');title.className='fury-note';title.textContent='Last '+count+' available matches · Shots '+f(avg(sample,'shots'))+' / game · SOT '+f(avg(sample,'sot'))+' / game';target.appendChild(title);const chart=document.createElement('div');chart.className='fury-chart';sample.slice().reverse().forEach((x,i)=>{const col=document.createElement('div');col.className='fury-col';const num=document.createElement('span');num.textContent=(x.shots??'—')+'/'+(x.sot??'—');const bar=document.createElement('div');bar.className='fury-bar';bar.style.height=(Math.max(3,Number(x.sot||0)*20))+'px';bar.title='SOT '+x.sot+' · Shots '+x.shots;const lbl=document.createElement('span');lbl.textContent=x.date?String(x.date).slice(5,10):'Game '+(i+1);col.append(num,bar,lbl);chart.appendChild(col)});target.appendChild(chart)}
@@ -1453,5 +1534,75 @@ oddsLeagueEl.addEventListener('change',()=>void loadOddsSchedule(true));
 oddsSearchEl.addEventListener('input',renderOddsSchedule);
 oddsDateEl.addEventListener('change',renderOddsSchedule);
 document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOddsSchedule(true));
+</script>
+<script id="fury-collapsible-sidebar-js">
+(function(){
+ const body=document.body,toggle=document.getElementById('furySideToggle'),backdrop=document.getElementById('furySideBackdrop');
+ function setOpen(open){body.classList.toggle('fury-side-closed',!open);toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Hide navigation':'Show navigation');}
+ toggle.addEventListener('click',()=>setOpen(body.classList.contains('fury-side-closed')));
+ backdrop.addEventListener('click',()=>setOpen(false));
+ document.querySelectorAll('[data-side-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+  const target=document.querySelector('.tabs button[data-tab="'+btn.dataset.sideTab+'"]');if(target)target.click();
+  if(window.matchMedia('(max-width:900px)').matches)setOpen(false);
+ }));
+ document.querySelectorAll('[data-side-league]').forEach(btn=>btn.addEventListener('click',()=>{
+  const target=document.querySelector('.league-menu-item[data-league="'+btn.dataset.sideLeague+'"]');if(target)target.click();
+  if(window.matchMedia('(max-width:900px)').matches)setOpen(false);
+ }));
+ document.addEventListener('click',e=>{
+  const tab=e.target.closest('.tabs button[data-tab]');if(tab)document.querySelectorAll('[data-side-tab]').forEach(b=>b.classList.toggle('active',b.dataset.sideTab===tab.dataset.tab));
+  const league=e.target.closest('.league-menu-item[data-league]');if(league)document.querySelectorAll('[data-side-league]').forEach(b=>b.classList.toggle('active',b.dataset.sideLeague===league.dataset.league));
+ });
+ const select=document.getElementById('leagueSelect');if(select)select.addEventListener('change',()=>document.querySelectorAll('[data-side-league]').forEach(b=>b.classList.toggle('active',b.dataset.sideLeague===select.value)));
+ if(window.innerWidth>900)setOpen(true);
+})();
+</script>
+<script id="fury-player-column-sort">
+(function(){
+  let sortColumn=null, sortDirection='desc';
+  const table=document.getElementById('furyPlayerStatsTable');
+  if(!table)return;
+  const heads=[...table.querySelectorAll('thead th')];
+  const textColumns=new Set([0,1]);
+  function numberValue(s){
+    const m=String(s).trim().replace(/,/g,'').match(/^-?\d+(?:\.\d+)?/);
+    return m?Number(m[0]):null;
+  }
+  window.furyApplyPlayerColumnSort=function(){
+    const body=table.tBodies[0];
+    if(!body)return;
+    const labels=heads.map(h=>h.textContent.trim().replace(/\s*[↑↓↕]\s*$/,''));
+    const rows=[...body.rows];
+    rows.forEach(row=>[...row.cells].forEach((cell,i)=>cell.setAttribute('data-label',labels[i]||'')));
+    if(sortColumn===null)return;
+    rows.sort((a,b)=>{
+      const av=a.cells[sortColumn]?.textContent.trim()||'';
+      const bv=b.cells[sortColumn]?.textContent.trim()||'';
+      let compare;
+      if(textColumns.has(sortColumn))compare=av.localeCompare(bv,undefined,{numeric:true,sensitivity:'base'});
+      else{
+        const an=numberValue(av),bn=numberValue(bv);
+        compare=an===null&&bn===null?0:an===null?1:bn===null?-1:an-bn;
+        if(an===null||bn===null)return compare;
+      }
+      return sortDirection==='asc'?compare:-compare;
+    });
+    body.append(...rows);
+  };
+  heads.forEach((th,i)=>{
+    th.tabIndex=0;th.setAttribute('role','button');th.setAttribute('aria-label','Sort by '+th.textContent.trim());
+    function activate(){
+      if(sortColumn===i)sortDirection=sortDirection==='desc'?'asc':'desc';
+      else{sortColumn=i;sortDirection=textColumns.has(i)?'asc':'desc';}
+      heads.forEach(h=>{h.removeAttribute('data-sort-dir');h.setAttribute('aria-sort','none')});
+      th.setAttribute('data-sort-dir',sortDirection);
+      th.setAttribute('aria-sort',sortDirection==='asc'?'ascending':'descending');
+      window.furyApplyPlayerColumnSort();
+    }
+    th.addEventListener('click',activate);
+    th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate()}});
+  });
+  window.furyApplyPlayerColumnSort();
+})();
 </script>
 </body></html>
