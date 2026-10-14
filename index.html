@@ -385,6 +385,19 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 #oddsTab .odds-summary{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;color:#a9d9f5;font-weight:700;font-size:13px}
 @media(max-width:800px){#oddsTab .odds-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:450px){#oddsTab .odds-controls{grid-template-columns:1fr}}
+
+/* Venue-based disciplinary projections */
+.projection-disciplinary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.projection-card-box{background:#101e31;border:1px solid #29435e;border-radius:14px;padding:18px 14px;text-align:center;min-width:0}
+.projection-card-heading{display:flex;align-items:center;justify-content:center;gap:9px;color:#afc2d7;font-size:12px;letter-spacing:1.1px;font-weight:750}
+.projection-card-symbol{display:inline-block;width:14px;height:20px;border-radius:2px;transform:rotate(-10deg);flex:none}
+.projection-card-box.yellow .projection-card-symbol{background:#facc15;box-shadow:0 0 10px #facc1540}
+.projection-card-box.red .projection-card-symbol{background:#f05252;box-shadow:0 0 10px #f0525240}
+.projection-card-numbers{font-size:clamp(26px,4vw,38px);font-weight:850;margin:11px 0 4px;font-variant-numeric:tabular-nums;color:#f6faff}
+.projection-card-numbers em{font-style:normal;color:#7d91a9;font-weight:400}
+.projection-card-total{font-size:13px;font-weight:750;color:#9edfff}
+.projection-card-detail{font-size:11px;color:#8ca4bd;margin-top:7px;line-height:1.4}
+@media(max-width:560px){.projection-disciplinary{grid-template-columns:1fr;gap:10px}.projection-card-box{padding:13px 10px}}
 </style>
 
 
@@ -478,16 +491,16 @@ body.fury-side-closed{padding-left:0}
 .fury-side-panel{position:fixed;top:0;bottom:0;left:0;width:var(--fury-side-width);z-index:8000;background:#0d131c;border-right:1px solid #2a3544;display:flex;flex-direction:column;box-shadow:8px 0 35px #0002;transition:transform .25s ease;font-family:'Outfit',sans-serif}
 body.fury-side-closed .fury-side-panel{transform:translateX(-100%)}
 .fury-side-brand{padding:27px 19px 20px;border-bottom:1px solid #26313f;font-size:20px;font-weight:900;letter-spacing:-.5px;color:#fff}
-.fury-side-brand span{color:#43baf6}
-.fury-side-brand{display:flex;align-items:center;justify-content:center;padding:18px 14px 15px}
-.fury-side-logo{display:block;width:100%;max-width:218px;height:auto;max-height:180px;object-fit:contain}
+.fury-side-brand .fury-side-name{color:#ffffff}.fury-side-brand .fury-side-name-accent{color:#67d5ff}
+.fury-side-brand{display:flex;align-items:center;justify-content:center;gap:7px;padding:26px 12px 23px;white-space:nowrap}
+.fury-side-name{font:900 24px/1 "Outfit",sans-serif;letter-spacing:-1px;color:#ffffff}.fury-side-name-accent{font:900 21px/1 "Outfit",sans-serif;letter-spacing:-.7px;color:#67d5ff}
 .fury-side-scroll{overflow-y:auto;overflow-x:hidden;flex:1;padding:18px 12px}
 .fury-side-label{color:#748ba1;font-size:10px;font-weight:800;letter-spacing:1.6px;margin:16px 12px 10px;text-transform:uppercase}
 .fury-side-link{width:100%;display:flex;align-items:center;gap:13px;text-align:left;border:1px solid transparent;background:transparent;color:#aebed0;padding:13px 15px;border-radius:12px;font:600 13px 'Outfit',sans-serif;margin:3px 0;cursor:pointer}
 .fury-side-link .side-icon{width:23px;text-align:center;font-size:17px;color:#91a9bf}
 .fury-side-link:hover{background:#172b3b;color:#fff}
-.fury-side-link.active{background:#10352f;color:#43e7b4;border-color:#146f59}
-.fury-side-link.active .side-icon{color:#43e7b4}
+.fury-side-link.active{background:#12384f;color:#76dcff;border-color:#2c9ac7}
+.fury-side-link.active .side-icon{color:#76dcff}
 .fury-side-sub{margin-left:14px;padding-left:9px;border-left:1px solid #293d4d}
 .fury-side-footer{padding:15px 13px;border-top:1px solid #293443;color:#7e95a8;font-size:11px}
 .fury-side-toggle{position:fixed;left:calc(var(--fury-side-width) - 15px);top:96px;width:34px;height:34px;z-index:8100;border:1px solid #3a4a60;background:#111b29;color:#e6f4ff;border-radius:50%;padding:0;display:grid;place-items:center;box-shadow:0 3px 12px #0007;transition:left .25s ease;cursor:pointer}
@@ -501,10 +514,10 @@ body.fury-side-closed .fury-side-toggle svg{transform:rotate(180deg)}
 /* Sortable player statistics and compact iPhone presentation */
 #furyPlayerStatsTable thead th{cursor:pointer;user-select:none;white-space:nowrap;transition:color .15s,background .15s;padding-right:20px}
 #furyPlayerStatsTable thead th:hover,#furyPlayerStatsTable thead th:focus-visible{color:#65dcff;background:#203d55}
-#furyPlayerStatsTable thead th[data-sort-dir="asc"],#furyPlayerStatsTable thead th[data-sort-dir="desc"]{color:#5de3b5}
+#furyPlayerStatsTable thead th[data-sort-dir="asc"],#furyPlayerStatsTable thead th[data-sort-dir="desc"]{color:#76dcff}
 #furyPlayerStatsTable thead th::after{content:" ↕";color:#7296af;font-size:11px}
-#furyPlayerStatsTable thead th[data-sort-dir="asc"]::after{content:" ↑";color:#5de3b5}
-#furyPlayerStatsTable thead th[data-sort-dir="desc"]::after{content:" ↓";color:#5de3b5}
+#furyPlayerStatsTable thead th[data-sort-dir="asc"]::after{content:" ↑";color:#76dcff}
+#furyPlayerStatsTable thead th[data-sort-dir="desc"]::after{content:" ↓";color:#76dcff}
 .fury-player-table-scroll{max-height:690px;overflow:auto}
 #furyPlayerStatsTable{min-width:1180px}
 @media(max-width:680px){
@@ -535,7 +548,7 @@ body.fury-side-closed .fury-side-toggle svg{transform:rotate(180deg)}
 
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside class="fury-side-panel" id="furySidePanel" aria-label="Sports analytics navigation">
-  <div class="fury-side-brand"><img class="fury-side-logo" src="fury-icon.png" alt="FURY Sports logo"></div>
+  <div class="fury-side-brand"><span class="fury-side-name">FURY</span><span class="fury-side-name-accent">SPORTS AI</span></div>
   <div class="fury-side-scroll">
     <div class="fury-side-label">Dashboard</div>
     <button class="fury-side-link active" data-side-tab="teams"><span class="side-icon">▤</span> Team Statistics</button>
@@ -673,6 +686,10 @@ body.fury-side-closed .fury-side-toggle svg{transform:rotate(180deg)}
     <div class="projection-side"><div id="projectionHomeIcon" class="projection-team-icon">H</div><div id="projectionHome" class="projection-name">Home</div></div>
     <div class="projection-center"><div id="projectionTotal" class="projection-total">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div id="projectionScoreline" class="projection-scoreline">Most likely score: —</div></div>
     <div class="projection-side"><div id="projectionAwayIcon" class="projection-team-icon">A</div><div id="projectionAway" class="projection-name">Away</div></div>
+  </div>
+  <div class="projection-disciplinary" aria-label="Expected disciplinary cards">
+    <div class="projection-card-box yellow"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED YELLOW CARDS</span></div><div class="projection-card-numbers"><span id="projectionYellowHome">N/A</span><em>–</em><span id="projectionYellowAway">N/A</span></div><div class="projection-card-total" id="projectionYellowTotal">No card data available</div><div class="projection-card-detail" id="projectionYellowProb"></div></div>
+    <div class="projection-card-box red"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED RED CARDS</span></div><div class="projection-card-numbers"><span id="projectionRedHome">N/A</span><em>–</em><span id="projectionRedAway">N/A</span></div><div class="projection-card-total" id="projectionRedTotal">No card data available</div><div class="projection-card-detail" id="projectionRedProb"></div></div>
   </div>
   <div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
   <div id="projectionCornersMarket" class="projection-market"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option value="9.5" selected>9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
@@ -1011,7 +1028,21 @@ function updateCornersMarket(){
   $('projectionCornersBarOver').style.width=(over*100).toFixed(1)+'%';
   $('projectionCornersBarUnder').style.width=(under*100).toFixed(1)+'%';
 }
+function updateDisciplinaryProjection(homeGames,awayGames){
+  for(const [metric,prefix,line] of [['yellow_cards','Yellow',3.5],['red_cards','Red',0.5]]){
+    const hf=avg(homeGames,metric+'_for'),ha=avg(homeGames,metric+'_against');
+    const af=avg(awayGames,metric+'_for'),aa=avg(awayGames,metric+'_against');
+    const complete=[hf,ha,af,aa].every(v=>v!==null&&Number.isFinite(v));
+    const h=complete?Math.max(0,(hf+aa)/2):null;
+    const a=complete?Math.max(0,(af+ha)/2):null;
+    $('projection'+prefix+'Home').textContent=h===null?'N/A':h.toFixed(2);
+    $('projection'+prefix+'Away').textContent=a===null?'N/A':a.toFixed(2);
+    $('projection'+prefix+'Total').textContent=complete?(h+a).toFixed(2)+' total expected '+metric.replace('_',' '):'No card data available';
+    $('projection'+prefix+'Prob').textContent=complete?'Over '+line.toFixed(1)+' cards · '+(100*cornersOverProbability(h+a,line)).toFixed(1)+'% (Poisson estimate)':'Requires yellow/red card match records for both teams';
+  }
+}
 function renderProjection(home,away,homeGames,awayGames){
+  updateDisciplinaryProjection(homeGames,awayGames);
   const chf=avg(homeGames,'corners_for'),cha=avg(homeGames,'corners_against');
   const caf=avg(awayGames,'corners_for'),caa=avg(awayGames,'corners_against');
   const validCorners=[chf,cha,caf,caa].every(v=>v!==null);
