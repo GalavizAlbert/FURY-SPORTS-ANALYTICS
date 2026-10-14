@@ -1,17 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 
-
-
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FURY Sports Analytics</title>
-<link rel="icon" type="image/png" href="fury-icon.png">
-<link rel="apple-touch-icon" href="fury-icon.png">
-
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>FURY Sports Analytics</title>
+<link href="fury-icon.png" rel="icon" type="image/png"/>
+<link href="fury-icon.png" rel="apple-touch-icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <style>
 
 
@@ -417,9 +411,6 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 @media(max-width:360px){.projection-card-heading{font-size:8px}.projection-card-box{padding:9px 4px}.projection-card-numbers{font-size:17px}}
 
 </style>
-
-
-
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
 .fury-extra h3{margin:0 0 12px;color:#b9eaff;font-size:17px}.fury-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.fury-stat{background:#14283b;padding:14px;border-radius:10px;border:1px solid #24445c}.fury-stat small{display:block;color:#9bb5c9}.fury-stat strong{display:block;font-size:24px;color:#fff;margin:5px 0}.fury-note{color:#a9c3d3;font-size:12px;margin-top:10px}.fury-hit{font-weight:700;border-radius:5px;padding:3px 7px;white-space:nowrap}.fury-hit.good{background:#154f36;color:#8af2ae}.fury-hit.mid{background:#60471a;color:#ffdc8a}.fury-hit.low{background:#59272d;color:#ffaaaa}.fury-chart{display:flex;align-items:end;gap:6px;overflow-x:auto;min-height:125px;padding:10px 0}.fury-col{min-width:42px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#bdd5e3}.fury-bar{width:28px;min-height:3px;border-radius:4px 4px 0 0;background:linear-gradient(#45c5ff,#1681be)}.fury-extra .controls{margin-bottom:12px}
@@ -560,210 +551,172 @@ body.fury-side-closed .fury-side-toggle svg{transform:rotate(180deg)}
  #furyPlayerStatsTable tbody td:nth-child(16){border-bottom:0}
  #playersTab .player-table-hint{font-size:11px}
 }
+</style><style>
+/* Compact navigation: brand removed; league selection is contextual to each page. */
+header:has(.header-top){display:none!important}
+.fury-side-brand,.fury-side-sub{display:none!important}
+.fury-context-league select{border-color:#4aaee6!important;background:#11283c!important;color:#e9f6ff!important}
+.fury-context-league{font-weight:700;color:#a9dfff!important}
+/* Responsive layout for all four centers */
+@media(max-width:760px){
+ html,body{width:100%;max-width:100%;overflow-x:hidden}
+ .fury-side-panel{max-width:86vw}
+ main,.main-content,.dashboard-content,.fury-main{min-width:0;max-width:100%}
+ #teamsTab,#playersTab,#matchTab,#oddsTab{min-width:0;width:100%;max-width:100%}
+ #teamsTab .panel,#playersTab .panel,#matchTab .panel,#oddsTab .panel{min-width:0;max-width:100%;box-sizing:border-box}
+ #teamsTab .controls,#playersTab .controls,#matchTab .controls,#oddsTab .controls{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ #teamsTab .controls label,#playersTab .controls label,#matchTab .controls label,#oddsTab .controls label{min-width:0;max-width:100%}
+ #teamsTab select,#playersTab select,#matchTab select,#oddsTab select,
+ #teamsTab input,#playersTab input,#matchTab input,#oddsTab input{width:100%;min-width:0;max-width:100%;box-sizing:border-box;font-size:16px}
+ .player-hero{padding:14px!important;margin-bottom:10px!important}
+ .player-hero h2{font-size:clamp(21px,6vw,28px)!important;line-height:1.18}
+ .player-hero p{font-size:12px!important}
+ .panel{padding:12px!important}
+ .scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ .projection,.match-center-projection{max-width:100%;min-width:0;overflow-wrap:anywhere}
+ .projection-hero{gap:6px!important}
+ .projection-team-name{overflow-wrap:anywhere}
+ .tabs{max-width:100%;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+}
+@media(max-width:390px){
+ #teamsTab .controls,#playersTab .controls,#matchTab .controls,#oddsTab .controls{grid-template-columns:1fr!important}
+ .player-hero{padding:10px!important}
+}
 </style></head>
-
-
-
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
-<aside class="fury-side-panel" id="furySidePanel" aria-label="Sports analytics navigation">
-  <div class="fury-side-brand"><span class="fury-side-name">FURY</span><span class="fury-side-name-accent">SPORTS AI</span></div>
-  <div class="fury-side-scroll">
-    <div class="fury-side-label">Dashboard</div>
-    <button class="fury-side-link active" data-side-tab="teams"><span class="side-icon">▤</span> Team Statistics</button>
-    <button class="fury-side-link" data-side-tab="players"><span class="side-icon">♙</span> Player Statistics</button>
-    <button class="fury-side-link" data-side-tab="match"><span class="side-icon">⚔</span> Match Analysis</button>
-    <button class="fury-side-link" data-side-tab="odds"><span class="side-icon">◈</span> Odds &amp; Schedule</button>
-    <div class="fury-side-label">Soccer leagues</div>
-    <div class="fury-side-sub">
-      <button class="fury-side-link active" data-side-league="laliga"><span class="side-icon">🇪🇸</span> La Liga</button>
-      <button class="fury-side-link" data-side-league="premier_league"><span class="side-icon">🇬🇧</span> Premier League</button>
-      <button class="fury-side-link" data-side-league="bundesliga"><span class="side-icon">🇩🇪</span> Bundesliga</button>
-      <button class="fury-side-link" data-side-league="serie_a"><span class="side-icon">🇮🇹</span> Serie A</button>
-      <button class="fury-side-link" data-side-league="ligue_1"><span class="side-icon">🇫🇷</span> Ligue 1</button>
-    </div>
-  </div>
-  <div class="fury-side-footer">2026–27 · Sports Intelligence</div>
+<aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
+
+<div class="fury-side-scroll">
+<div class="fury-side-label">Dashboard</div>
+<button class="fury-side-link active" data-side-tab="teams"><span class="side-icon">▤</span> Team Statistics</button>
+<button class="fury-side-link" data-side-tab="players"><span class="side-icon">♙</span> Player Statistics</button>
+<button class="fury-side-link" data-side-tab="match"><span class="side-icon">⚔</span> Match Analysis</button>
+<button class="fury-side-link" data-side-tab="odds"><span class="side-icon">◈</span> Odds &amp; Schedule</button>
+
+
+</div>
+<div class="fury-side-footer">2026–27 · Sports Intelligence</div>
 </aside>
-<button class="fury-side-toggle" id="furySideToggle" aria-label="Hide navigation" aria-expanded="true" aria-controls="furySidePanel" title="Show or hide navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-
-<div id="furyAuthGate" aria-hidden="true"><div class="fury-welcome"><div class="fury-welcome-brand">FURY <span>SPORTS AI</span></div><p>Private sports analytics · Open the menu in the upper-right corner to sign in.</p></div></div>
-<details id="furyAccountMenu" class="fury-account-menu">
-  <summary class="fury-account-trigger" aria-label="Open account menu" title="Account menu"><span class="fury-hamburger" aria-hidden="true"><span></span><span></span><span></span></span><span id="furyMenuLabel" class="visually-hidden">Account</span></summary>
-  <div class="fury-account-dropdown">
-    <div id="furySignedOutMenu">
-      <div class="fury-menu-heading">Member sign in</div>
-      <form id="furyLoginForm">
-        <label for="furyEmail">Email</label><input id="furyEmail" type="email" autocomplete="username" required placeholder="you@example.com">
-        <label for="furyPassword">Password</label><input id="furyPassword" type="password" autocomplete="current-password" required placeholder="Password">
-        <button id="furySignIn" type="submit">Sign in</button>
-        <div id="furyAuthMessage" class="auth-error" role="alert" aria-live="polite"></div>
-      </form>
-    </div>
-    <div id="furySignedInMenu" hidden>
-      <div class="fury-menu-heading">Signed in as</div>
-      <div id="furyAccountEmail" class="fury-menu-email"></div>
-      <button id="furyLogout" type="button" class="fury-menu-logout">Log out</button>
-    </div>
-  </div>
+<button aria-controls="furySidePanel" aria-expanded="true" aria-label="Hide navigation" class="fury-side-toggle" id="furySideToggle" title="Show or hide navigation"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg></button>
+<div aria-hidden="true" id="furyAuthGate"><div class="fury-welcome"><div class="fury-welcome-brand">FURY <span>SPORTS AI</span></div><p>Private sports analytics · Open the menu in the upper-right corner to sign in.</p></div></div>
+<details class="fury-account-menu" id="furyAccountMenu">
+<summary aria-label="Open account menu" class="fury-account-trigger" title="Account menu"><span aria-hidden="true" class="fury-hamburger"><span></span><span></span><span></span></span><span class="visually-hidden" id="furyMenuLabel">Account</span></summary>
+<div class="fury-account-dropdown">
+<div id="furySignedOutMenu">
+<div class="fury-menu-heading">Member sign in</div>
+<form id="furyLoginForm">
+<label for="furyEmail">Email</label><input autocomplete="username" id="furyEmail" placeholder="you@example.com" required="" type="email"/>
+<label for="furyPassword">Password</label><input autocomplete="current-password" id="furyPassword" placeholder="Password" required="" type="password"/>
+<button id="furySignIn" type="submit">Sign in</button>
+<div aria-live="polite" class="auth-error" id="furyAuthMessage" role="alert"></div>
+</form>
+</div>
+<div hidden="" id="furySignedInMenu">
+<div class="fury-menu-heading">Signed in as</div>
+<div class="fury-menu-email" id="furyAccountEmail"></div>
+<button class="fury-menu-logout" id="furyLogout" type="button">Log out</button>
+</div>
+</div>
 </details>
-
-
 <header>
-  <div class="header-top">
-  <h1 class="site-title">
-
-    <img src="fury-icon.png" alt="FurySports Logo" class="site-logo">
-
-    <span>
-
-      <span class="brand-fury">FURY</span><span class="brand-sports">SPORTS AI</span>
-
-    </span>
-
-  </h1>
-<details class="league-header-menu" aria-label="League navigation">
-  <summary class="league-header-trigger">🌍 <span id="selectedLeagueLabel">La Liga</span> <span aria-hidden="true">▾</span></summary>
-  <nav class="league-menu" aria-label="Select league">
-    <button type="button" class="league-menu-item active" data-league="laliga" aria-current="true"><span>🇪🇸</span> La Liga</button>
-    <button type="button" class="league-menu-item" data-league="premier_league"><span>🇬🇧</span> Premier League</button>
-    <button type="button" class="league-menu-item" data-league="bundesliga"><span>🇩🇪</span> Bundesliga</button>
-    <button type="button" class="league-menu-item" data-league="serie_a"><span>🇮🇹</span> Serie A</button>
-    <button type="button" class="league-menu-item" data-league="ligue_1"><span>🇫🇷</span> Ligue 1</button>
-  </nav>
-  <select id="leagueSelect" class="visually-hidden" aria-label="Selected league"><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option></select>
+<div class="header-top">
+<h1 class="site-title">
+<img alt="FurySports Logo" class="site-logo" src="fury-icon.png"/>
+<span>
+<span class="brand-fury">FURY</span><span class="brand-sports">SPORTS AI</span>
+</span>
+</h1>
+<details aria-label="League navigation" class="league-header-menu">
+<summary class="league-header-trigger">🌍 <span id="selectedLeagueLabel">La Liga</span> <span aria-hidden="true">▾</span></summary>
+<nav aria-label="Select league" class="league-menu">
+<button aria-current="true" class="league-menu-item active" data-league="laliga" type="button"><span>🇪🇸</span> La Liga</button>
+<button class="league-menu-item" data-league="premier_league" type="button"><span>🇬🇧</span> Premier League</button>
+<button class="league-menu-item" data-league="bundesliga" type="button"><span>🇩🇪</span> Bundesliga</button>
+<button class="league-menu-item" data-league="serie_a" type="button"><span>🇮🇹</span> Serie A</button>
+<button class="league-menu-item" data-league="ligue_1" type="button"><span>🇫🇷</span> Ligue 1</button>
+</nav>
+<select aria-label="Selected league" class="visually-hidden" id="leagueSelect"><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option></select>
 </details>
-  </div>
-  
-  <p class="hint">2026–27: Sports Analytics · Five Leagues</p>
-
+</div>
+<p class="hint">2026–27: Sports Analytics · Five Leagues</p>
 </header>
-
-
-
 <main class="app-shell">
-<div class="app-content"><div id="loadStatus" class="status" role="status">Loading your private Supabase statistics...</div>
-
-
-
-<nav class="tabs" aria-label="Dashboard sections"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button><button data-tab="odds">Odds &amp; Schedule</button></nav>
-
-
-
+<div class="app-content"><div class="status" id="loadStatus" role="status">Loading your private Supabase statistics...</div>
+<nav aria-label="Dashboard sections" class="tabs"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button><button data-tab="odds">Odds &amp; Schedule</button></nav>
 <section id="teamsTab">
 <div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / TEAM INTELLIGENCE</div><h2>Team Performance Center</h2><p>Explore league leaders, compare team trends, and analyze attacking and defensive performance across your selected league.</p><span class="player-hero-tag">● Five leagues · Season 2026–27</span></div>
-
-
-
-<div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div class="team-venue-bar" role="group" aria-label="Team statistics venue"><span>Match venue</span><button type="button" class="team-venue-btn active" data-venue="all" aria-pressed="true">All</button><button type="button" class="team-venue-btn" data-venue="home" aria-pressed="false">Home</button><button type="button" class="team-venue-btn" data-venue="away" aria-pressed="false">Away</button><span id="teamVenueNote" class="hint">All matches</span></div><div class="controls"><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input id="teamSearch" placeholder="Search club name" autocomplete="off"></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% uses the selected venue across the full season.</p></div>
-
-
-
+<div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div aria-label="Team statistics venue" class="team-venue-bar" role="group"><span>Match venue</span><button aria-pressed="true" class="team-venue-btn active" data-venue="all" type="button">All</button><button aria-pressed="false" class="team-venue-btn" data-venue="home" type="button">Home</button><button aria-pressed="false" class="team-venue-btn" data-venue="away" type="button">Away</button><span class="hint" id="teamVenueNote">All matches</span></div><div class="controls"><label class="fury-context-league">League<select id="furyTeamLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input autocomplete="off" id="teamSearch" placeholder="Search club name"/></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% uses the selected venue across the full season.</p></div>
 <div class="tiles player-kpis"><div class="tile"><span>Teams</span><strong id="teamCount">—</strong></div><div class="tile"><span>Corners for / game</span><strong id="teamCorners">—</strong></div><div class="tile"><span>Shots for / game</span><strong id="teamShots">—</strong></div><div class="tile"><span>Goals for / game</span><strong id="teamGoals">—</strong></div></div>
-
-
-
 <div class="team-insights team-center-layout">
- <div class="panel team-spotlight team-center-panel"><div class="team-section-head"><h2 id="teamSpotlightTitle">Team performance snapshot</h2><span id="teamSpotlightBadge" class="team-pill">Season</span></div><p id="teamSpotlightHint" class="hint">Choose a team to compare its attack and defense with league averages.</p><div id="teamSpotlight" class="team-compare"></div></div>
- <div class="panel team-center-panel"><div class="team-section-head"><h2>League leaders</h2><span class="team-pill">Top 3</span></div><div id="teamLeaders" class="team-leaders"></div></div>
+<div class="panel team-spotlight team-center-panel"><div class="team-section-head"><h2 id="teamSpotlightTitle">Team performance snapshot</h2><span class="team-pill" id="teamSpotlightBadge">Season</span></div><p class="hint" id="teamSpotlightHint">Choose a team to compare its attack and defense with league averages.</p><div class="team-compare" id="teamSpotlight"></div></div>
+<div class="panel team-center-panel"><div class="team-section-head"><h2>League leaders</h2><span class="team-pill">Top 3</span></div><div class="team-leaders" id="teamLeaders"></div></div>
 </div>
-<div class="panel team-center-panel"><div class="team-section-head"><h2 id="teamRankTitle">Team ranking</h2><span class="hint">Click a club to inspect it</span></div><div id="teamRanking"></div></div><div class="panel team-center-panel"><div class="team-section-head"><h2>Team statistics</h2><span id="teamTableCount" class="hint"></span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Team</th><th>Matches</th><th>Corners for</th><th>Corners against</th><th>Shots for</th><th>Shots against</th><th>SOT for</th><th>SOT against</th><th>Goals for</th><th>Goals against</th><th>Over 9.5 corners (season)</th><th>xG / game</th><th>xGA / game</th><th>xG diff / game</th></tr></thead><tbody id="teamRows"></tbody></table></div></div><div class="fury-note">xG metrics are calculated from recorded player-match xG; missing matches are not estimated.</div>
-<div class="panel team-center-panel" id="teamHistoryPanel"><div class="team-section-head"><div><h2>Last 15 Matches · Historical Results</h2><p class="hint" id="teamHistoryDescription">Select a club to review its latest recorded results, corners and shooting data.</p></div><label class="team-history-selector">Team<select id="teamHistoryTeam" aria-label="Select team for last 15 matches"></select></label></div><div class="scroll player-table-wrap"><table><thead><tr><th>Date</th><th>Venue</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners For</th><th>Corners Against</th><th>Shots For</th><th>Shots Against</th><th>SOT For</th><th>SOT Against</th></tr></thead><tbody id="teamHistoryRows"></tbody></table></div><p class="hint" id="teamHistoryCount"></p></div></section>
-
-
-
-<section id="playersTab" class="hidden">
+<div class="panel team-center-panel"><div class="team-section-head"><h2 id="teamRankTitle">Team ranking</h2><span class="hint">Click a club to inspect it</span></div><div id="teamRanking"></div></div><div class="panel team-center-panel"><div class="team-section-head"><h2>Team statistics</h2><span class="hint" id="teamTableCount"></span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Team</th><th>Matches</th><th>Corners for</th><th>Corners against</th><th>Shots for</th><th>Shots against</th><th>SOT for</th><th>SOT against</th><th>Goals for</th><th>Goals against</th><th>Over 9.5 corners (season)</th><th>xG / game</th><th>xGA / game</th><th>xG diff / game</th></tr></thead><tbody id="teamRows"></tbody></table></div></div><div class="fury-note">xG metrics are calculated from recorded player-match xG; missing matches are not estimated.</div>
+<div class="panel team-center-panel" id="teamHistoryPanel"><div class="team-section-head"><div><h2>Last 15 Matches · Historical Results</h2><p class="hint" id="teamHistoryDescription">Select a club to review its latest recorded results, corners and shooting data.</p></div><label class="team-history-selector">Team<select aria-label="Select team for last 15 matches" id="teamHistoryTeam"></select></label></div><div class="scroll player-table-wrap"><table><thead><tr><th>Date</th><th>Venue</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners For</th><th>Corners Against</th><th>Shots For</th><th>Shots Against</th><th>SOT For</th><th>SOT Against</th></tr></thead><tbody id="teamHistoryRows"></tbody></table></div><p class="hint" id="teamHistoryCount"></p></div></section>
+<section class="hidden" id="playersTab">
 <div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / PLAYER INTELLIGENCE</div><h2>Player Performance Center</h2><p>Compare season leaders, explore shooting trends, and select a player to inspect individual match results, hit rates and recent form.</p><span class="player-hero-tag">● Five leagues · Season 2026–27</span></div>
-<div class="panel player-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">PLAYER INTELLIGENCE</span><h3>Explore player data</h3></div><span class="filter-chip">FILTERS</span></div><div class="controls"><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">Expected assists (xA)</option><option value="key_passes">Key passes</option><option value="np_xg">Non-penalty xG</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Hit-rate stat<select id="furyHitStat"><option value="sot">Shots on target</option><option value="shots">Shots</option><option value="goals">Goals</option><option value="key_passes">Key passes</option></select></label><label>Over line<select id="furyHitLine"><option value="0.5">0.5</option><option value="1.5" selected>1.5</option><option value="2.5">2.5</option><option value="3.5">3.5</option></select></label></div></div>
-
-
-
-<div id="playerDetail" class="player-detail hidden">
-  <div class="pd-header"><div><div class="hint">FURYSPORTS AI · PLAYER GAME LOG</div><h2 id="pdName">Player</h2><div id="pdTeam" class="hint"></div></div><button id="pdClose" type="button">✕ Close player</button></div>
-  <div class="pd-filters"><label>Statistic<select id="pdStat"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">xA</option><option value="key_passes">Key passes</option><option value="np_xg">npxG</option></select></label><label>Line<select id="pdLine"></select></label><label>Games<select id="pdGames"><option value="5">Last 5</option><option value="10" selected>Last 10</option><option value="0">All available</option></select></label><label>Venue<select id="pdVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label></div>
-  <div id="pdSummary" class="pd-kpis"></div><div id="pdChart" class="pd-chart"></div><div id="pdMessage" class="hint"></div>
-  <div class="scroll pd-table"><table><thead><tr><th>Date</th><th>Opponent / Match</th><th>Venue</th><th>Minutes</th><th>Shots</th><th>Goals</th><th>xG</th><th>Selected stat</th><th>Over line?</th></tr></thead><tbody id="pdRows"></tbody></table></div>
+<div class="panel player-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">PLAYER INTELLIGENCE</span><h3>Explore player data</h3></div><span class="filter-chip">FILTERS</span></div><div class="controls"><label class="fury-context-league">League<select id="furyPlayerLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"/></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">Expected assists (xA)</option><option value="key_passes">Key passes</option><option value="np_xg">Non-penalty xG</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Hit-rate stat<select id="furyHitStat"><option value="sot">Shots on target</option><option value="shots">Shots</option><option value="goals">Goals</option><option value="key_passes">Key passes</option></select></label><label>Over line<select id="furyHitLine"><option value="0.5">0.5</option><option selected="" value="1.5">1.5</option><option value="2.5">2.5</option><option value="3.5">3.5</option></select></label></div></div>
+<div class="player-detail hidden" id="playerDetail">
+<div class="pd-header"><div><div class="hint">FURYSPORTS AI · PLAYER GAME LOG</div><h2 id="pdName">Player</h2><div class="hint" id="pdTeam"></div></div><button id="pdClose" type="button">✕ Close player</button></div>
+<div class="pd-filters"><label>Statistic<select id="pdStat"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">xA</option><option value="key_passes">Key passes</option><option value="np_xg">npxG</option></select></label><label>Line<select id="pdLine"></select></label><label>Games<select id="pdGames"><option value="5">Last 5</option><option selected="" value="10">Last 10</option><option value="0">All available</option></select></label><label>Venue<select id="pdVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label></div>
+<div class="pd-kpis" id="pdSummary"></div><div class="pd-chart" id="pdChart"></div><div class="hint" id="pdMessage"></div>
+<div class="scroll pd-table"><table><thead><tr><th>Date</th><th>Opponent / Match</th><th>Venue</th><th>Minutes</th><th>Shots</th><th>Goals</th><th>xG</th><th>Selected stat</th><th>Over line?</th></tr></thead><tbody id="pdRows"></tbody></table></div>
 </div>
-
-<p id="playerDataStatus" class="hint" role="status" style="margin:12px 2px;color:#9fd6f7"></p>
+<p class="hint" id="playerDataStatus" role="status" style="margin:12px 2px;color:#9fd6f7"></p>
 <div class="tiles player-kpis"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
-
-
-
-<div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap fury-player-table-scroll"><table id="furyPlayerStatsTable"><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div id="furyPlayerTrends" class="fury-extra"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
-
-
-
-<section id="matchTab" class="hidden"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Configure match analysis</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p id="matchStatus" class="hint"></p><p class="hint">Cross-league projections compare domestic league performances; they are estimates, not head-to-head results, and do not adjust for league strength.</p></div>
-
-
-
-
-<div id="projectionPanel" class="projection match-center-projection" aria-live="polite">
-  <div class="projection-topline"><span>◷ FURYSPORTS AI · MATCH PROJECTION</span><span>◉ Poisson model</span></div>
-  <div class="projection-hero">
-    <div class="projection-side"><div id="projectionHomeIcon" class="projection-team-icon">H</div><div id="projectionHome" class="projection-name">Home</div></div>
-    <div class="projection-center"><div id="projectionTotal" class="projection-total">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div id="projectionScoreline" class="projection-scoreline">Most likely score: —</div></div>
-    <div class="projection-side"><div id="projectionAwayIcon" class="projection-team-icon">A</div><div id="projectionAway" class="projection-name">Away</div></div>
-  </div>
-  <div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
-  <div id="projectionCornersMarket" class="projection-market"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option value="9.5" selected>9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
-  <div class="projection-market"><div class="projection-market-title">Moneyline · 1X2 model probability</div><div class="projection-market-labels three"><span id="projectionWinHome">Home —</span><span id="projectionDraw">Draw —</span><span id="projectionWinAway">Away —</span></div><div class="projection-bar"><div id="projectionBarHome" style="background:#ff652e"></div><div id="projectionBarDraw" style="background:#8592a4"></div><div id="projectionBarAway" style="background:#0a8f9f"></div></div></div>
-  <div class="projection-market"><div class="projection-market-title">Over / Under % (2.5 goals)</div><div class="projection-market-labels"><span id="projectionOver">Over —</span><span id="projectionUnder">Under —</span></div><div class="projection-bar"><div id="projectionBarOver" style="background:#088e49"></div><div id="projectionBarUnder" style="background:#a92437"></div></div></div>
-  <div class="projection-market"><div class="projection-market-title">Both Teams to Score</div><div class="projection-market-labels"><span id="projectionBttsYes">Yes —</span><span id="projectionBttsNo">No —</span></div><div class="projection-bar"><div id="projectionBarBttsYes" style="background:#088e49"></div><div id="projectionBarBttsNo" style="background:#a92437"></div></div></div>
-  <div class="projection-disciplinary" aria-label="Expected disciplinary cards">
-    <div class="projection-card-box yellow"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED YELLOW CARDS</span></div><div class="projection-card-numbers"><span id="projectionYellowHome">N/A</span><em>–</em><span id="projectionYellowAway">N/A</span></div><div class="projection-card-total" id="projectionYellowTotal">No card data available</div><div class="projection-card-detail" id="projectionYellowProb"></div></div>
-    <div class="projection-card-box red"><div class="projection-card-heading"><span class="projection-card-symbol" aria-hidden="true"></span><span>EXPECTED RED CARDS</span></div><div class="projection-card-numbers"><span id="projectionRedHome">N/A</span><em>–</em><span id="projectionRedAway">N/A</span></div><div class="projection-card-total" id="projectionRedTotal">No card data available</div><div class="projection-card-detail" id="projectionRedProb"></div></div>
-  </div>
-  <div class="panel match-center-panel" id="furyBookmakerOdds" style="margin:20px 0"><div class="player-panel-head"><h2>Live bookmaker odds</h2><span class="player-panel-kicker">THE ODDS API · DECIMAL</span></div><p id="furyOddsStatus" class="hint">Choose a matchup to load upcoming bookmaker odds.</p><div id="furyOddsResults" class="fury-grid"></div><p class="hint">Only upcoming fixtures returned by the provider. Scores and historical matches are not betting lines. Market availability varies by league, region and bookmaker. Implied probabilities include bookmaker margin.</p></div>
-  <div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
-  <div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
-  <div class="projection-foot"><div id="projectionSample" class="projection-sub"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
+<div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap fury-player-table-scroll"><table id="furyPlayerStatsTable"><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div class="fury-extra" id="furyPlayerTrends"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
+<section class="hidden" id="matchTab"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Configure match analysis</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label class="fury-context-league">League<select id="furyMatchLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p class="hint" id="matchStatus"></p><p class="hint">Cross-league projections compare domestic league performances; they are estimates, not head-to-head results, and do not adjust for league strength.</p></div>
+<div aria-live="polite" class="projection match-center-projection" id="projectionPanel">
+<div class="projection-topline"><span>◷ FURYSPORTS AI · MATCH PROJECTION</span><span>◉ Poisson model</span></div>
+<div class="projection-hero">
+<div class="projection-side"><div class="projection-team-icon" id="projectionHomeIcon">H</div><div class="projection-name" id="projectionHome">Home</div></div>
+<div class="projection-center"><div class="projection-total" id="projectionTotal">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div class="projection-scoreline" id="projectionScoreline">Most likely score: —</div></div>
+<div class="projection-side"><div class="projection-team-icon" id="projectionAwayIcon">A</div><div class="projection-name" id="projectionAway">Away</div></div>
 </div>
-
-
+<div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
+<div class="projection-market" id="projectionCornersMarket"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option selected="" value="9.5">9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
+<div class="projection-market"><div class="projection-market-title">Moneyline · 1X2 model probability</div><div class="projection-market-labels three"><span id="projectionWinHome">Home —</span><span id="projectionDraw">Draw —</span><span id="projectionWinAway">Away —</span></div><div class="projection-bar"><div id="projectionBarHome" style="background:#ff652e"></div><div id="projectionBarDraw" style="background:#8592a4"></div><div id="projectionBarAway" style="background:#0a8f9f"></div></div></div>
+<div class="projection-market"><div class="projection-market-title">Over / Under % (2.5 goals)</div><div class="projection-market-labels"><span id="projectionOver">Over —</span><span id="projectionUnder">Under —</span></div><div class="projection-bar"><div id="projectionBarOver" style="background:#088e49"></div><div id="projectionBarUnder" style="background:#a92437"></div></div></div>
+<div class="projection-market"><div class="projection-market-title">Both Teams to Score</div><div class="projection-market-labels"><span id="projectionBttsYes">Yes —</span><span id="projectionBttsNo">No —</span></div><div class="projection-bar"><div id="projectionBarBttsYes" style="background:#088e49"></div><div id="projectionBarBttsNo" style="background:#a92437"></div></div></div>
+<div aria-label="Expected disciplinary cards" class="projection-disciplinary">
+<div class="projection-card-box yellow"><div class="projection-card-heading"><span aria-hidden="true" class="projection-card-symbol"></span><span>EXPECTED YELLOW CARDS</span></div><div class="projection-card-numbers"><span id="projectionYellowHome">N/A</span><em>–</em><span id="projectionYellowAway">N/A</span></div><div class="projection-card-total" id="projectionYellowTotal">No card data available</div><div class="projection-card-detail" id="projectionYellowProb"></div></div>
+<div class="projection-card-box red"><div class="projection-card-heading"><span aria-hidden="true" class="projection-card-symbol"></span><span>EXPECTED RED CARDS</span></div><div class="projection-card-numbers"><span id="projectionRedHome">N/A</span><em>–</em><span id="projectionRedAway">N/A</span></div><div class="projection-card-total" id="projectionRedTotal">No card data available</div><div class="projection-card-detail" id="projectionRedProb"></div></div>
+</div>
+<div class="panel match-center-panel" id="furyBookmakerOdds" style="margin:20px 0"><div class="player-panel-head"><h2>Live bookmaker odds</h2><span class="player-panel-kicker">THE ODDS API · DECIMAL</span></div><p class="hint" id="furyOddsStatus">Choose a matchup to load upcoming bookmaker odds.</p><div class="fury-grid" id="furyOddsResults"></div><p class="hint">Only upcoming fixtures returned by the provider. Scores and historical matches are not betting lines. Market availability varies by league, region and bookmaker. Implied probabilities include bookmaker margin.</p></div>
+<div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
+<div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
+<div class="projection-foot"><div class="projection-sub" id="projectionSample"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
+</div>
 <div class="tiles player-kpis"><div class="tile"><span>Estimated total goals</span><strong id="matchGoals">—</strong></div><div class="tile"><span>Estimated total corners</span><strong id="matchCorners">—</strong></div><div class="tile"><span>Estimated total shots</span><strong id="matchShots">—</strong></div><div class="tile"><span>Estimated total SOT</span><strong id="matchSot">—</strong></div></div>
-
-
-
 <div class="panel match-center-panel"><div class="player-panel-head"><h2>Attacking vs. defensive matchup</h2><span class="player-panel-kicker">MODEL COMPARISON</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Metric</th><th id="homeHead">Home</th><th id="awayHead">Away</th><th>Estimated total</th><th>Comparison</th></tr></thead><tbody id="matchComparison"></tbody></table></div><p class="hint">Each team's baseline = average of its own for-per-game and the opponent's against-per-game, using the selected home/away samples. Not a calibrated forecast.</p></div>
-
-
-
-<div id="furyMatchQuality" class="fury-extra"><h3>Shot quality · venue splits</h3><div id="furyQualityGrid" class="fury-grid"></div><p class="fury-note">Observed xG, xGA and shot quality from completed match events; not model-implied probabilities.</p></div>
-<div id="furyMatchPlayers" class="fury-extra"><h3>Player home / away performance</h3><div class="controls"><label>Team<select id="furyMatchPlayerTeam"></select></label><label>Player<select id="furyMatchPlayer"></select></label></div><div id="furyPlayerVenue" class="fury-grid"></div><h3 style="margin-top:18px">Recent shooting trend</h3><div id="furyMatchTrend" class="fury-chart"></div></div>
+<div class="fury-extra" id="furyMatchQuality"><h3>Shot quality · venue splits</h3><div class="fury-grid" id="furyQualityGrid"></div><p class="fury-note">Observed xG, xGA and shot quality from completed match events; not model-implied probabilities.</p></div>
+<div class="fury-extra" id="furyMatchPlayers"><h3>Player home / away performance</h3><div class="controls"><label>Team<select id="furyMatchPlayerTeam"></select></label><label>Player<select id="furyMatchPlayer"></select></label></div><div class="fury-grid" id="furyPlayerVenue"></div><h3 style="margin-top:18px">Recent shooting trend</h3><div class="fury-chart" id="furyMatchTrend"></div></div>
 <div class="panel match-center-panel"><div class="player-panel-head"><h2>Historical betting-market hit rates</h2><span class="player-panel-kicker">RECENT MATCH SAMPLES</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Market</th><th id="homeRateHead">Home</th><th id="awayRateHead">Away</th></tr></thead><tbody id="matchRates"></tbody></table></div><p class="hint">Rates describe each team's sampled games, not the probability of the upcoming matchup. Sample sizes are shown.</p></div>
-
-
-
 <div class="panel full-match-history match-center-panel">
-  <div class="full-history-heading"><div><h2>Complete Team Match History</h2><p class="hint">Every available league match for both selected teams, home and away. Most recent first. This list is independent of the L5/L10 projection filter.</p></div></div>
-  <div class="split">
-    <div class="history-team"><h3 id="allHomeHistoryTitle">Home team · All matches</h3><p id="allHomeHistoryCount" class="hint"></p><div class="scroll player-table-wrap"><table class="all-games-table"><thead><tr><th>Date</th><th>H/A</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners</th><th>Shots</th></tr></thead><tbody id="allHomeHistory"></tbody></table></div></div>
-    <div class="history-team"><h3 id="allAwayHistoryTitle">Away team · All matches</h3><p id="allAwayHistoryCount" class="hint"></p><div class="scroll player-table-wrap"><table class="all-games-table"><thead><tr><th>Date</th><th>H/A</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners</th><th>Shots</th></tr></thead><tbody id="allAwayHistory"></tbody></table></div></div>
-  </div>
+<div class="full-history-heading"><div><h2>Complete Team Match History</h2><p class="hint">Every available league match for both selected teams, home and away. Most recent first. This list is independent of the L5/L10 projection filter.</p></div></div>
+<div class="split">
+<div class="history-team"><h3 id="allHomeHistoryTitle">Home team · All matches</h3><p class="hint" id="allHomeHistoryCount"></p><div class="scroll player-table-wrap"><table class="all-games-table"><thead><tr><th>Date</th><th>H/A</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners</th><th>Shots</th></tr></thead><tbody id="allHomeHistory"></tbody></table></div></div>
+<div class="history-team"><h3 id="allAwayHistoryTitle">Away team · All matches</h3><p class="hint" id="allAwayHistoryCount"></p><div class="scroll player-table-wrap"><table class="all-games-table"><thead><tr><th>Date</th><th>H/A</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners</th><th>Shots</th></tr></thead><tbody id="allAwayHistory"></tbody></table></div></div>
 </div>
-
+</div>
 </section>
-<section id="oddsTab" class="hidden">
-  <div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / BETTING MARKETS</div><h2>Odds &amp; Schedule</h2><p>Browse upcoming fixtures and bookmaker prices directly from The Odds API, without matching against your historical statistics.</p><span class="player-hero-tag">● Live provider feed · Decimal odds · Local kickoff times</span></div>
-  <div class="panel player-filter-panel odds-filter-panel">
-    <div class="filter-heading"><div><span class="filter-eyebrow">ODDS EXPLORER</span><h3>Upcoming fixtures</h3></div><span class="filter-chip">THE ODDS API</span></div>
-    <div class="controls odds-controls">
-      <label>League<select id="oddsLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option><option value="liga_mx">🇲🇽 Liga MX</option><option value="champions_league">🏆 Champions League</option><option value="eredivisie">🇳🇱 Eredivisie</option><option value="portugal_primeira_liga">🇵🇹 Liga Portugal</option><option value="all">All nine leagues</option></select></label>
-      <label>Find a team<input id="oddsSearch" type="search" placeholder="Search team name…" autocomplete="off"></label>
-      <label>Date<select id="oddsDate"><option value="all">All upcoming dates</option></select></label>
-      <label>Update<button type="button" id="oddsRefresh">Refresh odds</button></label>
-    </div>
-    <p id="oddsScheduleStatus" class="hint" role="status" aria-live="polite">Open this tab to load upcoming fixtures.</p>
-    <div class="odds-summary" id="oddsSummary"></div>
-    <div class="scroll odds-table-wrap"><table class="odds-table"><thead><tr><th>Kickoff (local)</th><th>League</th><th>Fixture</th><th>Bookmaker</th><th>1X2 Probability</th><th>Home</th><th>Draw</th><th>Away</th><th>Over 2.5</th><th>Under 2.5</th></tr></thead><tbody id="oddsScheduleRows"></tbody></table></div>
-    <p class="hint">Prices are decimal. The current secure endpoint returns one bookmaker per fixture and uses the US region. Missing markets show —. Odds can change; this is not a historical results feed. Refreshing or switching leagues may consume API credits (the server caches results briefly).</p>
-  </div>
+<section class="hidden" id="oddsTab">
+<div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / BETTING MARKETS</div><h2>Odds &amp; Schedule</h2><p>Browse upcoming fixtures and bookmaker prices directly from The Odds API, without matching against your historical statistics.</p><span class="player-hero-tag">● Live provider feed · Decimal odds · Local kickoff times</span></div>
+<div class="panel player-filter-panel odds-filter-panel">
+<div class="filter-heading"><div><span class="filter-eyebrow">ODDS EXPLORER</span><h3>Upcoming fixtures</h3></div><span class="filter-chip">THE ODDS API</span></div>
+<div class="controls odds-controls"><label class="fury-context-league">League<select id="oddsLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option><option value="liga_mx">🇲🇽 Liga MX</option><option value="champions_league">🏆 Champions League</option><option value="eredivisie">🇳🇱 Eredivisie</option><option value="portugal_primeira_liga">🇵🇹 Liga Portugal</option><option value="all">All nine leagues</option></select></label>
+
+<label>Find a team<input autocomplete="off" id="oddsSearch" placeholder="Search team name…" type="search"/></label>
+<label>Date<select id="oddsDate"><option value="all">All upcoming dates</option></select></label>
+<label>Update<button id="oddsRefresh" type="button">Refresh odds</button></label>
+</div>
+<p aria-live="polite" class="hint" id="oddsScheduleStatus" role="status">Open this tab to load upcoming fixtures.</p>
+<div class="odds-summary" id="oddsSummary"></div>
+<div class="scroll odds-table-wrap"><table class="odds-table"><thead><tr><th>Kickoff (local)</th><th>League</th><th>Fixture</th><th>Bookmaker</th><th>1X2 Probability</th><th>Home</th><th>Draw</th><th>Away</th><th>Over 2.5</th><th>Under 2.5</th></tr></thead><tbody id="oddsScheduleRows"></tbody></table></div>
+<p class="hint">Prices are decimal. The current secure endpoint returns one bookmaker per fixture and uses the US region. Missing markets show —. Odds can change; this is not a historical results feed. Refreshing or switching leagues may consume API credits (the server caches results briefly).</p>
+</div>
 </section>
 <p class="hint">Data: your local files. These are descriptive statistics; betting decisions also require reliable odds, lineups, opponent strength, and backtesting.</p></div></main>
-
-
-
 <script>
 
 
@@ -1483,7 +1436,7 @@ window.startFuryDashboard = init;
 
 
 </script>
-<script type="module" src="./fury-auth.js"></script>
+<script src="./fury-auth.js" type="module"></script>
 <script>
 // The Odds API integration. Access tokens and bookmaker API key never enter the page source.
 let furyOddsGeneration=0;
@@ -1654,4 +1607,24 @@ document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOdd
   window.furyApplyPlayerColumnSort();
 })();
 </script>
-</body></html>
+<script>
+// Keep per-page league selectors synchronized with the existing global league state.
+(function(){
+ const globalLeague=document.getElementById('leagueSelect');
+ const ids=['furyTeamLeague','furyPlayerLeague','furyMatchLeague'];
+ function sync(){
+   if(!globalLeague)return;
+   ids.forEach(id=>{const el=document.getElementById(id);if(el)el.value=globalLeague.value});
+   const odds=document.getElementById('oddsLeague');
+   if(odds && [...odds.options].some(o=>o.value===globalLeague.value) && document.getElementById('oddsTab')?.classList.contains('hidden'))odds.value=globalLeague.value;
+ }
+ ids.forEach(id=>document.getElementById(id)?.addEventListener('change',e=>{
+   if(!globalLeague)return;
+   globalLeague.value=e.target.value;
+   globalLeague.dispatchEvent(new Event('change',{bubbles:true}));
+   sync();
+ }));
+ globalLeague?.addEventListener('change',sync);
+ sync();
+})();
+</script></body></html>
