@@ -168,12 +168,19 @@ document.addEventListener('click', (event) => {
 
 // Reuse the existing approved Supabase session for FURY AI requests.
 window.furyAIAuth = async () => {
-  if (!authorized) throw new Error('Please sign in with an approved FURY account.');
-  return {
-    token: await getToken(),
-    url: SUPABASE_URL,
-    apikey: SUPABASE_PUBLISHABLE_KEY,
-  };
+  if (!client || !authorized) throw new Error('Please sign in with an approved FURY account.');
+  // Supabase may refresh an expired access token before the AI request.
+  let { data, error } = await client.auth.getSession();
+  if (error || !data.session) throw new Error('Your session expired. Please sign in again.');
+  if (data.session.expires_at && data.session.expires_at <= Math.floor(Date.now() / 1000) + 60) {
+    const refreshed = await client.auth.refreshSession();
+    if (refreshed.error || !refreshed.data.session) throw new Error('Session refresh failed. Please sign in again.');
+    data = refreshed.data;
+  }
+  const token = data.session.access_token;
+  if (!token) throw new Error('Missing login token. Please sign in again.');
+  currentToken = token;
+  return { token, url: SUPABASE_URL, apikey: SUPABASE_PUBLISHABLE_KEY };
 };
 
 // Protected odds endpoint. The secret API key lives only in Supabase Edge Function secrets.

@@ -1741,13 +1741,24 @@ async function furyAiRequest(payload){
  try{
    if(typeof window.furyAIAuth!=='function')throw Error('Authentication module is not loaded. Upload the updated fury-auth.js file.');
    const {token,url,apikey}=await window.furyAIAuth();
-   const response=await fetch(`${url}/functions/v1/${FURY_AI_FUNCTION_NAME}`,{
-     method:'POST',
-     headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`,'apikey':apikey},
-     body:JSON.stringify(payload),cache:'no-store'
-   });
+   if(!token || !url || !apikey)throw Error('Login credentials are unavailable. Please sign in again.');
+   let response;
+   try{
+     response=await fetch(`${url}/functions/v1/${FURY_AI_FUNCTION_NAME}`,{
+       method:'POST',
+       headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`,'apikey':apikey},
+       body:JSON.stringify(payload),cache:'no-store'
+     });
+   }catch(networkError){
+     throw Error('Cannot connect to the AI function. Check SITE_ORIGIN, CORS, and the deployed function.');
+   }
    const data=await response.json().catch(()=>({}));
-   if(!response.ok)throw Error(data.error||data.message||`AI service returned HTTP ${response.status}`);
+   if(!response.ok){
+     const detail=data.error||data.message||'Request rejected';
+     if(response.status===401)throw Error(`Authentication failed (HTTP 401): ${detail}. Sign out and sign in again.`);
+     if(response.status===403)throw Error(`Access check failed (HTTP 403): ${detail}. If private stats work, inspect the fury-match-ai server-side fury-data approval probe.`);
+     throw Error(`AI service HTTP ${response.status}: ${detail}`);
+   }
    const answer=data.analysis||data.output_text||data.text;
    if(typeof answer!=='string'||!answer.trim())throw Error('The AI service returned no analysis.');
    out.textContent=answer;
