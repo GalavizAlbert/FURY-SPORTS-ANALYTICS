@@ -612,6 +612,27 @@ header .site-title{width:auto!important;max-width:100%!important;justify-content
 header .site-title>span{display:inline-flex!important;align-items:baseline!important;flex-wrap:nowrap!important;gap:7px!important;white-space:nowrap!important}
 @media(max-width:600px){header:has(.header-top){padding-left:13px!important;padding-right:64px!important}header .site-title{gap:7px!important}header .fury-header-mark{width:32px!important;height:32px!important}header .brand-fury{font-size:clamp(16px,5vw,21px)!important}header .brand-sports{font-size:clamp(14px,4.5vw,19px)!important;letter-spacing:-.6px!important}}
 @media(max-width:360px){header .site-title>span{gap:4px!important}header .fury-header-mark{width:28px!important;height:28px!important}}
+</style><style id="fury-wide-desktop-layout">
+/* Expand the dashboard on desktop without changing the iPhone layout. */
+@media (min-width: 1024px) {
+  header, main, header:has(.header-top) {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 1900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: clamp(18px, 2vw, 34px) !important;
+    padding-right: clamp(18px, 2vw, 34px) !important;
+  }
+  header:has(.header-top) {
+    padding-right: 88px !important; /* keep clear of account menu */
+  }
+  .app-shell, .app-content {
+    width: 100%;
+    max-width: none !important;
+    min-width: 0;
+  }
+}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
