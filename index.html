@@ -459,6 +459,9 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
  #oddsTab .odds-summary{font-size:12px}
 }
 @media(max-width:370px){#oddsTab .odds-controls{grid-template-columns:minmax(0,1fr)}#oddsTab .odds-table tbody tr{padding:10px;gap:6px}}
+</style><style id="fury-odds-sorting-css">
+@media(min-width:1100px){#oddsTab .odds-controls{grid-template-columns:repeat(5,minmax(0,1fr))}}
+#oddsSort{width:100%;min-width:0}
 </style><style id="team-history-style">#teamHistoryPanel .team-section-head{align-items:center}#teamHistoryPanel .team-history-selector{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:800;color:#b7d0e5;min-width:185px}#teamHistoryPanel .team-history-selector select{background:#172d45;border:1px solid #385976;border-radius:10px;color:#f0f8ff;min-height:42px}#teamHistoryPanel .history-result{font-weight:800}#teamHistoryPanel .player-table-wrap{max-height:640px}@media(max-width:600px){#teamHistoryPanel .team-history-selector{width:100%}}
 /* Prevent any dashboard content from showing before authorization. */
 body:not(.fury-authorized) header,body:not(.fury-authorized) main{display:none!important}
@@ -760,6 +763,7 @@ header .site-title>span{display:inline-flex!important;align-items:baseline!impor
 
 <label>Find a team<input autocomplete="off" id="oddsSearch" placeholder="Search team name…" type="search"/></label>
 <label>Date<select id="oddsDate"><option value="all">All upcoming dates</option></select></label>
+<label>Sort odds<select id="oddsSort"><option value="kickoff-asc">Kickoff · earliest</option><option value="min-asc">Lowest odds · min first</option><option value="max-desc">Highest odds · max first</option><option value="home-asc">Home · lowest first</option><option value="home-desc">Home · highest first</option><option value="draw-asc">Draw · lowest first</option><option value="draw-desc">Draw · highest first</option><option value="away-asc">Away · lowest first</option><option value="away-desc">Away · highest first</option><option value="over-asc">Over 2.5 · lowest first</option><option value="over-desc">Over 2.5 · highest first</option><option value="under-asc">Under 2.5 · lowest first</option><option value="under-desc">Under 2.5 · highest first</option></select></label>
 <label>Update<button id="oddsRefresh" type="button">Refresh odds</button></label>
 </div>
 <p aria-live="polite" class="hint" id="oddsScheduleStatus" role="status">Open this tab to load upcoming fixtures.</p>
@@ -1531,6 +1535,22 @@ let oddsScheduleData=[],oddsLoadedLeague=null,oddsRequestSequence=0;
 const oddsLeagueEl=document.getElementById('oddsLeague');
 const oddsSearchEl=document.getElementById('oddsSearch');
 const oddsDateEl=document.getElementById('oddsDate');
+const oddsSortEl=document.getElementById('oddsSort');
+const oddsMarketKeys={home:e=>e.h2h?.home,draw:e=>e.h2h?.draw,away:e=>e.h2h?.away,over:e=>e.totals?.over,under:e=>e.totals?.under};
+const oddsValidPrice=p=>{const n=Number(p);return p!=null&&p!==''&&Number.isFinite(n)&&n>1?n:null};
+const oddsAvailablePrices=e=>Object.values(oddsMarketKeys).map(fn=>oddsValidPrice(fn(e))).filter(n=>n!==null);
+function oddsSortFixtures(fixtures){
+ const [key,dir]=(oddsSortEl?.value||'kickoff-asc').split('-');
+ const metric=e=>{
+  if(key==='kickoff'){const n=Date.parse(e.commence_time);return Number.isFinite(n)?n:null}
+  const prices=oddsAvailablePrices(e);
+  if(key==='min')return prices.length?Math.min(...prices):null;
+  if(key==='max')return prices.length?Math.max(...prices):null;
+  return oddsValidPrice(oddsMarketKeys[key]?.(e));
+ };
+ return fixtures.sort((a,b)=>{const x=metric(a),y=metric(b);if(x===null)return y===null?0:1;if(y===null)return -1;return (x-y)*(dir==='desc'?-1:1)});
+}
+
 const oddsStatusEl=document.getElementById('oddsScheduleStatus');
 const oddsRowsEl=document.getElementById('oddsScheduleRows');
 const oddsPrice=p=>Number.isFinite(Number(p))&&Number(p)>1?Number(p).toFixed(2):'—';
@@ -1554,6 +1574,7 @@ const oddsKickoff=e=>{const d=new Date(e.commence_time);return Number.isNaN(d.ge
 function renderOddsSchedule(){
  const term=oddsSearchEl.value.trim().toLowerCase();const day=oddsDateEl.value;
  const filtered=oddsScheduleData.filter(e=>(day==='all'||oddsDateKey(e)===day)&&(!term||`${e.home_team} ${e.away_team} ${oddsLeagueLabels[e.league]}`.toLowerCase().includes(term)));
+ oddsSortFixtures(filtered);
  oddsRowsEl.replaceChildren();
  for(const e of filtered){
   const tr=document.createElement('tr');
@@ -1565,6 +1586,7 @@ function renderOddsSchedule(){
  if(!filtered.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=10;td.className='odds-empty';td.textContent=oddsScheduleData.length?'No fixtures match these filters.':'No upcoming fixtures with bookmaker odds were returned.';tr.appendChild(td);oddsRowsEl.appendChild(tr)}
  document.getElementById('oddsSummary').textContent=`${filtered.length} fixture${filtered.length===1?'':'s'} shown · ${new Set(filtered.map(e=>e.league)).size} league${new Set(filtered.map(e=>e.league)).size===1?'':'s'}`;
 }
+oddsSortEl?.addEventListener('change',renderOddsSchedule);
 async function loadOddsSchedule(force=false){
  const selected=oddsLeagueEl.value;
  if(!force&&oddsLoadedLeague===selected){renderOddsSchedule();return}
