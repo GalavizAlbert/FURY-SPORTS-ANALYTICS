@@ -645,6 +645,8 @@ header .site-title>span{display:inline-flex!important;align-items:baseline!impor
     min-width: 0;
   }
 }
+</style><style id="fury-ai-analysis-style">
+.fury-ai-panel{margin:18px 0;background:linear-gradient(135deg,#112b43,#101d30);border:1px solid #39779c;border-radius:17px;padding:20px;box-shadow:0 12px 32px #0002}.fury-ai-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}.fury-ai-head h2{margin:0;font:800 21px 'Outfit',sans-serif}.fury-ai-head small{color:#85d9ff;font-weight:800;letter-spacing:1.5px}.fury-ai-button{background:linear-gradient(115deg,#127fb6,#16a3b6);border:1px solid #4cc9f4;border-radius:10px;color:white;font-weight:800;padding:11px 17px}.fury-ai-button:disabled{opacity:.55;cursor:wait}.fury-ai-result{margin-top:16px;color:#d9eaf6;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.fury-ai-meta{font-size:12px;color:#9cbad0;margin-top:12px}.fury-ai-result[hidden]{display:none}.fury-ai-odds-btn{font-size:12px;padding:9px 11px;white-space:nowrap;background:#153f5b;border-color:#3d8cb4}.fury-ai-error{color:#ffb9b9}.fury-ai-panel .fury-ai-title{color:#fff;font-weight:800;margin:12px 0 4px}@media(max-width:680px){.fury-ai-panel{padding:14px}#oddsTab .odds-table tbody td.fury-ai-action-cell{grid-column:1/-1;grid-row:auto;align-items:stretch!important}#oddsTab .fury-ai-odds-btn{width:100%}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -730,6 +732,7 @@ header .site-title>span{display:inline-flex!important;align-items:baseline!impor
 <div class="tiles player-kpis"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
 <div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap fury-player-table-scroll"><table id="furyPlayerStatsTable"><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div class="fury-extra" id="furyPlayerTrends"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
 <section class="hidden" id="matchTab"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Compare teams across leagues</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p class="hint" id="matchStatus"></p><p class="hint">Choose a home league and an away league independently, then select a team from each. Cross-league projections use domestic league performances and do not adjust for league strength.</p></div>
+<section class="fury-ai-panel" id="furyAiMatchPanel" aria-label="AI match analysis"><div class="fury-ai-head"><div><small>✦ FURY SPORTS AI</small><h2>AI Match Analysis</h2></div><button type="button" class="fury-ai-button" id="furyAiAnalyze">✦ Analyze with AI</button></div><p class="fury-ai-meta" id="furyAiContext">Select two teams and click Analyze match to load their statistics, then request an AI explanation.</p><div class="fury-ai-result" id="furyAiResult" role="status" aria-live="polite" hidden></div><p class="fury-ai-meta">AI commentary is based on supplied match records and projections. Estimates are not guarantees or betting advice.</p></section>
 <div aria-live="polite" class="projection match-center-projection" id="projectionPanel">
 <div class="projection-topline"><span>◷ FURYSPORTS AI · MATCH PROJECTION</span><span>◉ Poisson model</span></div>
 <div class="projection-hero">
@@ -1588,9 +1591,10 @@ function renderOddsSchedule(){
   const values=[oddsKickoff(e),oddsLeagueLabels[e.league]||e.league,`${e.home_team} vs ${e.away_team}`,e.bookmaker||'—',oddsPrice(e.h2h?.home),oddsPrice(e.h2h?.draw),oddsPrice(e.h2h?.away),oddsPrice(e.totals?.over),oddsPrice(e.totals?.under)];
   values.forEach((v,i)=>{const td=document.createElement('td');td.dataset.label=['Kickoff','League','Fixture','Bookmaker','Home','Draw','Away','Over 2.5','Under 2.5'][i];td.textContent=v;if(i===2)td.className='fixture';else if(i>=4)td.className='price';else if(i===1||i===3)td.className='muted';tr.appendChild(td)});
   const probTd=document.createElement('td');probTd.dataset.label='1X2 probability';probTd.className='probability-cell';probTd.appendChild(oddsProbabilityIndicator(e.h2h));tr.insertBefore(probTd,tr.children[4]);
+  const aiTd=document.createElement('td');aiTd.dataset.label='AI analysis';aiTd.className='fury-ai-action-cell';const aiBtn=document.createElement('button');aiBtn.type='button';aiBtn.className='fury-ai-odds-btn';aiBtn.textContent='✦ Analyze with AI';aiBtn.addEventListener('click',()=>furyAiFromOdds(e));aiTd.appendChild(aiBtn);tr.appendChild(aiTd);
   oddsRowsEl.appendChild(tr);
  }
- if(!filtered.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=10;td.className='odds-empty';td.textContent=oddsScheduleData.length?'No fixtures match these filters.':'No upcoming fixtures with bookmaker odds were returned.';tr.appendChild(td);oddsRowsEl.appendChild(tr)}
+ if(!filtered.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=11;td.className='odds-empty';td.textContent=oddsScheduleData.length?'No fixtures match these filters.':'No upcoming fixtures with bookmaker odds were returned.';tr.appendChild(td);oddsRowsEl.appendChild(tr)}
  document.getElementById('oddsSummary').textContent=`${filtered.length} fixture${filtered.length===1?'':'s'} shown · ${new Set(filtered.map(e=>e.league)).size} league${new Set(filtered.map(e=>e.league)).size===1?'':'s'}`;
 }
 oddsMinEl.addEventListener('input',renderOddsSchedule);
@@ -1709,4 +1713,47 @@ document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOdd
  globalLeague?.addEventListener('change',sync);
  sync();
 })();
+</script><script id="fury-ai-module">
+// Configure a secure server-side endpoint. Never put an OpenAI API key in this HTML.
+// Endpoint is derived from the same Supabase project as fury-auth.js.
+const FURY_AI_FUNCTION_NAME = 'fury-match-ai';
+let furyAiPending = false;
+const furyAiEl = id => document.getElementById(id);
+const furyAiNumeric = value => { const x=Number(value);return Number.isFinite(x)?x:null; };
+function furyAiAvg(rows,key){const nums=rows.map(r=>r[key]).filter(v=>v!==null&&v!==undefined&&v!=='').map(Number).filter(Number.isFinite);return nums.length?Math.round(nums.reduce((a,b)=>a+b,0)/nums.length*100)/100:null;}
+function furyAiGames(team,venue){const count=Number(furyAiEl('matchPeriod')?.value||5);if(typeof venueGames!=='function')return [];return venueGames(team,venue,count).map(r=>({date:r.date,opponent:r.opponent,venue:r.venue,goals_for:r.goals_for,goals_against:r.goals_against,xg_for:r.xg_for,xg_against:r.xg_against,shots_for:r.shots_for,shots_against:r.shots_against,shots_on_target_for:r.shots_on_target_for,shots_on_target_against:r.shots_on_target_against,corners_for:r.corners_for,corners_against:r.corners_against}));}
+function furyAiMatchPayload(){const home=furyAiEl('homeTeam')?.value,away=furyAiEl('awayTeam')?.value;if(!home||!away||home===away)throw Error('Select two different teams first.');const homeGames=furyAiGames(home,'Home'),awayGames=furyAiGames(away,'Away');if(!homeGames.length||!awayGames.length)throw Error('Match history is unavailable for these teams.');return {source:'match-analysis',home_team:home,away_team:away,home_league:furyAiEl('homeLeague')?.value,away_league:furyAiEl('awayLeague')?.value,venue_sample:furyAiEl('matchPeriod')?.selectedOptions?.[0]?.textContent,home_games:homeGames,away_games:awayGames,model:{home_expected_goals:furyAiNumeric(furyAiEl('projectionHomeXg')?.textContent),away_expected_goals:furyAiNumeric(furyAiEl('projectionAwayXg')?.textContent),most_likely_score:furyAiEl('projectionScoreline')?.textContent,home_win:furyAiEl('projectionWinHome')?.textContent,draw:furyAiEl('projectionDraw')?.textContent,away_win:furyAiEl('projectionWinAway')?.textContent,over_2_5:furyAiEl('projectionOver')?.textContent,btts_yes:furyAiEl('projectionBttsYes')?.textContent}};}
+function furyAiFromOdds(event){const home=event.home_team,away=event.away_team;const homeLeague=furyAiEl('homeLeague'),awayLeague=furyAiEl('awayLeague');const hleague=event.league;const homeOption=[...homeLeague.options].find(o=>o.value===hleague);const awayOption=[...awayLeague.options].find(o=>o.value===hleague);if(homeOption&&awayOption){homeLeague.value=hleague;awayLeague.value=hleague;homeLeague.dispatchEvent(new Event('change'));awayLeague.dispatchEvent(new Event('change'));const h=furyAiEl('homeTeam'),a=furyAiEl('awayTeam');const hOpt=[...h.options].find(o=>o.value.toLowerCase()===String(home).toLowerCase());const aOpt=[...a.options].find(o=>o.value.toLowerCase()===String(away).toLowerCase());if(hOpt&&aOpt){h.value=hOpt.value;a.value=aOpt.value;furyAiEl('analyzeButton')?.click();}}
+const tab=furyAiEl('matchTab');if(tab?.classList.contains('hidden')){const matchTabBtn=[...document.querySelectorAll('button')].find(b=>b.getAttribute('data-tab')==='matchTab'||b.getAttribute('data-target')==='matchTab');if(matchTabBtn)matchTabBtn.click();else{const tabs=[...document.querySelectorAll('.tabs button')];const button=tabs.find(b=>/match analysis/i.test(b.textContent));button?.click();}}
+const panel=furyAiEl('furyAiMatchPanel');panel?.scrollIntoView({behavior:'smooth',block:'start'});
+const ctx=furyAiEl('furyAiContext');if(ctx)ctx.textContent=`${home} vs ${away} · ${oddsKickoff(event)} · ${event.bookmaker||'Bookmaker unavailable'}`;
+const payload={source:'odds-schedule',home_team:home,away_team:away,league:event.league,kickoff:event.commence_time,bookmaker:event.bookmaker,odds:{moneyline:event.h2h,totals:event.totals}};
+// If matching history is available, include it as additional context.
+try{const p=furyAiMatchPayload();if(p.home_team.toLowerCase()===String(home).toLowerCase()&&p.away_team.toLowerCase()===String(away).toLowerCase())Object.assign(payload,{home_games:p.home_games,away_games:p.away_games,model:p.model});}catch(_){}
+void furyAiRequest(payload);
+}
+async function furyAiRequest(payload){
+ const out=furyAiEl('furyAiResult'),button=furyAiEl('furyAiAnalyze');
+ if(furyAiPending)return;
+ out.hidden=false;out.classList.remove('fury-ai-error');
+ furyAiPending=true;button.disabled=true;button.textContent='Analyzing…';
+ out.textContent='Reviewing available match data…';
+ try{
+   if(typeof window.furyAIAuth!=='function')throw Error('Authentication module is not loaded. Upload the updated fury-auth.js file.');
+   const {token,url,apikey}=await window.furyAIAuth();
+   const response=await fetch(`${url}/functions/v1/${FURY_AI_FUNCTION_NAME}`,{
+     method:'POST',
+     headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`,'apikey':apikey},
+     body:JSON.stringify(payload),cache:'no-store'
+   });
+   const data=await response.json().catch(()=>({}));
+   if(!response.ok)throw Error(data.error||data.message||`AI service returned HTTP ${response.status}`);
+   const answer=data.analysis||data.output_text||data.text;
+   if(typeof answer!=='string'||!answer.trim())throw Error('The AI service returned no analysis.');
+   out.textContent=answer;
+ }catch(err){out.classList.add('fury-ai-error');out.textContent='AI analysis unavailable: '+err.message;}
+ finally{furyAiPending=false;button.disabled=false;button.textContent='✦ Analyze with AI';}
+}
+furyAiEl('furyAiAnalyze')?.addEventListener('click',()=>{try{void furyAiRequest(furyAiMatchPayload());}catch(e){const out=furyAiEl('furyAiResult');out.hidden=false;out.classList.add('fury-ai-error');out.textContent=e.message;}});
+furyAiEl('analyzeButton')?.addEventListener('click',()=>{const out=furyAiEl('furyAiResult');if(out){out.hidden=true;out.textContent='';}const h=furyAiEl('homeTeam')?.value,a=furyAiEl('awayTeam')?.value;furyAiEl('furyAiContext').textContent=h&&a?`${h} vs ${a} · Statistical model ready. Click Analyze with AI for commentary.`:'Select a home and away team.';});
 </script></body></html>

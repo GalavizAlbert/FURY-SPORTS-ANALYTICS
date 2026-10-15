@@ -166,6 +166,16 @@ document.addEventListener('click', (event) => {
   if (accountMenu.open && !accountMenu.contains(event.target)) accountMenu.open = false;
 });
 
+// Reuse the existing approved Supabase session for FURY AI requests.
+window.furyAIAuth = async () => {
+  if (!authorized) throw new Error('Please sign in with an approved FURY account.');
+  return {
+    token: await getToken(),
+    url: SUPABASE_URL,
+    apikey: SUPABASE_PUBLISHABLE_KEY,
+  };
+};
+
 // Protected odds endpoint. The secret API key lives only in Supabase Edge Function secrets.
 window.furyOddsRequest = async (league) => {
   if (!authorized) throw new Error('Please sign in');
