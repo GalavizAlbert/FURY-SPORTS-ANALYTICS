@@ -717,28 +717,37 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
 .fury-mobile-props-list{display:none}
 @media(max-width:650px){
  #playersTab .player-layout{display:none!important}
- .fury-mobile-props-list{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin:12px 0 20px}
- .fury-mobile-prop-card{background:linear-gradient(120deg,#202a34,#151e2b);border:1px solid #405262;border-radius:15px;padding:12px;min-width:0;box-shadow:0 3px 10px #0002}
- .fury-mobile-prop-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #344353}
+ .fury-mobile-props-list{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:8px 0 16px}
+ .fury-mobile-prop-card{background:linear-gradient(120deg,#202a34,#151e2b);border:1px solid #405262;border-radius:12px;padding:9px 10px;min-width:0;box-shadow:0 2px 7px #0002}
+ .fury-mobile-prop-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:6px;border-bottom:1px solid #344353}
  .fury-mobile-prop-name{min-width:0;display:flex;flex-direction:column;gap:3px}
- .fury-mobile-prop-name strong{font-size:16px;line-height:1.15;color:#f4f8ff;overflow-wrap:anywhere}
- .fury-mobile-prop-name span{font-size:12px;color:#b7c5d5}
- .fury-mobile-market{flex-shrink:0;max-width:48%;text-align:right;background:#143b39;border:1px solid #1c866b;border-radius:10px;padding:6px 9px;color:#63e7ae;display:flex;flex-direction:column;gap:2px}
+ .fury-mobile-prop-name strong{font-size:14px;line-height:1.15;color:#f4f8ff;overflow-wrap:anywhere}
+ .fury-mobile-prop-name span{font-size:10px;color:#b7c5d5}
+ .fury-mobile-market{flex-shrink:0;max-width:48%;text-align:right;background:#143b39;border:1px solid #1c866b;border-radius:10px;padding:4px 7px;color:#63e7ae;display:flex;flex-direction:column;gap:2px}
  .fury-mobile-market small{font-size:9px;letter-spacing:.08em;color:#9bead0}
  .fury-mobile-market b{font-size:12px;line-height:1.2;overflow-wrap:anywhere}
- .fury-mobile-prop-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}
- .fury-mobile-prop-metric{background:#1b2938;border:1px solid #2d3d4e;border-radius:9px;padding:8px 5px;text-align:center;display:flex;flex-direction:column;gap:2px;min-width:0}
- .fury-mobile-prop-metric small{color:#9eafc1;font-size:10px}
- .fury-mobile-prop-metric b{color:#eaf5ff;font-size:18px;line-height:1.2}
+ .fury-mobile-prop-metrics{display:flex;flex-wrap:nowrap;gap:5px;margin-top:6px;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:1px 1px 7px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#367ca0 #152332;overscroll-behavior-x:contain}
+ .fury-mobile-prop-metrics::-webkit-scrollbar{height:4px}.fury-mobile-prop-metrics::-webkit-scrollbar-thumb{background:#367ca0;border-radius:9px}
+ .fury-mobile-prop-metrics:focus-visible{outline:2px solid #43baf6;outline-offset:2px}
+ .fury-mobile-prop-metric{background:#1b2938;border:1px solid #2d3d4e;border-radius:7px;padding:5px 7px;text-align:center;display:flex;flex:0 0 76px;flex-direction:column;gap:2px;min-width:0;scroll-snap-align:start}
+ .fury-mobile-prop-metric.above-avg{background:#12392f;border-color:#236b50}.fury-mobile-prop-metric.above-avg b{color:#62e5a4}
+ .fury-mobile-prop-metric.below-avg{background:#3a252b;border-color:#754451}.fury-mobile-prop-metric.below-avg b{color:#ffa0a8}
+ .fury-mobile-prop-metric.at-avg{background:#243444;border-color:#3d596e}.fury-mobile-prop-metric.at-avg b{color:#d8e9fa}
+ .fury-mobile-prop-metric small{color:#9eafc1;font-size:9px}
+ .fury-mobile-prop-metric b{color:#eaf5ff;font-size:13px;line-height:1.2}
  .fury-mobile-prop-metric.fury-mobile-hit b{color:#51e7a3}
  .fury-mobile-prop-metric em{color:#9baebd;font-size:10px;font-style:normal}
- .fury-mobile-prop-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;min-width:0}
+ .fury-mobile-metric-legend{font-size:9px;color:#8fb4cb;text-align:right;margin-top:1px}
+ .fury-mobile-rates{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;color:#a9c1d2;font-size:10px}
+ .fury-mobile-rates span{padding:3px 6px;border-radius:5px;background:#132a3b}
+ .fury-mobile-rates span:not(:first-child){color:#65dfa6}
+ .fury-mobile-prop-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:5px;min-width:0}
  .fury-mobile-form{display:flex;align-items:center;gap:4px;min-width:0;flex-wrap:wrap}
  .fury-mobile-form>span:first-child{font-size:9px;color:#9daebc;margin-right:2px}
- .fury-mobile-form-chip{display:inline-flex;align-items:center;justify-content:center;min-width:23px;height:24px;border-radius:6px;font-size:11px;font-weight:700}
+ .fury-mobile-form-chip{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:20px;border-radius:6px;font-size:11px;font-weight:700}
  .fury-mobile-form-chip.win{background:#124739;color:#71edaf}.fury-mobile-form-chip.loss{background:#4b2834;color:#f2a0a8}.fury-mobile-form-chip.unknown{background:#2e3945;color:#a6b1bc}
  .fury-mobile-no-logs{font-size:10px;color:#a6b1bc}
- .fury-mobile-details{border:0;background:transparent;color:#60caff;font-size:11px;font-weight:700;white-space:nowrap;padding:8px 0 8px 4px;cursor:pointer}
+ .fury-mobile-details{border:0;background:transparent;color:#60caff;font-size:10px;font-weight:700;white-space:nowrap;padding:4px 0 4px 4px;cursor:pointer}
  .fury-mobile-empty{color:#b8c7d8;padding:14px}
 }
 </style>
@@ -1102,6 +1111,10 @@ function renderFuryMobileCards(found,stat,line){
  const el=(tag,cls,value)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(value!==undefined)x.textContent=value;return x};
  if(!found.length){host.append(el('p','fury-mobile-empty','No players match your filters.'));return}
  const fragment=document.createDocumentFragment();
+  const eligible=players.filter(x=>n(x.minutes)!==null&&n(x.minutes)>0);
+  const avg90=k=>{const samples=eligible.map(x=>n(x[k])===null?null:90*n(x[k])/n(x.minutes)).filter(x=>x!==null);return samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null};
+  const avgRecent=(k,count)=>{const samples=players.map(x=>{const rows=playerMatchData.filter(g=>g.player===x.player&&g.team===x.team).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,count).map(g=>n(g[k])).filter(v=>v!==null);return rows.length?rows.reduce((a,b)=>a+b,0)/rows.length:null}).filter(v=>v!==null);return samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null};
+  const leagueAverages={shots:avg90('shots'),sot:avg90('sot'),xg:avg90('xg'),goals:avg90('goals')};
  for(const r of found){
   const logs=playerMatchData.filter(x=>x.player===r.player&&x.team===r.team).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
   const l5=rate(logs,5),l10=rate(logs,10);
@@ -1111,10 +1124,35 @@ function renderFuryMobileCards(found,stat,line){
   const marketBox=el('div','fury-mobile-market');marketBox.append(el('small','','OVER'),el('b','',String(line)+' '+market));
   top.append(name,marketBox);card.append(top);
   const metrics=el('div','fury-mobile-prop-metrics');
-  const mins=n(r.minutes),shots=n(r.shots),per90=mins>0&&shots!==null?(shots*90/mins).toFixed(2):'—';
-  const metric=(label,value,detail,hit)=>{const box=el('div','fury-mobile-prop-metric'+(hit?' fury-mobile-hit':''));box.append(el('small','',label),el('b','',value));if(detail)box.append(el('em','',detail));return box};
-  metrics.append(metric('Shots / 90',per90),metric('L5',l5.text,l5.detail,true),metric('L10',l10.text,l10.detail,true));
+  metrics.setAttribute('role','region');metrics.setAttribute('aria-label',r.player+' metrics; scroll horizontally');metrics.tabIndex=0;
+  // Compare rate metrics with league player averages (per 90 or per match).
+  // Raw season totals are not compared because players have unequal minutes.
+  const metric=(label,value,compare,benchmark)=>{const box=el('div','fury-mobile-prop-metric');if(compare!==null&&compare!==undefined&&benchmark!==null&&benchmark!==undefined){const delta=compare-benchmark;box.classList.add(Math.abs(delta)<0.005?'at-avg':delta>0?'above-avg':'below-avg');box.title=label+': '+value+' · league player average '+benchmark.toFixed(2)+' (same rate basis)'}else{box.title=label+': '+value+' · no comparable league average'}box.append(el('small','',label),el('b','',value));return box};
+  const val=k=>n(r[k])===null?'—':String(n(r[k]));
+  const per90=k=>{const v=n(r[k]),mins=n(r.minutes);return v===null||mins===null||mins<=0?'—':(v*90/mins).toFixed(2)};
+  const decimal=(k,d=2)=>n(r[k])===null?'—':n(r[k]).toFixed(d);
+  const recentAvg=(k,count)=>{const sample=logs.slice(0,count).map(x=>n(x[k])).filter(v=>v!==null);return sample.length?(sample.reduce((a,b)=>a+b,0)/sample.length).toFixed(1):'—'};
+  // Only show supplied values; never interpret missing data as zero.
+  const cells=[
+   ['Goals',val('goals')],['Assists',val('assists')],['Shots',val('shots')],['SOT',val('sot')],
+   ['xG',decimal('xg')],['xA',decimal('xa')],['NPxG',decimal('np_xg')],['Key passes',val('key_passes')],
+   ['Shots/90',per90('shots')],['SOT/90',per90('sot')],['xG/90',per90('xg')],['G/90',per90('goals')],
+   ['Apps',val('matches')],['Minutes',val('minutes')],['L5 shots',recentAvg('shots',5)],['L5 SOT',recentAvg('sot',5)]
+  ];
+  const comparables={
+   'Shots/90':[n(r.shots)!==null&&n(r.minutes)>0?90*n(r.shots)/n(r.minutes):null,leagueAverages.shots],
+   'SOT/90':[n(r.sot)!==null&&n(r.minutes)>0?90*n(r.sot)/n(r.minutes):null,leagueAverages.sot],
+   'xG/90':[n(r.xg)!==null&&n(r.minutes)>0?90*n(r.xg)/n(r.minutes):null,leagueAverages.xg],
+   'G/90':[n(r.goals)!==null&&n(r.minutes)>0?90*n(r.goals)/n(r.minutes):null,leagueAverages.goals],
+   'L5 shots':[recentAvg('shots',5)==='—'?null:Number(recentAvg('shots',5)),avgRecent('shots',5)],
+   'L5 SOT':[recentAvg('sot',5)==='—'?null:Number(recentAvg('sot',5)),avgRecent('sot',5)]
+  };
+  for(const [label,value] of cells){const pair=comparables[label]||[null,null];metrics.append(metric(label,value,pair[0],pair[1]))}
   card.append(metrics);
+  const legend=el('div','fury-mobile-metric-legend','← Swipe metrics →  🟢 Above avg  🔴 Below avg');legend.setAttribute('aria-label','Green above league player average, red below; only comparable rate metrics are colored');card.append(legend);
+  const rates=el('div','fury-mobile-rates');
+  rates.append(el('span','','OVER '+line+' '+market),el('span','', 'L5 '+l5.text+' ('+l5.detail+')'),el('span','','L10 '+l10.text+' ('+l10.detail+')'));
+  card.append(rates);
   const bottom=el('div','fury-mobile-prop-bottom');
   const recent=el('div','fury-mobile-form');recent.append(el('span','','RECENT'));
   const validRecent=logs.slice(0,5).reverse();
