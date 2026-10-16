@@ -1786,8 +1786,32 @@ document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOdd
  function shotDate(sh){return String(field(sh,['date','match_date','game_date'])??'')}
  function xy(sh){let x=n(field(sh,['X','x','shot_x','location_x'])),y=n(field(sh,['Y','y','shot_y','location_y']));if(x===null||y===null)return null;if(x>1||y>1){if(x<=100&&y<=100){x/=100;y/=100}else if(x<=120&&y<=80){x/=120;y/=80}else return null}if(x<0||x>1||y<0||y>1)return null;return [x,y]}
  function kpi(parent,label,value){const b=document.createElement('div');b.className='fury-stat';const a=document.createElement('small');a.textContent=label;const v=document.createElement('strong');v.textContent=value;b.append(a,v);parent.appendChild(b)}
- function shotPlayerOptions(){const sel=$('furyShotPlayer');if(!sel||typeof players==='undefined')return;const old=sel.value;sel.replaceChildren();for(const p of [...players].filter(p=>p.player&&p.team).sort((a,b)=>String(a.player).localeCompare(String(b.player)))){const o=document.createElement('option');o.value=key(p.team,p.player);o.textContent=p.player+' · '+p.team;sel.appendChild(o)}if([...sel.options].some(o=>o.value===old))sel.value=old;else{const props=$('furyPropsPlayer')?.value?.split('|');const match=props&&[...sel.options].find(o=>o.value===key(props[0],props[1]));if(match)sel.value=match.value}draw()}
- function draw(){const dots=$('furyShotDots'),status=$('furyShotStatus'),kpis=$('furyShotKpis'),sel=$('furyShotPlayer');if(!dots||!sel)return;dots.replaceChildren();kpis.replaceChildren();const p=typeof players==='undefined'?null:players.find(p=>key(p.team,p.player)===sel.value);if(!p){status.textContent='No player data loaded for this league.';return}
+ function shotPlayerOptions(){
+  const sel=$('furyShotPlayer');if(!sel)return;
+  const old=sel.value;
+  const unique=new Map();
+  const add=(team,player,source)=>{
+   const t=String(team??'').trim(),p=String(player??'').trim();
+   if(!t||!p)return;
+   const id=key(t,p);
+   if(!unique.has(id))unique.set(id,{id,team:t,player:p,source});
+  };
+  // Use all available player sources, not just the filtered season profiles.
+  if(typeof players!=='undefined')for(const p of players)add(p.team,p.player,'profile');
+  if(typeof playerMatchData!=='undefined')for(const p of playerMatchData)add(p.team,p.player,'match');
+  if(typeof shotEvents!=='undefined')for(const sh of shotEvents)add(field(sh,['team','team_name','team_title']),field(sh,['player','player_name','player_title']),'shot');
+  const options=[...unique.values()].sort((a,b)=>a.player.localeCompare(b.player)||a.team.localeCompare(b.team));
+  sel.replaceChildren();
+  for(const p of options){const o=document.createElement('option');o.value=p.id;o.textContent=p.player+' · '+p.team;sel.appendChild(o)}
+  if(options.some(p=>p.id===old))sel.value=old;
+  else{
+   const props=$('furyPropsPlayer')?.value?.split('|');
+   const match=props&&options.find(p=>p.id===key(props[0],props[1]));
+   if(match)sel.value=match.id;
+  }
+  draw();
+ }
+ function draw(){const dots=$('furyShotDots'),status=$('furyShotStatus'),kpis=$('furyShotKpis'),sel=$('furyShotPlayer');if(!dots||!sel)return;dots.replaceChildren();kpis.replaceChildren();const chosen=sel.selectedOptions[0];if(!chosen){status.textContent='No player or shot records loaded for this league.';return}const playerLabel=chosen.textContent.split(' · ')[0];
  const all=typeof shotEvents==='undefined'?[]:shotEvents.filter(sh=>key(field(sh,['team','team_name','team_title']),field(sh,['player','player_name','player_title']))===sel.value);
  const period=Number($('furyShotPeriod').value),venue=$('furyShotVenue').value,result=$('furyShotResult').value;
  let logs=typeof playerMatchData==='undefined'?[]:playerMatchData.filter(r=>key(r.team,r.player)===sel.value).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
@@ -1800,7 +1824,7 @@ document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOdd
  kpi(kpis,'Shots',String(total));kpi(kpis,'Goals',String(goals));kpi(kpis,'xG',xgs.length?sumXg.toFixed(2):'N/A');kpi(kpis,'Shots on target',String(onTarget));
  const visible=filtered.filter(sh=>result==='all'||shotType(sh)===result);let plotted=0;
  for(const sh of visible){const coords=xy(sh);if(!coords)continue;const [x,y]=coords,kind=shotType(sh),xg=n(field(sh,['xg','xG','expected_goals']));const circle=document.createElementNS(svgNS,'circle');circle.setAttribute('cx',String(36+x*848));circle.setAttribute('cy',String(36+y*468));circle.setAttribute('r',String(4+Math.sqrt(Math.max(0,xg??0))*16));circle.setAttribute('fill',({goal:'#39db9e',saved:'#4bbaf6',missed:'#e9a44d',blocked:'#ef6782',other:'#ef6782'})[kind]);circle.setAttribute('fill-opacity','.78');circle.setAttribute('stroke','#effff9');circle.setAttribute('stroke-width','1.1');const title=document.createElementNS(svgNS,'title');title.textContent=[shotDate(sh).slice(0,10),field(sh,['opponent','against'])||'',field(sh,['minute'])!==null?('Minute '+field(sh,['minute'])):'',String(field(sh,['result','shot_result'])||'Shot'),xg!==null?'xG '+xg.toFixed(3):'xG N/A'].filter(Boolean).join(' · ');circle.appendChild(title);dots.appendChild(circle);plotted++}
- status.textContent=(!all.length?'No shot events found for this player. Confirm the league JSON contains its shots array. ':`${p.player} · ${visible.length} selected shots · ${plotted} plotted with valid coordinates. `)+(plotted<visible.length?'Some shot coordinates are unavailable. ':'')+'The shot map is historical; it is not a prediction.';
+ status.textContent=(!all.length?'No shot events found for this player. Confirm the league JSON contains its shots array. ':`${playerLabel} · ${visible.length} selected shots · ${plotted} plotted with valid coordinates. `)+(plotted<visible.length?'Some shot coordinates are unavailable. ':'')+'The shot map is historical; it is not a prediction.';
  }
  for(const id of ['furyShotPlayer','furyShotPeriod','furyShotVenue','furyShotResult'])$(id)?.addEventListener('change',draw);
  if(typeof renderPlayers==='function'){const original=renderPlayers;renderPlayers=function(){original();shotPlayerOptions()}}
