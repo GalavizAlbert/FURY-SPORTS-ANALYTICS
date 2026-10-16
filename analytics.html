@@ -658,7 +658,16 @@ header .site-title>span{display:inline-flex!important;align-items:baseline!impor
 .fury-portal-header .fury-portal-links a:hover,.fury-portal-header .fury-portal-links a[aria-current=page]{background:#142b40;border-color:#2d5878;color:#67d1ff}
 .fury-portal-header .fury-portal-online{width:7px;height:7px;display:inline-block;background:#40d9b6;border-radius:50%;box-shadow:0 0 12px #40d9b6;margin-right:6px}
 @media(max-width:760px){.fury-portal-header{padding:12px 16px!important;height:auto!important;min-height:77px;flex-wrap:wrap}.fury-portal-header .fury-portal-brand{font-size:19px}.fury-portal-header .fury-portal-mark{width:35px;height:35px;font-size:19px}.fury-portal-header .fury-portal-links{width:100%;justify-content:flex-start;gap:2px;overflow-x:auto;flex-wrap:nowrap}.fury-portal-header .fury-portal-links a{font-size:12px;padding:8px 10px}}
-</style><style>.fury-analytics-league-picker{max-width:1450px;margin:10px auto 0;padding:0 30px;display:flex;justify-content:flex-end}.fury-analytics-league-picker .league-header-menu{position:relative}@media(max-width:760px){.fury-analytics-league-picker{padding:0 16px}}</style></head>
+</style><style>.fury-analytics-league-picker{max-width:1450px;margin:10px auto 0;padding:0 30px;display:flex;justify-content:flex-end}.fury-analytics-league-picker .league-header-menu{position:relative}@media(max-width:760px){.fury-analytics-league-picker{padding:0 16px}}</style><style id="fury-single-navigation-fix">
+/* The shared portal header is the single visible page navigation. */
+nav.tabs[aria-label="Dashboard sections"]{display:none!important}
+.fury-legacy-back-link{display:none!important}
+/* Retire the legacy side navigation while retaining the elements for compatibility. */
+#furySidePanel,#furySideToggle,#furySideBackdrop{display:none!important}
+body,body.fury-side-closed{padding-left:0!important}
+body .app-shell{margin-left:auto!important;margin-right:auto!important}
+@media(max-width:650px){body.fury-side-closed header.fury-portal-header{padding-left:16px!important}}
+</style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
 <div class="fury-side-scroll">
@@ -704,7 +713,7 @@ header .site-title>span{display:inline-flex!important;align-items:baseline!impor
 </details></div>
 <main class="app-shell">
 <div class="app-content"><div class="status" id="loadStatus" role="status">Loading your private Supabase statistics...</div>
-<div style="margin:8px 0 16px"><a href="./index.html" style="color:#66cfff;text-decoration:none;font-weight:750">← All tools</a></div><nav aria-label="Dashboard sections" class="tabs"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button><button data-tab="odds">Odds &amp; Schedule</button><a href="./league_rankings.html" style="display:inline-flex;align-items:center;padding:10px 14px;color:#43baf6;font-weight:800;text-decoration:none">League Rankings ↗</a></nav>
+<div class="fury-legacy-back-link" style="margin:8px 0 16px"><a href="./index.html" style="color:#66cfff;text-decoration:none;font-weight:750">← All tools</a></div><nav aria-label="Dashboard sections" class="tabs"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button><button data-tab="odds">Odds &amp; Schedule</button><a href="./league_rankings.html" style="display:inline-flex;align-items:center;padding:10px 14px;color:#43baf6;font-weight:800;text-decoration:none">League Rankings ↗</a></nav>
 <section id="teamsTab">
 <div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / TEAM INTELLIGENCE</div><h2>Team Performance Center</h2><p>Explore league leaders, compare team trends, and analyze attacking and defensive performance across your selected league.</p><span class="player-hero-tag">● Five leagues · Season 2026–27</span></div>
 <div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div aria-label="Team statistics venue" class="team-venue-bar" role="group"><span>Match venue</span><button aria-pressed="true" class="team-venue-btn active" data-venue="all" type="button">All</button><button aria-pressed="false" class="team-venue-btn" data-venue="home" type="button">Home</button><button aria-pressed="false" class="team-venue-btn" data-venue="away" type="button">Away</button><span class="hint" id="teamVenueNote">All matches</span></div><div class="controls"><label class="fury-context-league">League<select id="furyTeamLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input autocomplete="off" id="teamSearch" placeholder="Search club name"/></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% uses the selected venue across the full season.</p></div>
@@ -1908,6 +1917,41 @@ async function furyAiRequest(payload){
 furyAiEl('furyAiAnalyze')?.addEventListener('click',()=>{try{void furyAiRequest(furyAiMatchPayload());}catch(e){const out=furyAiEl('furyAiResult');out.hidden=false;out.classList.add('fury-ai-error');out.textContent=e.message;}});
 furyAiEl('analyzeButton')?.addEventListener('click',()=>{const out=furyAiEl('furyAiResult');if(out){out.hidden=true;out.textContent='';}const h=furyAiEl('homeTeam')?.value,a=furyAiEl('awayTeam')?.value;furyAiEl('furyAiContext').textContent=h&&a?`${h} vs ${a} · Statistical model ready. Click Analyze with AI for commentary.`:'Select a home and away team.';});
 </script><script>
+// In-page header navigation: preserve the existing Supabase session and loaded datasets.
+// The legacy hidden tab buttons remain the source of truth for section switching.
+(function(){
+ const valid=new Set(['teams','players','match','odds']);
+ const links=[...document.querySelectorAll('.fury-portal-links a')];
+ function activate(tab,updateHistory){
+   if(!valid.has(tab))return;
+   const button=document.querySelector('.tabs button[data-tab="'+tab+'"]');
+   if(!button)return;
+   button.click();
+   for(const link of links){
+     const target=new URL(link.href,location.href);
+     const active=target.pathname===location.pathname&&target.searchParams.get('tab')===tab;
+     if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+   }
+   if(updateHistory){
+     const url=new URL(location.href);url.searchParams.set('tab',tab);
+     history.pushState({furyTab:tab},'',url);
+   }
+ }
+ for(const link of links){
+   const target=new URL(link.href,location.href),tab=target.searchParams.get('tab');
+   if(target.pathname!==location.pathname||!valid.has(tab))continue;
+   link.addEventListener('click',event=>{
+     if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+     event.preventDefault();activate(tab,new URLSearchParams(location.search).get('tab')!==tab);
+   });
+ }
+ window.addEventListener('popstate',()=>activate(new URLSearchParams(location.search).get('tab')||'teams',false));
+ // Existing load handler handles deep-linked initial tabs after dashboard initialization.
+ window.addEventListener('load',()=>{
+   const tab=new URLSearchParams(location.search).get('tab')||'teams';
+   for(const link of links){const target=new URL(link.href,location.href);if(target.pathname===location.pathname&&target.searchParams.get('tab')===tab)link.setAttribute('aria-current','page');}
+ });
+})();
 // Allow dashboard cards to open the requested analytics section.
 window.addEventListener('load',()=>{
  const tab=new URLSearchParams(location.search).get('tab');
