@@ -1101,12 +1101,17 @@ function renderFuryMobileCards(found,stat,line){
  const el=(tag,cls,value)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(value!==undefined)x.textContent=value;return x};
  if(!found.length){host.append(el('p','fury-mobile-empty','No players match your filters.'));return}
  const fragment=document.createDocumentFragment();
+  // Build match-log lookup once: avoid scanning every match for every player.
+  const logsByPlayer=new Map();
+  for(const log of playerMatchData){const key=log.team+'\u0000'+log.player;if(!logsByPlayer.has(key))logsByPlayer.set(key,[]);logsByPlayer.get(key).push(log)}
+  for(const logs of logsByPlayer.values())logs.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
   const eligible=players.filter(x=>n(x.minutes)!==null&&n(x.minutes)>0);
   const avg90=k=>{const samples=eligible.map(x=>n(x[k])===null?null:90*n(x[k])/n(x.minutes)).filter(x=>x!==null);return samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null};
-  const avgRecent=(k,count)=>{const samples=players.map(x=>{const rows=playerMatchData.filter(g=>g.player===x.player&&g.team===x.team).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,count).map(g=>n(g[k])).filter(v=>v!==null);return rows.length?rows.reduce((a,b)=>a+b,0)/rows.length:null}).filter(v=>v!==null);return samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null};
+  const avgRecent=(k,count)=>{const samples=players.map(x=>{const rows=(logsByPlayer.get(x.team+'\u0000'+x.player)||[]).slice(0,count).map(g=>n(g[k])).filter(v=>v!==null);return rows.length?rows.reduce((a,b)=>a+b,0)/rows.length:null}).filter(v=>v!==null);return samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null};
   const leagueAverages={shots:avg90('shots'),sot:avg90('sot'),xg:avg90('xg'),goals:avg90('goals')};
+ const leagueRecentAverages={shots:avgRecent('shots',5),sot:avgRecent('sot',5)};
  for(const r of found){
-  const logs=playerMatchData.filter(x=>x.player===r.player&&x.team===r.team).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+  const logs=logsByPlayer.get(r.team+'\u0000'+r.player)||[];
   const l5=rate(logs,5),l10=rate(logs,10);
   const card=el('article','fury-mobile-prop-card');
   const top=el('div','fury-mobile-prop-top');
@@ -1134,8 +1139,8 @@ function renderFuryMobileCards(found,stat,line){
    'SOT/90':[n(r.sot)!==null&&n(r.minutes)>0?90*n(r.sot)/n(r.minutes):null,leagueAverages.sot],
    'xG/90':[n(r.xg)!==null&&n(r.minutes)>0?90*n(r.xg)/n(r.minutes):null,leagueAverages.xg],
    'G/90':[n(r.goals)!==null&&n(r.minutes)>0?90*n(r.goals)/n(r.minutes):null,leagueAverages.goals],
-   'L5 shots':[recentAvg('shots',5)==='—'?null:Number(recentAvg('shots',5)),avgRecent('shots',5)],
-   'L5 SOT':[recentAvg('sot',5)==='—'?null:Number(recentAvg('sot',5)),avgRecent('sot',5)]
+   'L5 shots':[recentAvg('shots',5)==='—'?null:Number(recentAvg('shots',5)),leagueRecentAverages.shots],
+   'L5 SOT':[recentAvg('sot',5)==='—'?null:Number(recentAvg('sot',5)),leagueRecentAverages.sot]
   };
   for(const [label,value] of cells){const pair=comparables[label]||[null,null];metrics.append(metric(label,value,pair[0],pair[1]))}
   card.append(metrics);
@@ -1620,12 +1625,11 @@ async function changeLeague() {
   const results = await Promise.allSettled([
     load(league === 'laliga' ? 'la_liga_team_metrics.json' : league+'_team_metrics.json'),
     loadLeaguePlayers(league, config),
-    load(league==='laliga'?'la_liga_team_matches.json':league+'_team_matches.json'),
-    load('all_leagues_data.json')
+    load(league==='laliga'?'la_liga_team_matches.json':league+'_team_matches.json')
   ]);
   if (generation !== loadGeneration) return;
   const failures=[];
-  const [t,p,m,raw]=results;
+  const [t,p,m]=results;
   teams = t.status==='fulfilled' && Array.isArray(t.value) ? t.value : [];
   if (!teams.length) failures.push('team metrics');
   const playerResult = p.status==='fulfilled' ? p.value : {data:null,source:null,errors:[String(p.reason)]};
@@ -1633,7 +1637,7 @@ async function changeLeague() {
   recent = playerResult.data ? normalizeRecent(playerResult.data) : [];
   playerMatchData = playerResult.data ? normalizePlayerMatches(playerResult.data) : [];
   selectedPlayer=null;$('playerDetail').classList.add('hidden');
-  rawLeague=raw.status==='fulfilled'?(raw.value[league==='laliga'?'la_liga':league]||null):null;
+  rawLeague=null;
   if(rawLeague){if(!players.length)players=getUsablePlayers(rawLeague);if(!playerMatchData.length)playerMatchData=normalizePlayerMatches(rawLeague);buildShotIndex(rawLeague);buildQuality(rawLeague);if(!teams.length){teams=derivedTeams();buildQuality(rawLeague);}}else{shotEvents=[];qualityGames=new Map()}
   if (!players.length && !playerMatchData.length) failures.push('player data: '+playerResult.errors.join('; '));
   matches = m.status==='fulfilled' && Array.isArray(m.value) ? m.value : [];
@@ -1654,6 +1658,20 @@ async function changeLeague() {
   renderTeams(); renderPlayers(); analyze();renderFuryMatch();
   $('loadStatus').textContent = config.label+': '+teams.length+' teams · '+players.length+' players · '+playerMatchData.length+' player-match records · '+matches.length+' team-match records'+(playerResult.source?' · player source: '+playerResult.source:'')+(failures.length?' · Missing: '+failures.join(', '):'');
   $('loadStatus').className = failures.length?'status error':'status good';
+  // Large all-leagues shot data is optional for first paint; hydrate later.
+  void load('all_leagues_data.json').then(all=>{
+    if(generation!==loadGeneration)return;
+    rawLeague=all?.[league==='laliga'?'la_liga':league]||null;
+    if(!rawLeague)return;
+    if(!players.length)players=getUsablePlayers(rawLeague);
+    if(!playerMatchData.length)playerMatchData=normalizePlayerMatches(rawLeague);
+    buildShotIndex(rawLeague);buildQuality(rawLeague);
+    if(!teams.length){teams=derivedTeams();buildQuality(rawLeague)}
+    if(!matches.length)matches=derivedMatchHistory();
+    fillOptions('playerTeam',[...new Set(players.map(r=>r.team).filter(Boolean))].sort(),'All teams');
+    renderPlayers();
+    if(document.getElementById('teamsTab')&&!document.getElementById('teamsTab').classList.contains('hidden'))renderTeams();
+  }).catch(()=>{/* Player stats remain available if shot-map export is missing. */});
 }
 function init(){
   $('teamHistoryTeam').addEventListener('change',()=>{ $('teamFilter').value='';renderTeamLast15(); });
