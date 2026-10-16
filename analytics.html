@@ -784,17 +784,7 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
 </div>
 </div>
 </details>
-<header aria-label="FURY SPORTS AI site header" class="fury-portal-header"><a aria-label="FURY SPORTS AI Dashboard" class="fury-portal-logo" href="./index.html"><span class="fury-portal-mark">FS</span><span class="fury-portal-brand">FURY <span>SPORTS AI</span></span></a><nav aria-label="Main navigation" class="fury-portal-links"><a href="./index.html">Dashboard</a><a href="./analytics.html?tab=teams">Team Stats</a><a href="./analytics.html?tab=players">Player Props</a><a href="./analytics.html?tab=match">Match AI</a><a href="./analytics.html?tab=odds">Odds</a><a href="./league_rankings.html">Rankings</a></nav></header><div class="fury-analytics-league-picker"><details aria-label="League navigation" class="league-header-menu">
-<summary class="league-header-trigger">🌍 <span id="selectedLeagueLabel">La Liga</span> <span aria-hidden="true">▾</span></summary>
-<nav aria-label="Select league" class="league-menu">
-<button aria-current="true" class="league-menu-item active" data-league="laliga" type="button"><span>🇪🇸</span> La Liga</button>
-<button class="league-menu-item" data-league="premier_league" type="button"><span>🇬🇧</span> Premier League</button>
-<button class="league-menu-item" data-league="bundesliga" type="button"><span>🇩🇪</span> Bundesliga</button>
-<button class="league-menu-item" data-league="serie_a" type="button"><span>🇮🇹</span> Serie A</button>
-<button class="league-menu-item" data-league="ligue_1" type="button"><span>🇫🇷</span> Ligue 1</button>
-</nav>
-<select aria-label="Selected league" class="visually-hidden" id="leagueSelect"><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option></select>
-</details></div>
+<header aria-label="FURY SPORTS AI site header" class="fury-portal-header"><a aria-label="FURY SPORTS AI Dashboard" class="fury-portal-logo" href="./index.html"><span class="fury-portal-mark">FS</span><span class="fury-portal-brand">FURY <span>SPORTS AI</span></span></a><nav aria-label="Main navigation" class="fury-portal-links"><a href="./index.html">Dashboard</a><a href="./analytics.html?tab=teams">Team Stats</a><a href="./analytics.html?tab=players">Player Props</a><a href="./analytics.html?tab=match">Match AI</a><a href="./analytics.html?tab=odds">Odds</a><a href="./league_rankings.html">Rankings</a></nav></header><select aria-label="Current league (internal)" class="visually-hidden" id="leagueSelect"><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option></select>
 <main class="app-shell">
 <div class="app-content"><div class="status" id="loadStatus" role="status">Loading your private Supabase statistics...</div>
 <div class="fury-legacy-back-link" style="margin:8px 0 16px"><a href="./index.html" style="color:#66cfff;text-decoration:none;font-weight:750">← All tools</a></div><nav aria-label="Dashboard sections" class="tabs"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button><button data-tab="odds">Odds &amp; Schedule</button><a href="./league_rankings.html" style="display:inline-flex;align-items:center;padding:10px 14px;color:#43baf6;font-weight:800;text-decoration:none">League Rankings ↗</a></nav>
@@ -1313,7 +1303,18 @@ function analyze(){if(!matchPool.length)return;const home=$('homeTeam').value,aw
 
 
 
-async function load(file){if(!window.furyPrivateLoad)throw new Error('Authentication required');return window.furyPrivateLoad(file)}
+// Reuse each authenticated JSON response for this page session (including in-flight requests).
+const furyDataCache = new Map();
+async function load(file){
+  if(!window.furyPrivateLoad)throw new Error('Authentication required');
+  if(!furyDataCache.has(file)){
+    const request=Promise.resolve().then(()=>window.furyPrivateLoad(file)).catch(error=>{
+      furyDataCache.delete(file);throw error;
+    });
+    furyDataCache.set(file,request);
+  }
+  return furyDataCache.get(file);
+}
 
 
 
@@ -1474,6 +1475,17 @@ function renderMatchPlayer(){const team=$('furyMatchPlayerTeam').value,player=$(
 
 // Cross-league matchup dataset is independent from the league used in Team/Player tabs.
 let matchPool=[],matchQualityPool=new Map(),matchPlayerPool=[],matchTeamsByLeague={};
+let crossLeagueLoadPromise=null;
+function ensureCrossLeagueMatchData(){
+  if(!crossLeagueLoadPromise){
+    crossLeagueLoadPromise=setupCrossLeagueMatchData().catch(err=>{
+      crossLeagueLoadPromise=null;
+      const status=document.getElementById('matchStatus');
+      if(status)status.textContent='Match analysis data unavailable: '+err.message;
+    });
+  }
+  return crossLeagueLoadPromise;
+}
 async function setupCrossLeagueMatchData(){
   let combined;
   try{combined=await load('all_leagues_data.json')}catch(e){combined={};}
@@ -1529,12 +1541,15 @@ async function setupCrossLeagueMatchData(){
     ligue_1:['ligue_1_team_matches.json']
   };
   const loadedLeagues=[];
-  for(const league of leagueKeys){
-    let records=null;
+  const officialRecords=await Promise.all(leagueKeys.map(async league=>{
     for(const filename of matchFiles[league]){
-      try{const data=await load(filename);if(Array.isArray(data)&&data.length){records=data;break;}}
+      try{const data=await load(filename);if(Array.isArray(data)&&data.length)return data;}
       catch(e){/* Try the next supported export filename. */}
     }
+    return null;
+  }));
+  for(const [idx,league] of leagueKeys.entries()){
+    const records=officialRecords[idx];
     if(!records)continue;
     const suffix=' ('+LEAGUES[league].label+')';
     const official=records.filter(r=>r&&r.team&&r.venue).map(r=>({
@@ -1629,7 +1644,8 @@ async function changeLeague() {
   const matchNames = [...new Set(matches.map(r=>r.team).filter(Boolean))].sort();
   fillOptions('teamFilter',teamNames,'All teams');
   fillOptions('playerTeam',playerNames,'All teams');
-  if(!matchPool.length) await setupCrossLeagueMatchData();
+  // Match-analysis dataset loads in background; do not block Team/Player display.
+  ensureCrossLeagueMatchData();
   $('playerSearch').value='';
   $('playerDataStatus').textContent = players.length ? `${config.label}: ${players.length} player profiles and ${playerMatchData.length} match logs loaded from ${playerResult.source}.` : `${config.label}: No player profiles loaded. ${playerResult.errors.join(' | ') || 'Check that the league player JSON exists in Supabase private storage.'}`;
   for (const id of ['teamRows','playerRows','matchComparison','matchRates','allHomeHistory','allAwayHistory','teamRanking','playerRanking']) $(id).replaceChildren();
