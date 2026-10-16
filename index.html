@@ -730,26 +730,27 @@ header .site-title>span{display:inline-flex!important;align-items:baseline!impor
 </div>
 <p class="hint" id="playerDataStatus" role="status" style="margin:12px 2px;color:#9fd6f7"></p>
 <div class="tiles player-kpis"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
-<div class="panel fury-advanced-panel" id="furyPropsPanel"><div class="player-panel-head"><h2>Player Props Analysis · Shots &amp; SOT</h2><span class="player-panel-kicker">HISTORICAL DATA · NOT BETTING ODDS</span></div>
-<div class="controls"><label>Player<select id="furyPropsPlayer"></select></label><label>Market<select id="furyPropsMarket"><option value="shots">Total shots</option><option value="sot">Shots on target</option></select></label><label>Over line<select id="furyPropsLine"><option value="0.5">0.5</option><option selected value="1.5">1.5</option><option value="2.5">2.5</option><option value="3.5">3.5</option><option value="4.5">4.5</option></select></label><label>Venue<select id="furyPropsVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label></div>
-<div class="fury-grid" id="furyPropsKpis"></div><div id="furyPropsHistory" class="fury-grid" style="margin-top:14px"></div><p class="fury-note" id="furyPropsNote">Select a player. Hit rates are descriptive, not future probabilities.</p></div>
-
-<style id="fury-shotmap-css">
-.fury-shotmap-panel{margin-top:20px}.fury-shotmap-wrap{margin-top:16px;background:#0a2028;border:1px solid rgba(125,202,213,.22);border-radius:15px;overflow:hidden}.fury-shotmap-wrap svg{display:block;width:100%;height:auto;max-height:520px}.fury-shot-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:13px 0;color:#c5d9e4;font-size:12px}.fury-shot-legend span{display:inline-flex;align-items:center;gap:6px}.fury-shot-legend i{display:inline-block;width:10px;height:10px;border-radius:50%}.fury-shotmap-panel .controls{margin-top:12px}
-</style>
-<section class="panel fury-shotmap-panel" id="furyShotMapPanel" aria-label="Player shot map">
-  <div class="player-panel-head"><h2>Player Shot Map · Understat</h2><span class="player-panel-kicker">SHOT LOCATIONS · xG QUALITY</span></div>
-  <div class="controls">
-    <label>Player<select id="furyShotPlayer"></select></label>
-    <label>Period<select id="furyShotPeriod"><option value="5">Last 5 matches</option><option value="10">Last 10 matches</option><option value="0" selected>Full season</option></select></label>
-    <label>Venue<select id="furyShotVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label>
-    <label>Result<select id="furyShotResult"><option value="all">All shots</option><option value="goal">Goals</option><option value="saved">Saved shots</option><option value="missed">Off target</option><option value="blocked">Blocked</option></select></label>
-  </div>
-  <div class="fury-grid" id="furyShotKpis"></div>
+<div class="panel fury-advanced-panel" id="furyPropsPanel"><div class="player-panel-head"><h2>Player Props &amp; Shot Map · Understat</h2><span class="player-panel-kicker">SHOTS · SOT · xG · SHOT LOCATIONS</span></div>
+<div class="controls fury-combined-controls">
+<label>Team<select id="furyPropsTeam"><option value="">All teams</option></select></label>
+<label>Player<select id="furyPropsPlayer"></select></label>
+<label>Market<select id="furyPropsMarket"><option value="shots">Total shots</option><option value="sot">Shots on target</option></select></label>
+<label>Over line<select id="furyPropsLine"><option value="0.5">0.5</option><option selected value="1.5">1.5</option><option value="2.5">2.5</option><option value="3.5">3.5</option><option value="4.5">4.5</option></select></label>
+<label>Period<select id="furyShotPeriod"><option value="5">Last 5 matches</option><option value="10">Last 10 matches</option><option value="0" selected>Full season</option></select></label>
+<label>Venue<select id="furyPropsVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label>
+<label>Shot result<select id="furyShotResult"><option value="all">All shots</option><option value="goal">Goals</option><option value="saved">Saved shots</option><option value="missed">Off target</option><option value="blocked">Blocked</option></select></label>
+</div>
+<p class="fury-note" id="furyPlayerAvailability" role="status">Loading league players…</p>
+<div class="fury-grid" id="furyPropsKpis"></div><div id="furyPropsHistory" class="fury-grid" style="margin-top:14px"></div><p class="fury-note" id="furyPropsNote">Select a player. Hit rates are descriptive, not future probabilities.</p><div class="fury-combined-map" id="furyShotMapPanel"><h3>Player Shot Map</h3><div class="fury-grid" id="furyShotKpis"></div>
   <div class="fury-shotmap-wrap"><svg id="furyShotPitch" viewBox="0 0 920 540" role="img" aria-label="Attacking-direction shot map with the goal at the right"><rect x="16" y="16" width="888" height="508" rx="12" fill="#102f35"/><g fill="none" stroke="#b9d8d3" stroke-width="2.3" opacity=".65"><rect x="36" y="36" width="848" height="468"/><path d="M460 36V504"/><circle cx="460" cy="270" r="67"/><rect x="746" y="120" width="138" height="300"/><rect x="828" y="205" width="56" height="130"/><path d="M746 194A85 85 0 0 0 746 346"/><circle cx="770" cy="270" r="3" fill="#b9d8d3"/><rect x="36" y="120" width="138" height="300"/><rect x="36" y="205" width="56" height="130"/><path d="M174 194A85 85 0 0 1 174 346"/></g><g id="furyShotDots"></g><text x="865" y="28" fill="#d7efeb" font-size="13" text-anchor="end">ATTACK →</text></svg></div>
   <div class="fury-shot-legend"><span><i style="background:#39db9e"></i> Goal</span><span><i style="background:#4bbaf6"></i> Saved</span><span><i style="background:#e9a44d"></i> Missed</span><span><i style="background:#ef6782"></i> Blocked / other</span><span>Circle size = shot xG</span></div>
   <p class="fury-note" id="furyShotStatus" role="status">Choose a player to display recorded shot locations. Hover or tap a shot for details.</p>
-</section>
+</div></div>
+
+<style id="fury-shotmap-css">
+.fury-shotmap-panel{margin-top:20px}.fury-shotmap-wrap{margin-top:16px;background:#0a2028;border:1px solid rgba(125,202,213,.22);border-radius:15px;overflow:hidden}.fury-shotmap-wrap svg{display:block;width:100%;height:auto;max-height:520px}.fury-shot-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:13px 0;color:#c5d9e4;font-size:12px}.fury-shot-legend span{display:inline-flex;align-items:center;gap:6px}.fury-shot-legend i{display:inline-block;width:10px;height:10px;border-radius:50%}.fury-combined-map{margin-top:24px;border-top:1px solid rgba(125,202,213,.22);padding-top:18px}.fury-combined-map h3{margin:0 0 12px}.fury-combined-controls{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+</style>
+
 <div class="player-layout"><div class="panel"><div class="player-panel-head"><h2>League leaders</h2><span class="player-panel-kicker">SORTED BY METRIC</span></div><div id="playerRanking"></div></div><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap fury-player-table-scroll"><table id="furyPlayerStatsTable"><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th>xG / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div class="fury-extra" id="furyPlayerTrends"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
 <section class="hidden" id="matchTab"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Compare teams across leagues</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p class="hint" id="matchStatus"></p><p class="hint">Choose a home league and an away league independently, then select a team from each. Cross-league projections use domestic league performances and do not adjust for league strength.</p></div>
 <section class="fury-ai-panel" id="furyAiMatchPanel" aria-label="AI match analysis"><div class="fury-ai-head"><div><small>✦ FURY SPORTS AI</small><h2>AI Match Analysis</h2></div><button type="button" class="fury-ai-button" id="furyAiAnalyze">✦ Analyze with AI</button></div><p class="fury-ai-meta" id="furyAiContext">Select two teams and click Analyze match to load their statistics, then request an AI explanation.</p><div class="fury-ai-result" id="furyAiResult" role="status" aria-live="polite" hidden></div><p class="fury-ai-meta">AI commentary is based on supplied match records and projections. Estimates are not guarantees or betting advice.</p></section>
@@ -1754,82 +1755,109 @@ document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOdd
    }
  }
  }
- function renderProps(){const select=el('furyPropsPlayer'),target=el('furyPropsKpis'),hist=el('furyPropsHistory');if(!select||!target||!hist||typeof players==='undefined'||typeof playerMatchData==='undefined')return;
- const old=select.value;const options=players.filter(p=>p.player&&p.team).sort((a,b)=>String(a.player).localeCompare(String(b.player)));select.replaceChildren();for(const p of options){const o=document.createElement('option');o.value=p.team+'|'+p.player;o.textContent=p.player+' · '+p.team;select.appendChild(o)}if(options.some(p=>p.team+'|'+p.player===old))select.value=old;
- updateProps();}
- function updateProps(){const target=el('furyPropsKpis'),hist=el('furyPropsHistory'),select=el('furyPropsPlayer');if(!target||!hist||!select)return;target.replaceChildren();hist.replaceChildren();const chosen=select.value,market=el('furyPropsMarket').value,line=Number(el('furyPropsLine').value),venue=el('furyPropsVenue').value;
- const player=players.find(p=>p.team+'|'+p.player===chosen);if(!player){el('furyPropsNote').textContent='No player data loaded for this league.';return}
- let logs=playerMatchData.filter(r=>r.team===player.team&&r.player===player.player).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
- if(venue!=='all')logs=logs.filter(r=>['home','h'].includes(String(r.homeAway).toLowerCase())=== (venue==='home'));
- const minutes=num(player.minutes),shots=num(player.shots),xg=num(player.xg);metric(target,'Season shots / 90',minutes>0&&shots!==null?fmt(shots*90/minutes):'N/A');metric(target,'Season xG / 90',minutes>0&&xg!==null?fmt(xg*90/minutes,3):'N/A');
- const valid=logs.filter(r=>num(r[market])!==null);for(const count of [5,10]){const sample=valid.slice(0,count),hits=sample.filter(r=>num(r[market])>line).length;metric(target,'L'+count+' over '+line+' '+(market==='shots'?'shots':'SOT'),sample.length?fmt(100*hits/sample.length,0)+'%':'N/A',hits+'/'+sample.length+' recorded games');metric(hist,'L'+count+' '+(market==='shots'?'shots':'SOT')+' / match',sample.length?fmt(mean(sample,market)):'N/A')}
- const last=valid.slice(0,10);const trend=document.createElement('div');trend.className='fury-chart';for(const r of last.slice().reverse()){const col=document.createElement('div');col.className='fury-col';const v=num(r[market]);const t=document.createElement('span');t.textContent=v===null?'—':String(v);const bar=document.createElement('div');bar.className='fury-bar';bar.style.height=Math.max(3,(v||0)*15)+'px';const date=document.createElement('span');date.textContent=String(r.date||'—').slice(5,10);col.append(t,bar,date);trend.appendChild(col)}hist.appendChild(trend);
- el('furyPropsNote').textContent=`${player.player} · ${venue} · ${valid.length} valid ${market} match records. L5/L10 exclude missing values. Historical hit rates are not modeled probabilities; starting status and minutes matter.`;
- }
- for(const id of ['furyPropsPlayer','furyPropsMarket','furyPropsLine','furyPropsVenue'])el(id)?.addEventListener('change',updateProps);
- el('analyzeButton')?.addEventListener('click',advancedMatch);
- // Wrap existing renderer to keep props synchronized after league/team/filter changes.
- if(typeof renderPlayers==='function'){const original=renderPlayers;renderPlayers=function(){original();renderProps()}}
  if(typeof analyze==='function'){const original=analyze;analyze=function(){original();advancedMatch()}}
- document.addEventListener('DOMContentLoaded',()=>{renderProps();advancedMatch()});
+ document.addEventListener('DOMContentLoaded',advancedMatch);
 })();
 </script><script id="fury-shotmap-module">
 (function(){
+ 'use strict';
  const $=id=>document.getElementById(id);
- const n=x=>x===null||x===undefined||x===''?null:(Number.isFinite(Number(x))?Number(x):null);
- const clean=x=>String(x??'').toLowerCase().replace(/[^a-z0-9]/g,'');
- const field=(r,keys)=>{for(const k of keys)if(r[k]!==undefined&&r[k]!==null&&r[k]!=='')return r[k];return null};
- const key=(team,player)=>clean(team)+'|'+clean(player);
- const svgNS='http://www.w3.org/2000/svg';
- function shotType(sh){const v=clean(field(sh,['result','shot_result','outcome']));return v.includes('goal')?'goal':v.includes('saved')?'saved':v.includes('miss')||v.includes('offtarget')?'missed':v.includes('block')?'blocked':'other'}
- function matchID(sh){return String(field(sh,['game_id','match_id','id_game'])??'')}
- function shotDate(sh){return String(field(sh,['date','match_date','game_date'])??'')}
- function xy(sh){let x=n(field(sh,['X','x','shot_x','location_x'])),y=n(field(sh,['Y','y','shot_y','location_y']));if(x===null||y===null)return null;if(x>1||y>1){if(x<=100&&y<=100){x/=100;y/=100}else if(x<=120&&y<=80){x/=120;y/=80}else return null}if(x<0||x>1||y<0||y>1)return null;return [x,y]}
- function kpi(parent,label,value){const b=document.createElement('div');b.className='fury-stat';const a=document.createElement('small');a.textContent=label;const v=document.createElement('strong');v.textContent=value;b.append(a,v);parent.appendChild(b)}
- function shotPlayerOptions(){
-  const sel=$('furyShotPlayer');if(!sel)return;
-  const old=sel.value;
-  const unique=new Map();
-  const add=(team,player,source)=>{
-   const t=String(team??'').trim(),p=String(player??'').trim();
-   if(!t||!p)return;
-   const id=key(t,p);
-   if(!unique.has(id))unique.set(id,{id,team:t,player:p,source});
+ const clean=v=>String(v??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+ const number=v=>v===null||v===undefined||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
+ const get=(r,keys)=>{for(const k of keys)if(r?.[k]!==undefined&&r[k]!==null&&r[k]!=='')return r[k];return null};
+ const identity=(team,player)=>clean(team)+'|'+clean(player);
+ const shotTeam=s=>get(s,['team','team_name','team_title']);
+ const shotPlayer=s=>get(s,['player','player_name','player_title']);
+ const matchId=r=>String(get(r,['game_id','match_id','id_game'])??'');
+ const date=r=>String(get(r,['date','match_date','game_date'])??'').slice(0,10);
+ const type=s=>{const t=clean(get(s,['result','shot_result','outcome']));return t.includes('goal')?'goal':t.includes('saved')?'saved':t.includes('miss')||t.includes('offtarget')?'missed':t.includes('block')?'blocked':'other'};
+ const venueOf=r=>{const v=clean(get(r,['homeAway','venue','home_away','h_a']));return v==='home'||v==='h'?'home':v==='away'||v==='a'?'away':''};
+ const NS='http://www.w3.org/2000/svg';
+ const state={roster:[],shotIndex:new Map(),matchIndex:new Map()};
+ function makeMetric(target,label,value,note){const box=document.createElement('div');box.className='fury-stat';const small=document.createElement('small');small.textContent=label;const strong=document.createElement('strong');strong.textContent=value;box.append(small,strong);if(note){const hint=document.createElement('div');hint.className='fury-note';hint.textContent=note;box.append(hint)}target.append(box)}
+ function format(v,d=2){return v===null||!Number.isFinite(v)?'N/A':v.toFixed(d)}
+ function playerRows(){
+  const map=new Map();
+  const add=(team,player,source,record)=>{
+   const t=String(team??'').trim(),p=String(player??'').trim();if(!t||!p)return;
+   const id=identity(t,p);if(!map.has(id))map.set(id,{id,team:t,player:p,profile:null,sources:new Set()});
+   const entry=map.get(id);entry.sources.add(source);if(source==='profile')entry.profile=record;
   };
-  // Use all available player sources, not just the filtered season profiles.
-  if(typeof players!=='undefined')for(const p of players)add(p.team,p.player,'profile');
-  if(typeof playerMatchData!=='undefined')for(const p of playerMatchData)add(p.team,p.player,'match');
-  if(typeof shotEvents!=='undefined')for(const sh of shotEvents)add(field(sh,['team','team_name','team_title']),field(sh,['player','player_name','player_title']),'shot');
-  const options=[...unique.values()].sort((a,b)=>a.player.localeCompare(b.player)||a.team.localeCompare(b.team));
+  if(typeof players!=='undefined')for(const p of players)add(p.team,p.player,'profile',p);
+  if(typeof playerMatchData!=='undefined')for(const p of playerMatchData)add(p.team,p.player,'match',p);
+  if(typeof shotEvents!=='undefined')for(const p of shotEvents)add(shotTeam(p),shotPlayer(p),'shot',p);
+  return [...map.values()].sort((a,b)=>a.team.localeCompare(b.team)||a.player.localeCompare(b.player));
+ }
+ function updateTeamOptions(){
+  const sel=$('furyPropsTeam');if(!sel)return;
+  const old=sel.value;const teams=[...new Set(state.roster.map(p=>p.team))].sort((a,b)=>a.localeCompare(b));
+  sel.replaceChildren(new Option('All teams',''));
+  for(const t of teams)sel.add(new Option(t,t));
+  if(teams.includes(old))sel.value=old;
+ }
+ function updatePlayerOptions(){
+  const sel=$('furyPropsPlayer'),team=$('furyPropsTeam')?.value||'';if(!sel)return;
+  const old=sel.value;
+  const options=state.roster.filter(p=>!team||p.team===team).sort((a,b)=>a.player.localeCompare(b.player));
   sel.replaceChildren();
-  for(const p of options){const o=document.createElement('option');o.value=p.id;o.textContent=p.player+' · '+p.team;sel.appendChild(o)}
+  for(const p of options)sel.add(new Option(p.player+(team?'':' · '+p.team),p.id));
   if(options.some(p=>p.id===old))sel.value=old;
-  else{
-   const props=$('furyPropsPlayer')?.value?.split('|');
-   const match=props&&options.find(p=>p.id===key(props[0],props[1]));
-   if(match)sel.value=match.id;
+  $('furyPlayerAvailability').textContent=`${options.length} players available${team?' for '+team:''} · ${state.roster.length} across ${new Set(state.roster.map(p=>p.team)).size} teams. Players are listed from profiles, match logs and shot records.`;
+  render();
+ }
+ function refresh(){state.roster=playerRows();updateTeamOptions();updatePlayerOptions()}
+ function coords(sh){let x=number(get(sh,['X','x','shot_x','location_x'])),y=number(get(sh,['Y','y','shot_y','location_y']));if(x===null||y===null)return null;
+  if(x>1||y>1){if(x<=100&&y<=100){x/=100;y/=100}else if(x<=120&&y<=80){x/=120;y/=80}else return null}
+  return x>=0&&x<=1&&y>=0&&y<=1?[x,y]:null;
+ }
+ function render(){
+  const sel=$('furyPropsPlayer'),kpis=$('furyPropsKpis'),history=$('furyPropsHistory'),dots=$('furyShotDots'),mapKpis=$('furyShotKpis');
+  if(!sel||!kpis||!history||!dots||!mapKpis)return;
+  kpis.replaceChildren();history.replaceChildren();dots.replaceChildren();mapKpis.replaceChildren();
+  const person=state.roster.find(p=>p.id===sel.value),note=$('furyPropsNote'),status=$('furyShotStatus');
+  if(!person){note.textContent='No players found in the loaded league data.';status.textContent='No shot records available.';return}
+  const period=Number($('furyShotPeriod').value),venue=$('furyPropsVenue').value,market=$('furyPropsMarket').value,line=Number($('furyPropsLine').value),result=$('furyShotResult').value;
+  const logs=(typeof playerMatchData==='undefined'?[]:playerMatchData.filter(r=>identity(r.team,r.player)===person.id))
+   .filter(r=>venue==='all'||venueOf(r)===venue)
+   .sort((a,b)=>String(b.date??'').localeCompare(String(a.date??'')));
+  const selectedLogs=period?logs.slice(0,period):logs;
+  const ids=new Set(selectedLogs.map(matchId).filter(Boolean)),dates=new Set(selectedLogs.map(date).filter(Boolean));
+  const shots=(typeof shotEvents==='undefined'?[]:shotEvents.filter(sh=>identity(shotTeam(sh),shotPlayer(sh))===person.id));
+  // For period/venue filtering, never display unverified shots if player match logs are absent.
+  const mustMatch=period>0||venue!=='all';
+  const selectedShots=mustMatch?(selectedLogs.length?shots.filter(sh=>(matchId(sh)&&ids.has(matchId(sh)))||(date(sh)&&dates.has(date(sh)))):[]):shots;
+  const minutes=number(person.profile?.minutes),seasonShots=number(person.profile?.shots),seasonXg=number(person.profile?.xg);
+  makeMetric(kpis,'Season shots / 90',minutes>0&&seasonShots!==null?format(seasonShots*90/minutes):'N/A');
+  makeMetric(kpis,'Season xG / 90',minutes>0&&seasonXg!==null?format(seasonXg*90/minutes,3):'N/A');
+  for(const count of [5,10]){
+   const sample=logs.slice(0,count),valid=sample.map(r=>market==='sot'?number(r.sot):number(r.shots)).filter(v=>v!==null);
+   const hits=valid.filter(v=>v>line).length;
+   makeMetric(kpis,`L${count} Over ${line} ${market==='sot'?'SOT':'shots'}`,valid.length?format(hits/valid.length*100,0)+'%':'N/A',`${hits}/${valid.length} valid match logs`);
+   makeMetric(history,`L${count} ${market==='sot'?'SOT':'shots'} / game`,valid.length?format(valid.reduce((a,b)=>a+b,0)/valid.length):'N/A');
   }
-  draw();
+  const chart=document.createElement('div');chart.className='fury-chart';
+  for(const r of logs.slice(0,10).reverse()){
+   const v=number(market==='sot'?r.sot:r.shots),col=document.createElement('div');col.className='fury-col';
+   const label=document.createElement('span');label.textContent=v===null?'—':String(v);
+   const bar=document.createElement('div');bar.className='fury-bar';bar.style.height=Math.max(3,(v||0)*15)+'px';
+   const d=document.createElement('span');d.textContent=String(r.date||'—').slice(5,10);col.append(label,bar,d);chart.append(col);
+  }
+  history.append(chart);
+  note.textContent=`${person.player} · ${person.team} · ${logs.length} match logs · ${shots.length} shot events. Hit rates are historical, not predictive probabilities.`;
+  const goals=selectedShots.filter(s=>type(s)==='goal').length, xgs=selectedShots.map(s=>number(get(s,['xg','xG','expected_goals']))).filter(v=>v!==null),sot=selectedShots.filter(s=>['goal','saved'].includes(type(s))).length;
+  makeMetric(mapKpis,'Shots',String(selectedShots.length));makeMetric(mapKpis,'Goals',String(goals));makeMetric(mapKpis,'Shot xG',xgs.length?format(xgs.reduce((a,b)=>a+b,0)):'N/A');makeMetric(mapKpis,'SOT',String(sot));
+  let plotted=0;const visible=selectedShots.filter(s=>result==='all'||type(s)===result);
+  for(const sh of visible){const xy=coords(sh);if(!xy)continue;const [x,y]=xy,kind=type(sh),xg=number(get(sh,['xg','xG','expected_goals']));
+   const c=document.createElementNS(NS,'circle');c.setAttribute('cx',String(36+x*848));c.setAttribute('cy',String(36+y*468));c.setAttribute('r',String(4+Math.sqrt(Math.max(0,xg??0))*16));
+   c.setAttribute('fill',({goal:'#39db9e',saved:'#4bbaf6',missed:'#e9a44d',blocked:'#ef6782',other:'#ef6782'})[kind]);c.setAttribute('fill-opacity','.78');c.setAttribute('stroke','#effff9');c.setAttribute('stroke-width','1.1');
+   const title=document.createElementNS(NS,'title');title.textContent=[date(sh),get(sh,['opponent','against'])||'',get(sh,['minute'])!==null?'Minute '+get(sh,['minute']):'',get(sh,['result','shot_result'])||'Shot',xg!==null?'xG '+xg.toFixed(3):'xG N/A'].filter(Boolean).join(' · ');c.append(title);dots.append(c);plotted++;
+  }
+  status.textContent=(!shots.length?'No shot events for this player in the loaded league JSON. ':mustMatch&&!logs.length?'Match logs unavailable; cannot safely filter shot locations. ':'')+`${visible.length} matching shots · ${plotted} plotted. `+(plotted<visible.length?'Some shots have missing coordinates. ':'')+'Shot map is historical, not a prediction.';
  }
- function draw(){const dots=$('furyShotDots'),status=$('furyShotStatus'),kpis=$('furyShotKpis'),sel=$('furyShotPlayer');if(!dots||!sel)return;dots.replaceChildren();kpis.replaceChildren();const chosen=sel.selectedOptions[0];if(!chosen){status.textContent='No player or shot records loaded for this league.';return}const playerLabel=chosen.textContent.split(' · ')[0];
- const all=typeof shotEvents==='undefined'?[]:shotEvents.filter(sh=>key(field(sh,['team','team_name','team_title']),field(sh,['player','player_name','player_title']))===sel.value);
- const period=Number($('furyShotPeriod').value),venue=$('furyShotVenue').value,result=$('furyShotResult').value;
- let logs=typeof playerMatchData==='undefined'?[]:playerMatchData.filter(r=>key(r.team,r.player)===sel.value).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
- if(venue!=='all')logs=logs.filter(r=>clean(r.homeAway)===(venue==='home'?'home':'away')||clean(r.homeAway)===(venue==='home'?'h':'a'));
- const allowedIDs=new Set((period?logs.slice(0,period):logs).map(r=>String(r.game_id)).filter(x=>x&&x!=='null'));
- const allowedDates=new Set((period?logs.slice(0,period):logs).map(r=>String(r.date||'').slice(0,10)).filter(Boolean));
- let filtered=all.filter(sh=>{const id=matchID(sh),date=shotDate(sh).slice(0,10);if(period&&logs.length)return(id&&allowedIDs.has(id))||(date&&allowedDates.has(date));if(venue!=='all'&&logs.length)return(id&&allowedIDs.has(id))||(date&&allowedDates.has(date));return true});
- if((period||venue!=='all')&&!logs.length){filtered=[];status.textContent='Player match logs are unavailable: cannot reliably filter shot events by period or venue.'}
- const total=filtered.length,goals=filtered.filter(sh=>shotType(sh)==='goal').length,xgs=filtered.map(sh=>n(field(sh,['xg','xG','expected_goals']))).filter(v=>v!==null);const sumXg=xgs.reduce((a,b)=>a+b,0);const onTarget=filtered.filter(sh=>['goal','saved'].includes(shotType(sh))).length;
- kpi(kpis,'Shots',String(total));kpi(kpis,'Goals',String(goals));kpi(kpis,'xG',xgs.length?sumXg.toFixed(2):'N/A');kpi(kpis,'Shots on target',String(onTarget));
- const visible=filtered.filter(sh=>result==='all'||shotType(sh)===result);let plotted=0;
- for(const sh of visible){const coords=xy(sh);if(!coords)continue;const [x,y]=coords,kind=shotType(sh),xg=n(field(sh,['xg','xG','expected_goals']));const circle=document.createElementNS(svgNS,'circle');circle.setAttribute('cx',String(36+x*848));circle.setAttribute('cy',String(36+y*468));circle.setAttribute('r',String(4+Math.sqrt(Math.max(0,xg??0))*16));circle.setAttribute('fill',({goal:'#39db9e',saved:'#4bbaf6',missed:'#e9a44d',blocked:'#ef6782',other:'#ef6782'})[kind]);circle.setAttribute('fill-opacity','.78');circle.setAttribute('stroke','#effff9');circle.setAttribute('stroke-width','1.1');const title=document.createElementNS(svgNS,'title');title.textContent=[shotDate(sh).slice(0,10),field(sh,['opponent','against'])||'',field(sh,['minute'])!==null?('Minute '+field(sh,['minute'])):'',String(field(sh,['result','shot_result'])||'Shot'),xg!==null?'xG '+xg.toFixed(3):'xG N/A'].filter(Boolean).join(' · ');circle.appendChild(title);dots.appendChild(circle);plotted++}
- status.textContent=(!all.length?'No shot events found for this player. Confirm the league JSON contains its shots array. ':`${playerLabel} · ${visible.length} selected shots · ${plotted} plotted with valid coordinates. `)+(plotted<visible.length?'Some shot coordinates are unavailable. ':'')+'The shot map is historical; it is not a prediction.';
- }
- for(const id of ['furyShotPlayer','furyShotPeriod','furyShotVenue','furyShotResult'])$(id)?.addEventListener('change',draw);
- if(typeof renderPlayers==='function'){const original=renderPlayers;renderPlayers=function(){original();shotPlayerOptions()}}
- $('furyPropsPlayer')?.addEventListener('change',()=>{const v=$('furyPropsPlayer').value.split('|');const target=key(v[0],v[1]);if([...$('furyShotPlayer').options].some(o=>o.value===target)){$('furyShotPlayer').value=target;draw()}});
- document.addEventListener('DOMContentLoaded',shotPlayerOptions);
+ $('furyPropsTeam')?.addEventListener('change',updatePlayerOptions);
+ for(const id of ['furyPropsPlayer','furyPropsMarket','furyPropsLine','furyPropsVenue','furyShotPeriod','furyShotResult'])$(id)?.addEventListener('change',render);
+ if(typeof renderPlayers==='function'){const original=renderPlayers;renderPlayers=function(){original();refresh()}}
+ document.addEventListener('DOMContentLoaded',refresh);
 })();
 </script>
 <script id="fury-ai-module">
