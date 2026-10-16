@@ -23,7 +23,29 @@ const n=v=>v==null||v===''?null:Number.isFinite(Number(v))?Number(v):null;
 const pick=(o,...ks)=>{for(const k of ks)if(o?.[k]!=null)return o[k];return null};
 const fmt=(v,d=1)=>v==null||!Number.isFinite(v)?'—':v.toFixed(d);
 let data=null,request=0;const cache=new Map();
-async function privateLoad(file){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw Error('Sign in on the main dashboard first, then reopen this page.');const url=`${SUPABASE_URL}/functions/v1/${FURY_FUNCTION_NAME}?file=${encodeURIComponent(file)}`;const response=await fetch(url,{headers:{Authorization:`Bearer ${session.access_token}`,apikey:SUPABASE_PUBLISHABLE_KEY}});if(!response.ok)throw Error(`${file}: HTTP ${response.status}`);return response.json()}
+let accessPromise=null;
+async function verifyAccess(){
+  if(!accessPromise)accessPromise=(async()=>{
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session?.access_token)throw Error('Sign in on Analytics first.');
+    // Server-side membership verification is still required.
+    const response=await fetch(`${SUPABASE_URL}/functions/v1/${FURY_FUNCTION_NAME}?file=la_liga_team_metrics.json`,{
+      headers:{Authorization:`Bearer ${session.access_token}`,apikey:SUPABASE_PUBLISHABLE_KEY},cache:'no-store'
+    });
+    if(!response.ok)throw Error('Account access verification failed (HTTP '+response.status+').');
+    return true;
+  })().catch(error=>{accessPromise=null;throw error});
+  return accessPromise;
+}
+const publicCache=new Map();
+async function privateLoad(file){
+  await verifyAccess();
+  if(!/^[a-z0-9_-]+\.json$/.test(file))throw Error('Invalid JSON filename');
+  if(!publicCache.has(file))publicCache.set(file,fetch(`./data/${file}`,{cache:'default'})
+    .then(r=>{if(!r.ok)throw Error(`${file}: HTTP ${r.status}`);return r.json()})
+    .catch(e=>{publicCache.delete(file);throw e}));
+  return publicCache.get(file);
+}
 function records(raw,venue){const by=new Map(),ids=new Set();const get=t=>{const k=norm(t);if(!k)return null;if(!by.has(k))by.set(k,{team:t,p:0,w:0,d:0,l:0,gf:0,ga:0,points:0});return by.get(k)};
 const schedule=Array.isArray(raw.schedule)?raw.schedule:[];
 for(const r of schedule){const home=pick(r,'home_team','home','home_team_name'),away=pick(r,'away_team','away','away_team_name'),hg=n(pick(r,'home_score','home_goals','FTHG')),ag=n(pick(r,'away_score','away_goals','FTAG'));if(!home||!away||hg===null||ag===null)continue;ids.add(String(pick(r,'game_id','match_id','id')??`${home}|${away}|${r.date}`));for(const [team,gf,ga,v] of [[home,hg,ag,'home'],[away,ag,hg,'away']]){if(venue!=='all'&&venue!==v)continue;const t=get(team);t.p++;t.gf+=gf;t.ga+=ga;if(gf>ga){t.w++;t.points+=3}else if(gf===ga){t.d++;t.points++}else t.l++}}

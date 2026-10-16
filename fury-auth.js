@@ -30,6 +30,7 @@ function lockDashboard() {
   authorized = false;
   currentToken = null;
   sessionJSONCache.clear();
+  publicJSONCache.clear();
   document.body.classList.remove('fury-authorized');
   accountEmail.textContent = '';
   updateAccountMenu(false);
@@ -65,15 +66,19 @@ async function getToken() {
   return currentToken;
 }
 // Called by the dashboard's existing load(file) function.
+// Approved account required, but data files are served by GitHub Pages.
+// Public files are NOT protected by this client-side access check.
+const publicJSONCache = new Map();
 window.furyPrivateLoad = async (filename) => {
   if (!authorized) throw new Error('Not authorized');
-  const token = await getToken();
-  if (sessionJSONCache.has(filename)) {
-    const cached = sessionJSONCache.get(filename);
-    sessionJSONCache.delete(filename);
-    return cached;
+  if (!/^[a-z0-9_-]+\.json$/.test(filename)) throw new Error('Invalid data filename');
+  if (!publicJSONCache.has(filename)) {
+    const request = fetch(`./data/${filename}`, {cache:'default'})
+      .then(response => {if (!response.ok) throw new Error(`${filename}: HTTP ${response.status}`);return response.json();})
+      .catch(error => {publicJSONCache.delete(filename);throw error;});
+    publicJSONCache.set(filename, request);
   }
-  return requestPrivateJSON(filename, token);
+  return publicJSONCache.get(filename);
 };
 
 async function authorizeSession(session) {
@@ -88,7 +93,7 @@ async function authorizeSession(session) {
     const probeData = await requestPrivateJSON(probeFile, session.access_token);
     if (generation !== authGeneration) return;
     currentToken = session.access_token;
-    sessionJSONCache.set(probeFile, probeData);
+    // Approval probe succeeded; statistics are now loaded from GitHub Pages.
     authorized = true;
     accountEmail.textContent = session.user?.email || '';
     updateAccountMenu(true);
