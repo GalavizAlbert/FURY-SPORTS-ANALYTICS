@@ -1913,23 +1913,37 @@ const oddsDateKey=e=>{const d=new Date(e.commence_time);return Number.isNaN(d.ge
 const oddsKickoff=e=>{const d=new Date(e.commence_time);return Number.isNaN(d.getTime())?'Unknown':d.toLocaleString(undefined,{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})};
 // Independent model inputs are public static exports on GitHub Pages.
 // Do not fall back to bookmaker-implied probabilities if historical data is missing.
-const furyModelFiles={laliga:'la_liga_team_matches.json',premier_league:'premier_league_team_matches.json',bundesliga:'bundesliga_team_matches.json',serie_a:'serie_a_team_matches.json',ligue_1:'ligue_1_team_matches.json'};
+const furyModelFiles={laliga:['la_liga_team_matches.json','laliga_team_matches.json'],premier_league:['premier_league_team_matches.json'],bundesliga:['bundesliga_team_matches.json'],serie_a:['serie_a_team_matches.json'],ligue_1:['ligue_1_team_matches.json']};
 const furyModelCache=new Map();
 const furyModelPending=new Map();
+const furyModelErrors=new Map();
 const furyProjectionCache=new Map();
-const furyNameAliases={manutd:'manchesterunited',manunited:'manchesterunited',mancity:'manchestercity',spurs:'tottenham',tottenhamhotspur:'tottenham',intermilan:'inter',internazionale:'inter',psg:'parissaintgermain',bayernmunich:'bayernmunchen',bayernmunchen:'bayernmunchen',atleticomadrid:'atleticomadrid',athleticbilbao:'athleticclub'};
-function furyTeamKey(value){let v=String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/\b(fc|cf|sc|afc|calcio|football|club|de|the)\b/g,'').replace(/[^a-z0-9]/g,'');return furyNameAliases[v]||v;}
+const furyNameAliases={manutd:'manchesterunited',manunited:'manchesterunited',mancity:'manchestercity',spurs:'tottenham',tottenhamhotspur:'tottenham',intermilan:'inter',internazionale:'inter',psg:'parissaintgermain',parissg:'parissaintgermain',bayernmunich:'bayernmunchen',bayernmunchen:'bayernmunchen',athleticbilbao:'athletic',athleticclub:'athletic',atleticodemadrid:'atleticomadrid',borussiamonchengladbach:'monchengladbach',borussiamgladbach:'monchengladbach',mgladbach:'monchengladbach',leedsunited:'leeds',newcastleunited:'newcastle',westhamunited:'westham',brightonandhovealbion:'brighton',nottinghamforest:'nottinghamforest',wolves:'wolverhamptonwanderers',sportinglisbon:'sportingcp',staderennais:'rennes',staderennes:'rennes',asmonaco:'monaco',losclille:'lille',losc:'lille',olympiquemarseille:'marseille',olympiquelyonnais:'lyon',bayer04leverkusen:'bayerleverkusen',tsghoffenheim:'hoffenheim',scfreiburg:'freiburg'};
+function furyTeamKey(value){
+ let v=String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/\([^)]*\)\s*$/,'').replace(/[^a-z0-9]/g,'');
+ if(furyNameAliases[v])return furyNameAliases[v];
+ v=String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/\b(fc|cf|sc|afc|calcio|football|club|de|the)\b/g,'').replace(/[^a-z0-9]/g,'');
+ return furyNameAliases[v]||v;
+}
 async function furyEnsureModels(events){
  const leagues=[...new Set(events.map(e=>e.league).filter(l=>furyModelFiles[l]))];
  await Promise.all(leagues.map(async league=>{
   if(furyModelCache.has(league))return;
   if(!furyModelPending.has(league)){
-   const file=furyModelFiles[league];
-   const request=fetch('./data/'+file,{cache:'default'}).then(async response=>{
-    if(!response.ok)throw Error('HTTP '+response.status);
-    const data=await response.json();if(!Array.isArray(data))throw Error('Expected team match array');
-    furyModelCache.set(league,data);furyProjectionCache.clear();return data;
-   }).catch(error=>{furyModelCache.set(league,[]);console.warn('FURY model data unavailable:',league,error.message);return []});
+   const request=(async()=>{
+    let lastError='';
+    for(const file of furyModelFiles[league]){
+     try{
+      const response=await fetch('./data/'+file,{cache:'default'});
+      if(!response.ok)throw Error('HTTP '+response.status);
+      const data=await response.json();
+      if(!Array.isArray(data)||!data.length)throw Error('Missing or empty team match array');
+      furyModelCache.set(league,data);furyModelErrors.delete(league);furyProjectionCache.clear();return data;
+     }catch(error){lastError=file+': '+error.message;}
+    }
+    furyModelCache.set(league,[]);furyModelErrors.set(league,lastError);
+    console.warn('FURY model data unavailable:',league,lastError);return [];
+   })();
    furyModelPending.set(league,request);
   }
   await furyModelPending.get(league);
@@ -1957,9 +1971,20 @@ function renderFuryPicks(events){
  const minOdds=Math.max(1.01,Number(document.getElementById('pickMinOdds').value)||1.01);
  const minEV=Number(document.getElementById('pickMinEV').value);
  const market=document.getElementById('pickMarket').value,sort=document.getElementById('pickSort').value;
- const candidates=[];let missing=0;
+ const candidates=[];let missing=0;const reasons={unsupported:0,noFile:0,noTeam:0,lowSample:0};
  for(const e of events){
-  const model=furyEstimateEvent(e);if(!model){missing++;continue;}
+  const model=furyEstimateEvent(e);if(!model){
+   missing++;
+   if(!furyModelFiles[e.league])reasons.unsupported++;
+   else if(!furyModelCache.get(e.league)?.length)reasons.noFile++;
+   else{
+    const rows=furyModelCache.get(e.league),homeKey=furyTeamKey(e.home_team),awayKey=furyTeamKey(e.away_team);
+    const home=rows.filter(r=>furyTeamKey(r.team)===homeKey&&String(r.venue||'').toLowerCase()==='home');
+    const away=rows.filter(r=>furyTeamKey(r.team)===awayKey&&String(r.venue||'').toLowerCase()==='away');
+    if(!home.length||!away.length)reasons.noTeam++;else reasons.lowSample++;
+   }
+   continue;
+  }
   const selections=[];
   if(market!=='totals')selections.push(['Home win',e.h2h?.home,model.probs.home],['Draw',e.h2h?.draw,model.probs.draw],['Away win',e.h2h?.away,model.probs.away]);
   if(market!=='h2h'&&Number(e.totals?.point??2.5)===2.5)selections.push(['Over 2.5',e.totals?.over,model.probs.over],['Under 2.5',e.totals?.under,model.probs.under]);
@@ -1984,8 +2009,9 @@ function renderFuryPicks(events){
   }
   card.append(top,fixture,stats);host.appendChild(card);
  }
- count.textContent=`${candidates.length} qualifying model selections · showing ${shown.length} · ${missing} fixtures without sufficient matched historical data`;
- if(!shown.length){const empty=document.createElement('p');empty.className='hint';empty.textContent='No qualifying model picks. Confirm data/*_team_matches.json files are deployed, choose a supported league, or adjust thresholds. Unmatched clubs and leagues without historical data are excluded.';host.appendChild(empty)}
+ count.textContent=`${events.length} fixtures evaluated · ${events.length-missing} model eligible · ${candidates.length} qualifying selections · showing ${shown.length} · ${missing} excluded (unsupported league: ${reasons.unsupported}, historical files unavailable: ${reasons.noFile}, team name unmatched: ${reasons.noTeam}, insufficient valid home/away games: ${reasons.lowSample})`;
+ if(reasons.noFile){const errors=[...furyModelErrors].map(([league,error])=>`${oddsLeagueLabels[league]||league}: ${error}`);count.title=errors.join(' | ');console.warn('FURY historical file diagnostics:',errors);}else count.removeAttribute('title');
+ if(!shown.length){const empty=document.createElement('p');empty.className='hint';empty.textContent=missing===events.length?'No model-eligible fixtures. Review the exclusion counts above and check historical JSON files under data/.':'No selections meet the current probability, decimal odds and model EV filters. Try Any probability and All model estimates to inspect available model outputs.';host.appendChild(empty)}
 }
 ['pickMinProbability','pickMinOdds','pickMinEV','pickMarket','pickSort'].forEach(id=>document.getElementById(id).addEventListener('input',()=>renderOddsSchedule()));
 function renderOddsSchedule(){
