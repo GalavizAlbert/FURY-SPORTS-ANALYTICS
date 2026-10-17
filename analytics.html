@@ -1930,18 +1930,18 @@ function furyModelSameTeam(a,b,league){
  if(aId&&bId)return aId===bId;
  return furyTeamKey(a)===furyTeamKey(b);
 }
-function furyModelValidRow(r,venue){return String(r.venue||'').toLowerCase()===venue&&r.goals_for!==null&&r.goals_for!==undefined&&r.goals_against!==null&&r.goals_against!==undefined&&r.goals_for!==''&&r.goals_against!==''&&Number.isFinite(Number(r.goals_for))&&Number.isFinite(Number(r.goals_against));}
+function furyModelValidRow(r,venue){return (!venue||String(r.venue||'').toLowerCase()===venue)&&r.goals_for!==null&&r.goals_for!==undefined&&r.goals_against!==null&&r.goals_against!==undefined&&r.goals_for!==''&&r.goals_against!==''&&Number.isFinite(Number(r.goals_for))&&Number.isFinite(Number(r.goals_against));}
 function furyModelDiagnostic(e){
  const league=e.league;
  if(!furyModelFiles[league])return {reason:'Unsupported league',detail:league};
  if(furyModelErrors.has(league))return {reason:'Historical file unavailable',detail:furyModelErrors.get(league)};
  const rows=furyModelCache.get(league);
  if(!Array.isArray(rows)||!rows.length)return {reason:'No historical records',detail:furyModelFiles[league]};
- const home=rows.filter(r=>furyModelSameTeam(r.team,e.home_team,league)&&furyModelValidRow(r,'home'));
- const away=rows.filter(r=>furyModelSameTeam(r.team,e.away_team,league)&&furyModelValidRow(r,'away'));
+ const home=rows.filter(r=>furyModelSameTeam(r.team,e.home_team,league)&&furyModelValidRow(r,null));
+ const away=rows.filter(r=>furyModelSameTeam(r.team,e.away_team,league)&&furyModelValidRow(r,null));
  if(!home.length)return {reason:'Home team not matched',detail:e.home_team};
  if(!away.length)return {reason:'Away team not matched',detail:e.away_team};
- if(home.length<5||away.length<5)return {reason:'Fewer than 5 venue matches',detail:`${e.home_team}: ${home.length} home; ${e.away_team}: ${away.length} away`};
+ if(home.length<5||away.length<5)return {reason:'Fewer than 5 total matches',detail:`${e.home_team}: ${home.length} total; ${e.away_team}: ${away.length} total`};
  return null;
 }
 async function furyEnsureModels(events){
@@ -1966,9 +1966,10 @@ function furyEstimateEvent(event){
  const rows=furyModelCache.get(event.league);
  if(!Array.isArray(rows)||!rows.length)return null;
  const homeKey=furyTeamKey(event.home_team),awayKey=furyTeamKey(event.away_team);
+ // Use all available home and away matches for each club, with a minimum of 5 per club.
  // Exact normalized matches only; never silently compare the wrong clubs.
- const home=rows.filter(r=>furyModelSameTeam(r.team,event.home_team,event.league)&&furyModelValidRow(r,'home')).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
- const away=rows.filter(r=>furyModelSameTeam(r.team,event.away_team,event.league)&&furyModelValidRow(r,'away')).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const home=rows.filter(r=>furyModelSameTeam(r.team,event.home_team,event.league)&&furyModelValidRow(r,null)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+ const away=rows.filter(r=>furyModelSameTeam(r.team,event.away_team,event.league)&&furyModelValidRow(r,null)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
  if(home.length<5||away.length<5)return null;
  const mean=(list,key)=>list.reduce((total,r)=>total+Number(r[key]),0)/list.length;
  const eh=Math.max(.05,Math.min(5,(mean(home,'goals_for')+mean(away,'goals_against'))/2));
@@ -2004,7 +2005,7 @@ function renderFuryPicks(events){
   const price=document.createElement('span');price.className='fury-pick-price';price.textContent=c.price.toFixed(2);top.append(name,price);
   const fixture=document.createElement('div');fixture.className='fury-pick-meta';fixture.append(furyFixtureElement(c.event.home_team,c.event.away_team,c.event.league),document.createTextNode(` · ${oddsLeagueLabels[c.event.league]||c.event.league} · ${oddsKickoff(c.event)}`));
   const stats=document.createElement('div');stats.className='fury-pick-stats';
-  for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,`Home/Away sample ${c.model.homeN}/${c.model.awayN}`,c.event.bookmaker||'Bookmaker unavailable']){
+  for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,`Team match samples ${c.model.homeN}/${c.model.awayN} (all venues)`,c.event.bookmaker||'Bookmaker unavailable']){
    const item=document.createElement('span');item.className='fury-pick-stat';item.textContent=value;stats.appendChild(item);
   }
   card.append(top,fixture,stats);host.appendChild(card);
