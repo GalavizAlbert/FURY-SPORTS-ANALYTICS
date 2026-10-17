@@ -354,6 +354,25 @@ td.fury-hit{background:transparent!important;color:inherit!important;padding:inh
 .team-venue-bar .hint{margin-left:auto}
 @media(max-width:600px){.team-venue-bar .hint{width:100%;margin-left:0}}
 
+
+/* FURY probability + payout explorer */
+#oddsTab .fury-picks-panel{margin:14px 0 20px;padding:16px;background:#10243a;border:1px solid #315775;border-radius:14px}
+#oddsTab .fury-picks-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+#oddsTab .fury-picks-head h3{margin:0;color:#eaf7ff;font-size:18px}
+#oddsTab .fury-picks-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+#oddsTab .fury-picks-controls label{font-size:11px;color:#a9c5db;display:flex;flex-direction:column;gap:5px}
+#oddsTab .fury-picks-controls select,#oddsTab .fury-picks-controls input{background:#0c1d30;color:#f0f8ff;border:1px solid #37516b;border-radius:8px;padding:9px;min-width:0;width:100%}
+#oddsTab .fury-pick-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#oddsTab .fury-pick{padding:12px;border:1px solid #2c4a62;border-radius:11px;background:#162e45;min-width:0}
+#oddsTab .fury-pick-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#oddsTab .fury-pick-title{font-size:13px;color:#f2f8ff;font-weight:800;overflow-wrap:anywhere}
+#oddsTab .fury-pick-price{color:#67d5ff;font-size:17px;font-weight:900;white-space:nowrap}
+#oddsTab .fury-pick-meta{font-size:11px;color:#9bb7cb;margin-top:6px}
+#oddsTab .fury-pick-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:11px}
+#oddsTab .fury-pick-stat{background:#0d2336;border-radius:6px;padding:5px 7px;color:#c3e7fb}
+#oddsTab .fury-picks-note{font-size:11px;color:#a9bacc;line-height:1.5;margin:10px 0 0}
+@media(max-width:680px){#oddsTab .fury-picks-controls{grid-template-columns:repeat(2,minmax(0,1fr))}#oddsTab .fury-pick-list{grid-template-columns:1fr}#oddsTab .fury-picks-panel{padding:11px}}
+
 /* Odds & Schedule */
 #oddsTab .odds-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 #oddsTab .odds-controls label{min-width:0}
@@ -458,6 +477,31 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
  #oddsTab .odds-summary{font-size:12px}
 }
 @media(max-width:370px){#oddsTab .odds-controls{grid-template-columns:minmax(0,1fr)}#oddsTab .odds-table tbody tr{padding:10px;gap:6px}}
+
+.fury-team-line{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;white-space:nowrap}
+.fury-team-crest{width:25px;height:25px;object-fit:contain;flex:none;vertical-align:middle}
+.fury-fixture-line{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap}
+.fury-fixture-vs{font-size:11px;color:#9bb4ca;font-weight:700}
+.fury-pick-meta .fury-team-crest{width:30px;height:30px}
+.projection-team-icon img{width:90%;height:90%;object-fit:contain}
+@media(max-width:520px){.fury-team-crest{width:20px;height:20px}.fury-pick-meta .fury-team-crest{width:25px;height:25px}}
+
+
+/* Correct mobile grid positions for the dynamically inserted probability column. */
+@media(max-width:680px){
+ #oddsTab .odds-table tbody td.probability-cell{grid-column:1 / -1!important;grid-row:4!important;align-items:stretch!important;text-align:left!important;background:transparent!important}
+ #oddsTab .odds-table tbody td:nth-child(4){grid-row:3!important}
+ #oddsTab .odds-table tbody td:nth-child(6),#oddsTab .odds-table tbody td:nth-child(7),#oddsTab .odds-table tbody td:nth-child(8){grid-row:5!important;grid-column:auto!important}
+ #oddsTab .odds-table tbody td:nth-child(9),#oddsTab .odds-table tbody td:nth-child(10){grid-row:6!important;grid-column:auto!important}
+ #oddsTab .odds-table tbody td:nth-child(11){grid-column:1 / -1!important;grid-row:7!important}
+ #oddsTab .odds-table tbody td:nth-child(5){grid-row:5!important;grid-column:1!important}
+ #oddsTab .odds-table tbody td:nth-child(6){grid-column:2!important}
+ #oddsTab .odds-table tbody td:nth-child(7){grid-column:3!important}
+ #oddsTab .odds-table tbody td:nth-child(8){grid-row:6!important;grid-column:1!important}
+ #oddsTab .odds-table tbody td:nth-child(9){grid-column:2!important}
+ #oddsTab .odds-table tbody td:nth-child(10){grid-column:3!important}
+ #oddsTab .odds-table tbody td:nth-child(4){grid-column:1 / -1!important}
+}
 </style><style id="fury-odds-range-css">
 /* Compact min/max odds filter — no sorting */
 #oddsTab .odds-range-filter{display:flex;align-items:center;gap:10px;min-width:0;align-self:end;min-height:45px;padding:6px 12px;border:1px solid #2b3545;border-radius:13px;background:#1a222f;color:#a8c9e5}
@@ -868,7 +912,7 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
 </div>
 </section>
 <section class="hidden" id="oddsTab">
-<div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / BETTING MARKETS</div><h2>Odds &amp; Schedule</h2><p>Browse upcoming fixtures and bookmaker prices directly from The Odds API, without matching against your historical statistics.</p><span class="player-hero-tag">● Live provider feed · Decimal odds · Local kickoff times</span></div>
+<div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / BETTING MARKETS</div><h2>Odds &amp; Schedule</h2><p>Browse upcoming fixtures and compare bookmaker prices against an independent historical-goals model where matching data is available.</p><span class="player-hero-tag">● Live provider feed · Decimal odds · Local kickoff times</span></div>
 <div class="panel player-filter-panel odds-filter-panel">
 <div class="filter-heading"><div><span class="filter-eyebrow">ODDS EXPLORER</span><h3>Upcoming fixtures</h3></div><span class="filter-chip">THE ODDS API</span></div>
 <div class="controls odds-controls"><label class="fury-context-league">League<select id="oddsLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option><option value="liga_mx">🇲🇽 Liga MX</option><option value="champions_league">🏆 Champions League</option><option value="eredivisie">🇳🇱 Eredivisie</option><option value="portugal_primeira_liga">🇵🇹 Liga Portugal</option><option value="all">All nine leagues</option></select></label>
@@ -878,6 +922,18 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
 <label>Update<button id="oddsRefresh" type="button">Refresh odds</button></label>
 </div>
 <p aria-live="polite" class="hint" id="oddsScheduleStatus" role="status">Open this tab to load upcoming fixtures.</p>
+<section class="fury-picks-panel" aria-label="High probability picks explorer">
+<div class="fury-picks-head"><h3>⚡ High Probability · Best Payout</h3><span class="filter-chip">INDEPENDENT GOALS MODEL</span></div>
+<div class="fury-picks-controls">
+<label>Minimum probability <select id="pickMinProbability"><option value="0">Any</option><option value="50">50%+</option><option value="60" selected>60%+</option><option value="65">65%+</option><option value="70">70%+</option><option value="75">75%+</option><option value="80">80%+</option></select></label>
+<label>Minimum decimal odds <input id="pickMinOdds" type="number" inputmode="decimal" min="1.01" step="0.05" value="1.30"/></label>
+<label>Minimum model EV <select id="pickMinEV"><option value="0" selected>Positive EV only</option><option value="0.03">+3% or more</option><option value="0.05">+5% or more</option><option value="0.10">+10% or more</option><option value="-1">All model estimates</option></select></label><label>Market <select id="pickMarket"><option value="all">All markets</option><option value="h2h">Match winner / draw</option><option value="totals">Over / Under 2.5</option></select></label>
+<label>Rank by <select id="pickSort"><option value="ev">Highest model EV</option><option value="edge">Largest model edge</option><option value="prob">Highest model probability</option><option value="odds">Highest odds</option></select></label>
+</div>
+<div id="furyPickCount" class="hint" aria-live="polite">Load odds to discover selections.</div>
+<div id="furyPickList" class="fury-pick-list"></div>
+<p class="fury-picks-note">Model probabilities are calculated independently from historical home/away goals, using a simple Poisson approximation (up to 20 goals per team). EV = model probability × decimal odds − 1. These are uncalibrated estimates, not proven profitable bets. Fixtures without reliable team matches are excluded. Odds, squads, and conditions may change.</p>
+</section>
 <div class="odds-summary" id="oddsSummary"></div>
 <div class="scroll odds-table-wrap"><table class="odds-table"><thead><tr><th>Kickoff (local)</th><th>League</th><th>Fixture</th><th>Bookmaker</th><th>1X2 Probability</th><th>Home</th><th>Draw</th><th>Away</th><th>Over 2.5</th><th>Under 2.5</th></tr></thead><tbody id="oddsScheduleRows"></tbody></table></div>
 <p class="hint">Prices are decimal. The current secure endpoint returns one bookmaker per fixture and uses the US region. Missing markets show —. Odds can change; this is not a historical results feed. Refreshing or switching leagues may consume API credits (the server caches results briefly).</p>
@@ -1282,8 +1338,8 @@ function renderProjection(home,away,homeGames,awayGames){
   $('projectionHomeXg').textContent=String(p.best.h);
   $('projectionAwayXg').textContent=String(p.best.a);
   $('projectionTotal').textContent='Expected goals: '+eh.toFixed(2)+' – '+ea.toFixed(2)+' · '+(eh+ea).toFixed(2)+' total';
-  $('projectionHomeIcon').textContent=home.trim().charAt(0).toUpperCase();
-  $('projectionAwayIcon').textContent=away.trim().charAt(0).toUpperCase();
+  furySetProjectionCrest('projectionHomeIcon',home);
+  furySetProjectionCrest('projectionAwayIcon',away);
   $('projectionWinHome').textContent=home+' '+pct(p.home);
   $('projectionDraw').textContent='Draw '+pct(p.draw);
   $('projectionWinAway').textContent=away+' '+pct(p.away);
@@ -1747,6 +1803,60 @@ document.getElementById('analyzeButton')?.addEventListener('click',()=>{void fur
 </script>
 <script>
 // Independent schedule explorer. Reads only the authenticated Supabase Edge Function.
+// Team crests: static files hosted on GitHub Pages; no client-side API key.
+const furyLogoLeagueKeys={laliga:'la_liga',la_liga:'la_liga',premier_league:'premier_league',bundesliga:'bundesliga',serie_a:'serie_a',ligue_1:'ligue_1',champions_league:'champions_league',eredivisie:'eredivisie',portugal_primeira_liga:'primeira_liga',primeira_liga:'primeira_liga',brasileirao_serie_a:'brasileirao_serie_a',championship:'championship',european_championship:'european_championship',world_cup:'world_cup',copa_libertadores:'copa_libertadores'};
+let furyLogoCatalog=null,furyLogoAliases=null;
+const furyLogoNormalize=name=>String(name||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
+async function furyLoadLogos(){
+ try{
+  const [catalog,aliases]=await Promise.all(['./data/team_logos.json','./data/team_logo_aliases.json'].map(async url=>{const response=await fetch(url,{cache:'force-cache'});if(!response.ok)throw Error(url+': HTTP '+response.status);return response.json()}));
+  furyLogoCatalog=catalog.leagues||{};furyLogoAliases=aliases.leagues||{};
+  if(document.getElementById('oddsTab')&&!document.getElementById('oddsTab').classList.contains('hidden'))renderOddsSchedule();
+  if(document.getElementById('projectionHome')?.textContent&&document.getElementById('projectionPanel')&&!document.getElementById('projectionPanel').classList.contains('hidden')){
+   furySetProjectionCrest('projectionHomeIcon',document.getElementById('projectionHome').textContent);
+   furySetProjectionCrest('projectionAwayIcon',document.getElementById('projectionAway').textContent);
+  }
+ }catch(err){console.warn('FURY team crests unavailable; displaying team names:',err.message)}
+}
+function furyFindCrest(team,league){
+ if(!furyLogoCatalog||!team)return '';
+ const normalized=furyLogoNormalize(team),key=furyLogoLeagueKeys[league]||league;
+ const pools=key&&furyLogoCatalog[key]?[[key,furyLogoCatalog[key]]]:Object.entries(furyLogoCatalog);
+ const lookup=(k,records)=>{
+  const aliases=furyLogoAliases?.[k]||{};
+  const direct=aliases[normalized]||aliases[normalized.replace(/ /g,'')];
+  if(direct&&records[String(direct)])return records[String(direct)].logo;
+  for(const record of Object.values(records))if([record.name,record.shortName,record.tla].some(v=>furyLogoNormalize(v)===normalized))return record.logo;
+  return '';
+ };
+ for(const [k,records] of pools){const result=lookup(k,records);if(result)return result}
+ // Cross-league lookup helps clubs appearing in Champions League and domestic leagues.
+ for(const [k,records] of Object.entries(furyLogoCatalog)){
+  if(k===key)continue;
+  const result=lookup(k,records);if(result)return result;
+ }
+ return '';
+}
+function furyTeamElement(team,league){
+ const span=document.createElement('span');span.className='fury-team-line';
+ const logo=furyFindCrest(team,league);
+ if(logo){const img=document.createElement('img');img.className='fury-team-crest';img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>img.remove();span.appendChild(img)}
+ const label=document.createElement('span');label.textContent=team||'—';span.appendChild(label);return span;
+}
+function furyFixtureElement(home,away,league){
+ const wrapper=document.createElement('span');wrapper.className='fury-fixture-line';
+ const vs=document.createElement('span');vs.className='fury-fixture-vs';vs.textContent='VS';
+ wrapper.append(furyTeamElement(home,league),vs,furyTeamElement(away,league));return wrapper;
+}
+function furySetProjectionCrest(id,team){
+ const el=document.getElementById(id);if(!el)return;
+ const league=document.getElementById('leagueSelect')?.value||document.getElementById('matchLeague')?.value||'';
+ const logo=furyFindCrest(team,league);el.replaceChildren();
+ if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.onerror=()=>{el.textContent=String(team||'?').charAt(0).toUpperCase()};el.appendChild(img)}
+ else el.textContent=String(team||'?').charAt(0).toUpperCase();
+}
+void furyLoadLogos();
+
 const oddsLeagueLabels={laliga:'La Liga',premier_league:'Premier League',bundesliga:'Bundesliga',serie_a:'Serie A',ligue_1:'Ligue 1',liga_mx:'Liga MX',champions_league:'Champions League',eredivisie:'Eredivisie',portugal_primeira_liga:'Liga Portugal'};
 let oddsScheduleData=[],oddsLoadedLeague=null,oddsRequestSequence=0;
 const oddsLeagueEl=document.getElementById('oddsLeague');
@@ -1786,15 +1896,93 @@ function oddsProbabilityIndicator(h2h){
 }
 const oddsDateKey=e=>{const d=new Date(e.commence_time);return Number.isNaN(d.getTime())?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const oddsKickoff=e=>{const d=new Date(e.commence_time);return Number.isNaN(d.getTime())?'Unknown':d.toLocaleString(undefined,{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})};
+// Independent model inputs are public static exports on GitHub Pages.
+// Do not fall back to bookmaker-implied probabilities if historical data is missing.
+const furyModelFiles={laliga:'la_liga_team_matches.json',premier_league:'premier_league_team_matches.json',bundesliga:'bundesliga_team_matches.json',serie_a:'serie_a_team_matches.json',ligue_1:'ligue_1_team_matches.json'};
+const furyModelCache=new Map();
+const furyModelPending=new Map();
+const furyProjectionCache=new Map();
+const furyNameAliases={manutd:'manchesterunited',manunited:'manchesterunited',mancity:'manchestercity',spurs:'tottenham',tottenhamhotspur:'tottenham',intermilan:'inter',internazionale:'inter',psg:'parissaintgermain',bayernmunich:'bayernmunchen',bayernmunchen:'bayernmunchen',atleticomadrid:'atleticomadrid',athleticbilbao:'athleticclub'};
+function furyTeamKey(value){let v=String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/\b(fc|cf|sc|afc|calcio|football|club|de|the)\b/g,'').replace(/[^a-z0-9]/g,'');return furyNameAliases[v]||v;}
+async function furyEnsureModels(events){
+ const leagues=[...new Set(events.map(e=>e.league).filter(l=>furyModelFiles[l]))];
+ await Promise.all(leagues.map(async league=>{
+  if(furyModelCache.has(league))return;
+  if(!furyModelPending.has(league)){
+   const file=furyModelFiles[league];
+   const request=fetch('./data/'+file,{cache:'default'}).then(async response=>{
+    if(!response.ok)throw Error('HTTP '+response.status);
+    const data=await response.json();if(!Array.isArray(data))throw Error('Expected team match array');
+    furyModelCache.set(league,data);furyProjectionCache.clear();return data;
+   }).catch(error=>{furyModelCache.set(league,[]);console.warn('FURY model data unavailable:',league,error.message);return []});
+   furyModelPending.set(league,request);
+  }
+  await furyModelPending.get(league);
+ }));
+}
+function furyEstimateEvent(event){
+ const cacheKey=[event.league,furyTeamKey(event.home_team),furyTeamKey(event.away_team)].join('|');
+ if(furyProjectionCache.has(cacheKey))return furyProjectionCache.get(cacheKey);
+ const rows=furyModelCache.get(event.league);
+ if(!Array.isArray(rows)||!rows.length)return null;
+ const homeKey=furyTeamKey(event.home_team),awayKey=furyTeamKey(event.away_team);
+ // Exact normalized matches only; never silently compare the wrong clubs.
+ const home=rows.filter(r=>furyTeamKey(r.team)===homeKey&&String(r.venue||'').toLowerCase()==='home'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const away=rows.filter(r=>furyTeamKey(r.team)===awayKey&&String(r.venue||'').toLowerCase()==='away'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ if(home.length<5||away.length<5)return null;
+ const mean=(list,key)=>list.reduce((total,r)=>total+Number(r[key]),0)/list.length;
+ const eh=Math.max(.05,Math.min(5,(mean(home,'goals_for')+mean(away,'goals_against'))/2));
+ const ea=Math.max(.05,Math.min(5,(mean(away,'goals_for')+mean(home,'goals_against'))/2));
+ const probs=poissonProjection(eh,ea);
+ const result={probs,eh,ea,homeN:home.length,awayN:away.length};furyProjectionCache.set(cacheKey,result);return result;
+}
+function renderFuryPicks(events){
+ const host=document.getElementById('furyPickList'),count=document.getElementById('furyPickCount');if(!host)return;
+ const threshold=(Number(document.getElementById('pickMinProbability').value)||0)/100;
+ const minOdds=Math.max(1.01,Number(document.getElementById('pickMinOdds').value)||1.01);
+ const minEV=Number(document.getElementById('pickMinEV').value);
+ const market=document.getElementById('pickMarket').value,sort=document.getElementById('pickSort').value;
+ const candidates=[];let missing=0;
+ for(const e of events){
+  const model=furyEstimateEvent(e);if(!model){missing++;continue;}
+  const selections=[];
+  if(market!=='totals')selections.push(['Home win',e.h2h?.home,model.probs.home],['Draw',e.h2h?.draw,model.probs.draw],['Away win',e.h2h?.away,model.probs.away]);
+  if(market!=='h2h'&&Number(e.totals?.point??2.5)===2.5)selections.push(['Over 2.5',e.totals?.over,model.probs.over],['Under 2.5',e.totals?.under,model.probs.under]);
+  for(const [name,raw,prob] of selections){
+   const price=oddsValidPrice(raw);if(price===null||!Number.isFinite(prob))continue;
+   const ev=prob*price-1,edge=prob-1/price;
+   if(prob<threshold||price<minOdds||ev<minEV)continue;
+   candidates.push({event:e,name,price,prob,ev,edge,model});
+  }
+ }
+ candidates.sort((a,b)=>sort==='prob'?b.prob-a.prob:sort==='odds'?b.price-a.price:sort==='edge'?b.edge-a.edge:b.ev-a.ev);
+ host.replaceChildren();const shown=candidates.slice(0,20);
+ for(const c of shown){
+  const card=document.createElement('article');card.className='fury-pick';
+  const top=document.createElement('div');top.className='fury-pick-top';
+  const name=document.createElement('span');name.className='fury-pick-title';name.textContent=c.name;
+  const price=document.createElement('span');price.className='fury-pick-price';price.textContent=c.price.toFixed(2);top.append(name,price);
+  const fixture=document.createElement('div');fixture.className='fury-pick-meta';fixture.append(furyFixtureElement(c.event.home_team,c.event.away_team,c.event.league),document.createTextNode(` · ${oddsLeagueLabels[c.event.league]||c.event.league} · ${oddsKickoff(c.event)}`));
+  const stats=document.createElement('div');stats.className='fury-pick-stats';
+  for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,`Home/Away sample ${c.model.homeN}/${c.model.awayN}`,c.event.bookmaker||'Bookmaker unavailable']){
+   const item=document.createElement('span');item.className='fury-pick-stat';item.textContent=value;stats.appendChild(item);
+  }
+  card.append(top,fixture,stats);host.appendChild(card);
+ }
+ count.textContent=`${candidates.length} qualifying model selections · showing ${shown.length} · ${missing} fixtures without sufficient matched historical data`;
+ if(!shown.length){const empty=document.createElement('p');empty.className='hint';empty.textContent='No qualifying model picks. Confirm data/*_team_matches.json files are deployed, choose a supported league, or adjust thresholds. Unmatched clubs and leagues without historical data are excluded.';host.appendChild(empty)}
+}
+['pickMinProbability','pickMinOdds','pickMinEV','pickMarket','pickSort'].forEach(id=>document.getElementById(id).addEventListener('input',()=>renderOddsSchedule()));
 function renderOddsSchedule(){
  const term=oddsSearchEl.value.trim().toLowerCase();const day=oddsDateEl.value;
  const filtered=oddsScheduleData.filter(e=>(day==='all'||oddsDateKey(e)===day)&&(!term||`${e.home_team} ${e.away_team} ${oddsLeagueLabels[e.league]}`.toLowerCase().includes(term))&&oddsInRange(e));
  filtered.sort((a,b)=>Date.parse(a.commence_time)-Date.parse(b.commence_time));
+ renderFuryPicks(filtered);
  oddsRowsEl.replaceChildren();
  for(const e of filtered){
   const tr=document.createElement('tr');
   const values=[oddsKickoff(e),oddsLeagueLabels[e.league]||e.league,`${e.home_team} vs ${e.away_team}`,e.bookmaker||'—',oddsPrice(e.h2h?.home),oddsPrice(e.h2h?.draw),oddsPrice(e.h2h?.away),oddsPrice(e.totals?.over),oddsPrice(e.totals?.under)];
-  values.forEach((v,i)=>{const td=document.createElement('td');td.dataset.label=['Kickoff','League','Fixture','Bookmaker','Home','Draw','Away','Over 2.5','Under 2.5'][i];td.textContent=v;if(i===2)td.className='fixture';else if(i>=4)td.className='price';else if(i===1||i===3)td.className='muted';tr.appendChild(td)});
+  values.forEach((v,i)=>{const td=document.createElement('td');td.dataset.label=['Kickoff','League','Fixture','Bookmaker','Home','Draw','Away','Over 2.5','Under 2.5'][i];if(i===2)td.appendChild(furyFixtureElement(e.home_team,e.away_team,e.league));else td.textContent=v;if(i===2)td.className='fixture';else if(i>=4)td.className='price';else if(i===1||i===3)td.className='muted';tr.appendChild(td)});
   const probTd=document.createElement('td');probTd.dataset.label='1X2 probability';probTd.className='probability-cell';probTd.appendChild(oddsProbabilityIndicator(e.h2h));tr.insertBefore(probTd,tr.children[4]);
   const aiTd=document.createElement('td');aiTd.dataset.label='AI analysis';aiTd.className='fury-ai-action-cell';const aiBtn=document.createElement('button');aiBtn.type='button';aiBtn.className='fury-ai-odds-btn';aiBtn.textContent='✦ Analyze with AI';aiBtn.addEventListener('click',()=>furyAiFromOdds(e));aiTd.appendChild(aiBtn);tr.appendChild(aiTd);
   oddsRowsEl.appendChild(tr);
@@ -1822,6 +2010,7 @@ async function loadOddsSchedule(force=false){
  oddsDateEl.value=[...oddsDateEl.options].some(o=>o.value===previous)?previous:'all';
  oddsStatusEl.textContent=errors.length?`Loaded ${events.length} fixtures. ${errors.join(' | ')}`:`${events.length} upcoming fixtures loaded. Times shown in your browser's local timezone.`;
  renderOddsSchedule();
+ void furyEnsureModels(events).then(()=>{if(sequence===oddsRequestSequence)renderOddsSchedule()});
 }
 oddsLeagueEl.addEventListener('change',()=>void loadOddsSchedule(true));
 oddsSearchEl.addEventListener('input',renderOddsSchedule);
