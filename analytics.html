@@ -2014,10 +2014,24 @@ async function loadOddsSchedule(force=false){
  if(typeof window.furyOddsRequest!=='function'){oddsStatusEl.textContent='Sign in to load the protected odds feed.';return}
  const leagues=selected==='all'?Object.keys(oddsLeagueLabels):[selected];
  oddsStatusEl.textContent=`Loading upcoming fixtures for ${selected==='all'?'all nine leagues':oddsLeagueLabels[selected]}…`;
- const results=await Promise.allSettled(leagues.map(async league=>({league,data:await window.furyOddsRequest(league,force)})));
+ // Only refresh supported leagues; unsupported leagues remain visible in the dropdown.
+ const supported=leagues.filter(league=>!['eredivisie','portugal_primeira_liga'].includes(league));
+ const results=[];
+ if(force){
+  // Refresh one league at a time to avoid many simultaneous long-running Edge requests.
+  for(const league of supported){
+   if(sequence!==oddsRequestSequence)return;
+   oddsStatusEl.textContent=`Refreshing ${oddsLeagueLabels[league]} (${results.length+1}/${supported.length}) · downloading seven days…`;
+   try{results.push({status:'fulfilled',value:{league,data:await window.furyOddsRequest(league,true)}})}
+   catch(reason){results.push({status:'rejected',reason})}
+  }
+ }else{
+  results.push(...await Promise.allSettled(supported.map(async league=>({league,data:await window.furyOddsRequest(league,false)}))));
+ }
  if(sequence!==oddsRequestSequence)return;
  const errors=[],events=[];
- results.forEach((r,i)=>{if(r.status==='fulfilled'){const list=r.value.data?.events;if(Array.isArray(list))events.push(...list.map(e=>({...e,league:r.value.league})));else errors.push(`${oddsLeagueLabels[leagues[i]]}: invalid response`)}else errors.push(`${oddsLeagueLabels[leagues[i]]}: ${r.reason?.message||'request failed'}`)});
+ const warnings=[];
+ results.forEach((r,i)=>{if(r.status==='fulfilled'){const list=r.value.data?.events;if(Array.isArray(list)){events.push(...list.map(e=>({...e,league:r.value.league})));if(r.value.data?.stale)warnings.push(`${oddsLeagueLabels[r.value.league]}: last saved data retained (refresh failed)`);if(r.value.data?.warning)warnings.push(`${oddsLeagueLabels[r.value.league]}: ${r.value.data.warning}`)}else errors.push(`${oddsLeagueLabels[supported[i]]}: invalid response`)}else errors.push(`${oddsLeagueLabels[supported[i]]}: ${r.reason?.message||'request failed'}`)});
  const ranks={'DraftKings':0,'Bookmaker 19':0,'BetMGM':1,'Bookmaker 22':1,'FanDuel':2,'Bookmaker 23':2};
  const chosen=new Map();
  for(const e of events){
@@ -2032,7 +2046,7 @@ async function loadOddsSchedule(force=false){
  [...new Set(events.map(oddsDateKey).filter(Boolean))].sort().forEach(day=>{const o=document.createElement('option');o.value=day;o.textContent=new Date(day+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});oddsDateEl.appendChild(o)});
  oddsDateEl.value=[...oddsDateEl.options].some(o=>o.value===previous)?previous:'all';
  const lastSaved=results.filter(r=>r.status==='fulfilled').map(r=>r.value.data?.updated_at).filter(Boolean).sort().at(-1);
- oddsStatusEl.textContent=(errors.length?`Loaded ${events.length} fixtures. ${errors.join(' | ')}`:`${events.length} fixtures loaded from saved odds. Times shown in your browser's local timezone.`)+(lastSaved?` Last saved: ${new Date(lastSaved).toLocaleString()}.`:' Click Refresh odds to download new prices.');
+ oddsStatusEl.textContent=(errors.length?`Loaded ${events.length} fixtures. ${errors.join(' | ')}`:`${events.length} fixtures loaded from saved odds. Times shown in your browser's local timezone.`)+(lastSaved?` Last saved: ${new Date(lastSaved).toLocaleString()}.`:' Click Refresh odds to download new prices.')+(warnings.length?` ${warnings.join(' | ')}`:'');
  renderOddsSchedule();
  void furyEnsureModels(events).then(()=>{if(sequence===oddsRequestSequence)renderOddsSchedule()});
 }
