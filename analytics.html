@@ -487,6 +487,28 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
  #oddsTab .odds-summary{font-size:12px}
 }
 @media(max-width:370px){#oddsTab .odds-controls{grid-template-columns:minmax(0,1fr)}#oddsTab .odds-table tbody tr{padding:10px;gap:6px}}
+
+/* High Probability picks — navy surfaces with restrained green accents */
+#oddsTab .fury-pick{
+  position:relative;
+  background:linear-gradient(135deg,#182f48 0%,#14283e 70%,#112337 100%);
+  border:1px solid #36546b;
+  border-left:3px solid #43d69c;
+  box-shadow:0 5px 18px rgba(0,0,0,.13);
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+#oddsTab .fury-pick:hover{
+  border-color:#4d9c91;
+  border-left-color:#67e6b3;
+  box-shadow:0 9px 24px rgba(0,0,0,.22);
+  transform:translateY(-2px);
+}
+#oddsTab .fury-pick-title{color:#f5faff;font-size:14px;letter-spacing:.1px}
+#oddsTab .fury-pick-price{color:#6ed8ff;font-size:19px}
+#oddsTab .fury-pick-meta{color:#9fb7cb}
+#oddsTab .fury-pick-stat{background:#10263b;color:#bad3e6;border:1px solid #28465c}
+#oddsTab .fury-pick-stat.fury-pick-stat-model{color:#b1eddb;border-color:#2b685d;background:#143b3b}
+#oddsTab .fury-pick-stat.fury-pick-stat-ev{color:#8af1b9;border-color:#327c61;background:#14372f;font-weight:800}
 </style><style id="fury-odds-range-css">
 /* Compact min/max odds filter — no sorting */
 #oddsTab .odds-range-filter{display:flex;align-items:center;gap:10px;min-width:0;align-self:end;min-height:45px;padding:6px 12px;border:1px solid #2b3545;border-radius:13px;background:#1a222f;color:#a8c9e5}
@@ -780,7 +802,26 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
  .fury-mobile-empty{color:#b8c7d8;padding:14px}
 }
 </style>
-</head>
+<style id="fury-picks-crest-design">
+/* Premium selection cards: deep navy, emerald edge, large crests */
+#oddsTab .fury-pick-list{gap:14px}
+#oddsTab .fury-pick{position:relative;overflow:hidden;background:linear-gradient(125deg,#112b43 0%,#0a2036 100%);border:1px solid #2d5974;border-left:5px solid #28e3a1;border-radius:14px;padding:17px 18px;box-shadow:0 8px 24px #0003}
+#oddsTab .fury-pick:hover{border-color:#399a98;border-left-color:#39efad;box-shadow:0 12px 30px #0005;transform:translateY(-2px)}
+#oddsTab .fury-pick-hero{display:grid;grid-template-columns:74px minmax(0,1fr) 74px;align-items:center;gap:13px;min-height:108px}
+#oddsTab .fury-pick-crest{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 3px 8px #0006)}
+#oddsTab .fury-pick-crest-fallback{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;background:#173a51;border:1px solid #376c82;color:#d4f6ff;font-size:18px;font-weight:900}
+#oddsTab .fury-pick-info{min-width:0}
+#oddsTab .fury-pick-top{gap:12px;align-items:flex-start}
+#oddsTab .fury-pick-title{font:800 clamp(16px,1.8vw,22px) 'Outfit',sans-serif;color:#f4f9ff;line-height:1.25}
+#oddsTab .fury-pick-price{font:900 clamp(22px,2.2vw,29px) 'Outfit',sans-serif;color:#61d7ff;flex:none}
+#oddsTab .fury-pick-match{margin-top:8px;font-size:12px;color:#e1edf9;font-weight:650;overflow-wrap:anywhere}
+#oddsTab .fury-pick-match .fury-vs{color:#8eaec5;padding:0 8px}
+#oddsTab .fury-pick-meta{margin-top:7px;color:#9cb9d0;font-size:11px}
+#oddsTab .fury-pick-stats{margin-top:13px;gap:8px}
+#oddsTab .fury-pick-stat{background:#10273e;border:1px solid #34516b;border-radius:7px;color:#d5e7f4;font-size:11px;padding:6px 9px}
+#oddsTab .fury-pick-stat.fury-pick-stat-model,#oddsTab .fury-pick-stat.fury-pick-stat-ev{background:#102f32;border-color:#169e78;color:#63f1b0;font-weight:800}
+@media(max-width:600px){#oddsTab .fury-pick{padding:13px 10px}#oddsTab .fury-pick-hero{grid-template-columns:46px minmax(0,1fr) 46px;gap:8px;min-height:80px}#oddsTab .fury-pick-crest,#oddsTab .fury-pick-crest-fallback{width:45px;height:45px}#oddsTab .fury-pick-title{font-size:16px}#oddsTab .fury-pick-price{font-size:21px}#oddsTab .fury-pick-stat{font-size:10px;padding:5px 7px}}
+</style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
 <div class="fury-side-scroll">
@@ -1802,6 +1843,7 @@ async function furyLoadLogos(){
   furyLogoCatalog=catalog.leagues||{};furyLogoAliases=aliases.leagues||{};if(document.getElementById('teamsTab')&&!document.getElementById('teamsTab').classList.contains('hidden'))renderTeams();
   if(document.getElementById('playersTab')&&!document.getElementById('playersTab').classList.contains('hidden'))renderPlayers();
   furyRefreshVisibleCrests();
+  if(typeof renderOddsSchedule==='function' && typeof oddsScheduleData!=='undefined' && oddsScheduleData.length)renderOddsSchedule();
   if(document.getElementById('oddsTab')&&!document.getElementById('oddsTab').classList.contains('hidden'))renderOddsSchedule();
   if(document.getElementById('projectionHome')?.textContent&&document.getElementById('projectionPanel')){
    furySetProjectionCrest('projectionHomeIcon',document.getElementById('projectionHome').textContent);
@@ -2014,7 +2056,7 @@ function renderFuryPicks(events){
    continue;
   }
   const selections=[];
-  if(market!=='totals')selections.push(['Home win',e.h2h?.home,model.probs.home],['Draw',e.h2h?.draw,model.probs.draw],['Away win',e.h2h?.away,model.probs.away]);
+  if(market!=='totals')selections.push([`${e.home_team} Win`,e.h2h?.home,model.probs.home],['Draw',e.h2h?.draw,model.probs.draw],[`${e.away_team} Win`,e.h2h?.away,model.probs.away]);
   if(market!=='h2h'&&Number(e.totals?.point??2.5)===2.5)selections.push(['Over 2.5',e.totals?.over,model.probs.over],['Under 2.5',e.totals?.under,model.probs.under]);
   for(const [name,raw,prob] of selections){
    const price=oddsValidPrice(raw);if(price===null||!Number.isFinite(prob))continue;
@@ -2027,15 +2069,27 @@ function renderFuryPicks(events){
  host.replaceChildren();const shown=candidates.slice(0,20);
  for(const c of shown){
   const card=document.createElement('article');card.className='fury-pick';
+  const hero=document.createElement('div');hero.className='fury-pick-hero';
+  const pickCrest=(team)=>{
+   const logo=furyFindCrest(team,c.event.league);
+   if(logo){const img=document.createElement('img');img.className='fury-pick-crest';img.src=logo;img.alt=team+' crest';img.loading='lazy';img.onerror=()=>{const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();img.replaceWith(fallback)};return img}
+   const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();return fallback;
+  };
+  const info=document.createElement('div');info.className='fury-pick-info';
   const top=document.createElement('div');top.className='fury-pick-top';
   const name=document.createElement('span');name.className='fury-pick-title';name.textContent=c.name;
   const price=document.createElement('span');price.className='fury-pick-price';price.textContent=c.price.toFixed(2);top.append(name,price);
-  const fixture=document.createElement('div');fixture.className='fury-pick-meta';fixture.append(furyFixtureElement(c.event.home_team,c.event.away_team,c.event.league),document.createTextNode(` · ${oddsLeagueLabels[c.event.league]||c.event.league} · ${oddsKickoff(c.event)}`));
+  const match=document.createElement('div');match.className='fury-pick-match';
+  const vs=document.createElement('span');vs.className='fury-vs';vs.textContent='VS';
+  match.append(document.createTextNode(c.event.home_team+' '),vs,document.createTextNode(' '+c.event.away_team));
+  const fixture=document.createElement('div');fixture.className='fury-pick-meta';fixture.textContent=`${oddsLeagueLabels[c.event.league]||c.event.league} · ${oddsKickoff(c.event)}`;
+  info.append(top,match,fixture);
+  hero.append(pickCrest(c.event.home_team),info,pickCrest(c.event.away_team));
   const stats=document.createElement('div');stats.className='fury-pick-stats';
   for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,`Home/Away sample ${c.model.homeN}/${c.model.awayN}`,c.event.bookmaker||'Bookmaker unavailable']){
-   const item=document.createElement('span');item.className='fury-pick-stat';item.textContent=value;stats.appendChild(item);
+   const item=document.createElement('span');item.className='fury-pick-stat';if(value.startsWith('FURY model '))item.classList.add('fury-pick-stat-model');if(value.startsWith('Model EV '))item.classList.add('fury-pick-stat-ev');item.textContent=value;stats.appendChild(item);
   }
-  card.append(top,fixture,stats);host.appendChild(card);
+  card.append(hero,stats);host.appendChild(card);
  }
  count.textContent=`${events.length} fixtures evaluated · ${events.length-missing} model eligible · ${candidates.length} qualifying selections · showing ${shown.length} · ${missing} excluded (unsupported league: ${reasons.unsupported}, historical files unavailable: ${reasons.noFile}, team name unmatched: ${reasons.noTeam}, insufficient valid home/away games: ${reasons.lowSample})`;
  if(reasons.noFile){const errors=[...furyModelErrors].map(([league,error])=>`${oddsLeagueLabels[league]||league}: ${error}`);count.title=errors.join(' | ');console.warn('FURY historical file diagnostics:',errors);}else count.removeAttribute('title');
