@@ -30,7 +30,6 @@ function lockDashboard() {
   authorized = false;
   currentToken = null;
   sessionJSONCache.clear();
-  publicJSONCache.clear();
   document.body.classList.remove('fury-authorized');
   accountEmail.textContent = '';
   updateAccountMenu(false);
@@ -66,19 +65,15 @@ async function getToken() {
   return currentToken;
 }
 // Called by the dashboard's existing load(file) function.
-// Approved account required, but data files are served by GitHub Pages.
-// Public files are NOT protected by this client-side access check.
-const publicJSONCache = new Map();
 window.furyPrivateLoad = async (filename) => {
   if (!authorized) throw new Error('Not authorized');
-  if (!/^[a-z0-9_-]+\.json$/.test(filename)) throw new Error('Invalid data filename');
-  if (!publicJSONCache.has(filename)) {
-    const request = fetch(`./data/${filename}`, {cache:'default'})
-      .then(response => {if (!response.ok) throw new Error(`${filename}: HTTP ${response.status}`);return response.json();})
-      .catch(error => {publicJSONCache.delete(filename);throw error;});
-    publicJSONCache.set(filename, request);
+  const token = await getToken();
+  if (sessionJSONCache.has(filename)) {
+    const cached = sessionJSONCache.get(filename);
+    sessionJSONCache.delete(filename);
+    return cached;
   }
-  return publicJSONCache.get(filename);
+  return requestPrivateJSON(filename, token);
 };
 
 async function authorizeSession(session) {
@@ -93,7 +88,7 @@ async function authorizeSession(session) {
     const probeData = await requestPrivateJSON(probeFile, session.access_token);
     if (generation !== authGeneration) return;
     currentToken = session.access_token;
-    // Approval probe succeeded; statistics are now loaded from GitHub Pages.
+    sessionJSONCache.set(probeFile, probeData);
     authorized = true;
     accountEmail.textContent = session.user?.email || '';
     updateAccountMenu(true);
@@ -171,28 +166,11 @@ document.addEventListener('click', (event) => {
   if (accountMenu.open && !accountMenu.contains(event.target)) accountMenu.open = false;
 });
 
-// Reuse the existing approved Supabase session for FURY AI requests.
-window.furyAIAuth = async () => {
-  if (!client || !authorized) throw new Error('Please sign in with an approved FURY account.');
-  // Supabase may refresh an expired access token before the AI request.
-  let { data, error } = await client.auth.getSession();
-  if (error || !data.session) throw new Error('Your session expired. Please sign in again.');
-  if (data.session.expires_at && data.session.expires_at <= Math.floor(Date.now() / 1000) + 60) {
-    const refreshed = await client.auth.refreshSession();
-    if (refreshed.error || !refreshed.data.session) throw new Error('Session refresh failed. Please sign in again.');
-    data = refreshed.data;
-  }
-  const token = data.session.access_token;
-  if (!token) throw new Error('Missing login token. Please sign in again.');
-  currentToken = token;
-  return { token, url: SUPABASE_URL, apikey: SUPABASE_PUBLISHABLE_KEY };
-};
-
 // Protected odds endpoint. The secret API key lives only in Supabase Edge Function secrets.
-window.furyOddsRequest = async (league) => {
+window.furyOddsRequest = async (league, refresh = false) => {
   if (!authorized) throw new Error('Please sign in');
   const token = await getToken();
-  const response = await fetch(`${SUPABASE_URL}/functions/v1/fury-odds?league=${encodeURIComponent(league)}`, {
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/fury-odds?league=${encodeURIComponent(league)}${refresh ? "&refresh=1" : ""}`, {
     headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_PUBLISHABLE_KEY },
     cache: 'no-store'
   });
