@@ -1919,6 +1919,28 @@ const furyModelPending=new Map();
 const furyModelErrors=new Map();
 const furyProjectionCache=new Map();
 const furyNameAliases={manutd:'manchesterunited',manunited:'manchesterunited',mancity:'manchestercity',spurs:'tottenham',tottenhamhotspur:'tottenham',intermilan:'inter',internazionale:'inter',psg:'parissaintgermain',parissg:'parissaintgermain',bayernmunich:'bayernmunchen',bayernmunchen:'bayernmunchen',athleticbilbao:'athletic',athleticclub:'athletic',atleticodemadrid:'atleticomadrid',borussiamonchengladbach:'monchengladbach',borussiamgladbach:'monchengladbach',mgladbach:'monchengladbach',leedsunited:'leeds',newcastleunited:'newcastle',westhamunited:'westham',brightonandhovealbion:'brighton',nottinghamforest:'nottinghamforest',wolves:'wolverhamptonwanderers',sportinglisbon:'sportingcp',staderennais:'rennes',staderennes:'rennes',asmonaco:'monaco',losclille:'lille',losc:'lille',olympiquemarseille:'marseille',olympiquelyonnais:'lyon',bayer04leverkusen:'bayerleverkusen',tsghoffenheim:'hoffenheim',scfreiburg:'freiburg'};
+// Verified mappings against the five uploaded historical exports.
+Object.assign(furyNameAliases,{
+ athletic:'athbilbao',athleticbilbao:'athbilbao',athleticclub:'athbilbao',athbilbao:'athbilbao',
+ atleticomadrid:'athmadrid',atleticodemadrid:'athmadrid',athmadrid:'athmadrid',
+ racingsantander:'santander',
+ rayovallecano:'vallecano',realsociedad:'sociedad',realbetis:'betis',
+ celtavigo:'celta',deportivolacoruna:'lacoruna',
+ bayerleverkusen:'leverkusen',bayer04leverkusen:'leverkusen',
+ borussiadortmund:'dortmund',vfbstuttgart:'stuttgart',
+ borussiamonchengladbach:'mgladbach',borussiamgladbach:'mgladbach',monchengladbach:'mgladbach',
+ scfreiburg:'freiburg',tsghoffenheim:'hoffenheim',
+ nottmforest:'nottmforest',nottinghamforest:'nottmforest',
+ ipswichtown:'ipswich',coventrycity:'coventry',
+ brightonandhovealbion:'brighton',brightonhovealbion:'brighton',
+ losclille:'lille',losc:'lille',staderennais:'rennes',staderennes:'rennes',
+ lehavreac:'lehavre',ajauxerre:'auxerre',
+ parissaintgermain:'parissg',psg:'parissg',parissg:'parissg',
+ asroma:'roma',acmilan:'milan',intermilan:'inter',internazionale:'inter',
+ manchesterunited:'manchesterunited',manunited:'manchesterunited',manutd:'manchesterunited',
+ manchestercity:'manchestercity',mancity:'manchestercity',
+ newcastleunited:'newcastle',leedsunited:'leeds',tottenhamhotspur:'tottenham'
+});
 function furyTeamKey(value){
  let v=String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/\([^)]*\)\s*$/,'').replace(/[^a-z0-9]/g,'');
  if(furyNameAliases[v])return furyNameAliases[v];
@@ -1958,10 +1980,16 @@ function furyEstimateEvent(event){
  // Exact normalized matches only; never silently compare the wrong clubs.
  const home=rows.filter(r=>furyTeamKey(r.team)===homeKey&&String(r.venue||'').toLowerCase()==='home'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
  const away=rows.filter(r=>furyTeamKey(r.team)===awayKey&&String(r.venue||'').toLowerCase()==='away'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
- if(home.length<5||away.length<5)return null;
+ // Early-season exports contain only 5-8 games per team, usually 2-4 per venue.
+ // Require at least two at the relevant venue and five total for each club.
+ const homeAll=rows.filter(r=>furyTeamKey(r.team)===homeKey&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const awayAll=rows.filter(r=>furyTeamKey(r.team)===awayKey&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ if(home.length<2||away.length<2||homeAll.length<5||awayAll.length<5)return null;
  const mean=(list,key)=>list.reduce((total,r)=>total+Number(r[key]),0)/list.length;
- const eh=Math.max(.05,Math.min(5,(mean(home,'goals_for')+mean(away,'goals_against'))/2));
- const ea=Math.max(.05,Math.min(5,(mean(away,'goals_for')+mean(home,'goals_against'))/2));
+ // Shrink small venue samples toward each team's all-venue form.
+ const blended=(venue,all,key)=>.65*mean(venue,key)+.35*mean(all,key);
+ const eh=Math.max(.05,Math.min(5,(blended(home,homeAll,'goals_for')+blended(away,awayAll,'goals_against'))/2));
+ const ea=Math.max(.05,Math.min(5,(blended(away,awayAll,'goals_for')+blended(home,homeAll,'goals_against'))/2));
  const probs=poissonProjection(eh,ea);
  const result={probs,eh,ea,homeN:home.length,awayN:away.length};furyProjectionCache.set(cacheKey,result);return result;
 }
