@@ -447,6 +447,7 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
 .fury-pick-meta .fury-team-crest{width:30px;height:30px}
 .projection-team-icon img{width:90%;height:90%;object-fit:contain}
 @media(max-width:520px){.fury-team-crest{width:20px;height:20px}.fury-pick-meta .fury-team-crest{width:25px;height:25px}}
+.fury-team-line{display:inline-flex;align-items:center;gap:8px;vertical-align:middle;white-space:nowrap}.fury-team-line .fury-team-crest{width:23px;height:23px;object-fit:contain;flex-shrink:0}.team-rank-click .fury-team-line,.team-leader-name .fury-team-line{font:inherit;color:inherit}#teamRows td:first-child,#playerRows td:nth-child(2){white-space:nowrap}
 </style>
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
@@ -1069,7 +1070,7 @@ function renderTeamLast15(){
   recentGames.forEach(g=>{
     const gf=n(g.goals_for),ga=n(g.goals_against),outcome=gf===null||ga===null?'—':gf>ga?'W':gf<ga?'L':'D';
     const tr=row(body,[String(g.date||'').slice(0,10)||'—',g.venue||'—',g.opponent||'—',gf===null||ga===null?'—':gf+'–'+ga,outcome,f(g.corners_for,0),f(g.corners_against,0),f(g.shots_for,0),f(g.shots_against,0),f(g.shots_on_target_for,0),f(g.shots_on_target_against,0)]);
-    if(outcome!=='—'){const td=tr.children[4];td.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;td.appendChild(badge);}
+    furyDecorateCell(tr.cells[2],g.opponent);if(outcome!=='—'){const td=tr.children[4];td.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;td.appendChild(badge);}
   });
 }
 
@@ -1097,10 +1098,10 @@ function renderTeams(){
   $('teamRankTitle').textContent=(d==='against'?'Allowed':'Produced')+' · '+$('teamMetric').selectedOptions[0].textContent+' ranking';
   const rankBox=$('teamRanking');rankBox.replaceChildren();
   const valid=sorted.filter(r=>n(r[key(m)])!==null).slice(0,20),max=Math.max(0.1,...valid.map(r=>n(r[key(m)])));
-  valid.forEach((r,i)=>{const el=document.createElement('div');el.className='rank';const btn=document.createElement('button');btn.type='button';btn.className='team-rank-click';btn.textContent=(i+1)+'. '+r.team;btn.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()});const track=document.createElement('div');track.className='track';const bar=document.createElement('div');bar.className='fill';bar.style.width=(Math.max(0,n(r[key(m)])/max)*100)+'%';track.appendChild(bar);const val=document.createElement('span');val.className='right';val.textContent=f(r[key(m)]);el.append(btn,track,val);rankBox.appendChild(el)});
+  valid.forEach((r,i)=>{const el=document.createElement('div');el.className='rank';const btn=document.createElement('button');btn.type='button';btn.className='team-rank-click';btn.textContent=(i+1)+'. ';btn.appendChild(furyTeamElement(r.team,document.getElementById('leagueSelect')?.value));btn.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()});const track=document.createElement('div');track.className='track';const bar=document.createElement('div');bar.className='fill';bar.style.width=(Math.max(0,n(r[key(m)])/max)*100)+'%';track.appendChild(bar);const val=document.createElement('span');val.className='right';val.textContent=f(r[key(m)]);el.append(btn,track,val);rankBox.appendChild(el)});
   if(!valid.length)rankBox.textContent='No data available for this metric.';
   const leaders=$('teamLeaders');leaders.replaceChildren();
-  valid.slice(0,3).forEach((r,i)=>{const item=document.createElement('div');item.className='team-leader';const number=document.createElement('span');number.className='team-leader-num';number.textContent='#'+(i+1);const btn=document.createElement('button');btn.className='team-leader-name';btn.textContent=r.team;btn.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()});const value=document.createElement('span');value.className='team-leader-value';value.textContent=f(r[key(m)]);item.append(number,btn,value);leaders.appendChild(item)});
+  valid.slice(0,3).forEach((r,i)=>{const item=document.createElement('div');item.className='team-leader';const number=document.createElement('span');number.className='team-leader-num';number.textContent='#'+(i+1);const btn=document.createElement('button');btn.className='team-leader-name';btn.appendChild(furyTeamElement(r.team,document.getElementById('leagueSelect')?.value));btn.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()});const value=document.createElement('span');value.className='team-leader-value';value.textContent=f(r[key(m)]);item.append(number,btn,value);leaders.appendChild(item)});
   if(!valid.length)leaders.textContent='No league leaders available.';
   const focus=selected.length===1?selected[0]:null;
   $('teamSpotlightTitle').textContent=focus?focus.team+' · team profile':'League performance overview';
@@ -1113,7 +1114,7 @@ function renderTeams(){
     main.append(strong,comparison);const meter=document.createElement('div');meter.className='team-meter';const fill=document.createElement('div');fill.style.width=(value===null||baseline===null?'0':Math.min(100,Math.max(0,value/Math.max(0.1,baseline*1.6)*100)))+'%';meter.appendChild(fill);
     const note=document.createElement('div');note.className='hint';note.textContent=focus&&value!==null&&baseline!==null?(value>=baseline?'+':'')+f(value-baseline)+' vs league':'Selected teams average';card.append(title,main,meter,note);cards.appendChild(card);
   });
-  $('teamRows').replaceChildren();sorted.forEach(r=>{const tr=row($('teamRows'),[r.team,r.matches,f(r['corners_for_'+p]),f(r['corners_against_'+p]),f(r['shots_for_'+p]),f(r['shots_against_'+p]),f(r['shots_on_target_for_'+p]),f(r['shots_on_target_against_'+p]),f(r['goals_for_'+p]),f(r['goals_against_'+p]),n(r['corners_over_9.5_pct'])===null?'N/A':f(r['corners_over_9.5_pct'],1)+'%',f(r['xg_for_'+p]),f(r['xg_against_'+p]),f(r['xg_diff_'+p])]);tr.title='Click to inspect '+r.team;tr.style.cursor='pointer';tr.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()})});
+  $('teamRows').replaceChildren();sorted.forEach(r=>{const tr=row($('teamRows'),[r.team,r.matches,f(r['corners_for_'+p]),f(r['corners_against_'+p]),f(r['shots_for_'+p]),f(r['shots_against_'+p]),f(r['shots_on_target_for_'+p]),f(r['shots_on_target_against_'+p]),f(r['goals_for_'+p]),f(r['goals_against_'+p]),n(r['corners_over_9.5_pct'])===null?'N/A':f(r['corners_over_9.5_pct'],1)+'%',f(r['xg_for_'+p]),f(r['xg_against_'+p]),f(r['xg_diff_'+p])]);furyDecorateCell(tr.cells[0],r.team);tr.title='Click to inspect '+r.team;tr.style.cursor='pointer';tr.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()})});
   applyStatIndicators('teamRows',2,[3,5,7,9]);insertStatLegend('teamRows');renderTeamLast15();
 }
 
@@ -1129,7 +1130,7 @@ function renderPlayers(){
   const valid=logs.filter(x=>n(x[stat])!==null),hitRate=valid.length?100*valid.filter(x=>n(x[stat])>line).length/valid.length:null;
   const minutes=n(r.minutes),shotAvg=logs.length?sum(logs,'shots')/logs.length:null;
   const tr=row($('playerRows'),[r.player,r.team,r.matches,r.minutes,r.goals,r.assists,r.shots,f(r.xg),minutes>0?f(90*(n(r.shots)??0)/minutes):'N/A',minutes>0&&n(r.xg)!==null?f(90*n(r.xg)/minutes,2):'N/A',f(shotAvg),hitRate===null?'N/A':f(hitRate,0)+'% ('+valid.filter(x=>n(x[stat])>line).length+'/'+valid.length+')',r.sot??'N/A',f(r.xa),r.key_passes??'N/A',f(r.np_xg),minutes>0?f(90*(n(r.sot)??0)/minutes):'N/A']);
-  if(hitRate!==null){const cell=tr.cells[11],badge=document.createElement('span');badge.className='stat-indicator '+(hitRate>=80?'stat-hit-good':hitRate>=60?'stat-hit-above':hitRate>=40?'stat-hit-mid':'stat-hit-low');badge.textContent=cell.textContent;badge.title='Hit rate over '+line+' '+stat+' · '+valid.length+' games';cell.classList.add('fury-hit',hitRate>=80?'stat-hit-good':hitRate>=60?'stat-hit-above':hitRate>=40?'stat-hit-mid':'stat-hit-low');cell.replaceChildren(badge)}
+  furyDecorateCell(tr.cells[1],r.team);if(hitRate!==null){const cell=tr.cells[11],badge=document.createElement('span');badge.className='stat-indicator '+(hitRate>=80?'stat-hit-good':hitRate>=60?'stat-hit-above':hitRate>=40?'stat-hit-mid':'stat-hit-low');badge.textContent=cell.textContent;badge.title='Hit rate over '+line+' '+stat+' · '+valid.length+' games';cell.classList.add('fury-hit',hitRate>=80?'stat-hit-good':hitRate>=60?'stat-hit-above':hitRate>=40?'stat-hit-mid':'stat-hit-low');cell.replaceChildren(badge)}
   const link=document.createElement('button');link.className='pd-player-link';link.textContent=r.player;link.addEventListener('click',()=>{openPlayer(r);renderFuryPlayerTrend(r)});tr.cells[0].replaceChildren(link);
  });applyStatIndicators('playerRows',4,[/* none */], [11]);insertStatLegend('playerRows');furyApplyPlayerColumnSort();
 }
@@ -1225,7 +1226,7 @@ function renderCompleteMatchHistory(home,away){
       const hasScore=r.goals_for!==null&&r.goals_for!==undefined&&r.goals_against!==null&&r.goals_against!==undefined&&Number.isFinite(gf)&&Number.isFinite(ga);
       const outcome=hasScore?(gf>ga?'W':gf<ga?'L':'D'):'—';
       const tr=row(body,[String(r.date||'').slice(0,10)||'—',r.venue==='Home'?'H':r.venue==='Away'?'A':'—',formatValue(r.opponent),hasScore?(r.venue==='Away'?ga+'–'+gf:gf+'–'+ga):'—',outcome,formatValue(r.corners_for),formatValue(r.shots_for)]);
-      if(hasScore){const cell=tr.children[4];cell.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;cell.appendChild(badge);}
+      furyDecorateCell(tr.cells[2],r.opponent);if(hasScore){const cell=tr.children[4];cell.textContent='';const badge=document.createElement('span');badge.className='history-result '+(outcome==='W'?'win':outcome==='D'?'draw':'loss');badge.textContent=outcome;cell.appendChild(badge);}
     });
   }
 }
@@ -1795,7 +1796,9 @@ const furyLogoNormalize=name=>String(name||'').normalize('NFKD').replace(/[\u030
 async function furyLoadLogos(){
  try{
   const [catalog,aliases]=await Promise.all(['./data/team_logos.json','./data/team_logo_aliases.json'].map(async url=>{const response=await fetch(url,{cache:'force-cache'});if(!response.ok)throw Error(url+': HTTP '+response.status);return response.json()}));
-  furyLogoCatalog=catalog.leagues||{};furyLogoAliases=aliases.leagues||{};
+  furyLogoCatalog=catalog.leagues||{};furyLogoAliases=aliases.leagues||{};if(document.getElementById('teamsTab')&&!document.getElementById('teamsTab').classList.contains('hidden'))renderTeams();
+  if(document.getElementById('playersTab')&&!document.getElementById('playersTab').classList.contains('hidden'))renderPlayers();
+  furyRefreshVisibleCrests();
   if(document.getElementById('oddsTab')&&!document.getElementById('oddsTab').classList.contains('hidden'))renderOddsSchedule();
   if(document.getElementById('projectionHome')?.textContent&&document.getElementById('projectionPanel')&&!document.getElementById('projectionPanel').classList.contains('hidden')){
    furySetProjectionCrest('projectionHomeIcon',document.getElementById('projectionHome').textContent);
@@ -1827,6 +1830,16 @@ function furyTeamElement(team,league){
  const logo=furyFindCrest(team,league);
  if(logo){const img=document.createElement('img');img.className='fury-team-crest';img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>img.remove();span.appendChild(img)}
  const label=document.createElement('span');label.textContent=team||'—';span.appendChild(label);return span;
+}
+function furyDecorateCell(cell,team,league){
+ if(!cell||!team||cell.querySelector('.fury-team-line'))return;
+ cell.replaceChildren(furyTeamElement(team,league||document.getElementById('leagueSelect')?.value||''));
+}
+function furyRefreshVisibleCrests(){
+ const league=document.getElementById('leagueSelect')?.value||'';
+ document.querySelectorAll('#teamRows tr').forEach(tr=>{const cell=tr.cells[0];if(cell)furyDecorateCell(cell,cell.textContent,league)});
+ document.querySelectorAll('#playerRows tr').forEach(tr=>{const cell=tr.cells[1];if(cell)furyDecorateCell(cell,cell.textContent,league)});
+ for(const id of ['teamHistoryRows','allHomeHistory','allAwayHistory'])document.querySelectorAll('#'+id+' tr').forEach(tr=>{const cell=tr.cells[2];if(cell)furyDecorateCell(cell,cell.textContent,league)});
 }
 function furyFixtureElement(home,away,league){
  const wrapper=document.createElement('span');wrapper.className='fury-fixture-line';
