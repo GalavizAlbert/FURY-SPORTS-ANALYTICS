@@ -178,3 +178,19 @@ window.furyOddsRequest = async (league, refresh = false) => {
   if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
   return result;
 };
+
+
+/* Authentication bridge for FURY Match Analysis AI */
+window.furyAIAuth = async () => {
+  if (!client || !authorized) {
+    throw new Error('Please sign in with an approved FURY account.');
+  }
+
+  const token = await getToken();
+
+  return {
+    token,
+    url: SUPABASE_URL,
+    apikey: SUPABASE_PUBLISHABLE_KEY
+  };
+};
