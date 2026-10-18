@@ -1817,7 +1817,7 @@ window.startFuryDashboard = init;
 
 
 </script>
-<script src="./fury-auth.js" type="module"></script>
+<script src="./fury-auth.js?v=ai-auth-20261017-2" type="module"></script>
 <script>
 // The Odds API integration. Access tokens and bookmaker API key never enter the page source.
 let furyOddsGeneration=0;
@@ -2475,7 +2475,7 @@ async function furyAiRequest(payload){
  furyAiPending=true;button.disabled=true;button.textContent='Analyzing…';
  out.textContent='Reviewing available match data…';
  try{
-   if(typeof window.furyAIAuth!=='function')throw Error('Authentication module is not loaded. Upload the updated fury-auth.js file.');
+   if(typeof window.furyAIAuth!=='function')throw Error('AI authentication bridge missing. Verify fury-auth.js?v=ai-auth-20261017-2 is loaded (Network tab) and defines window.furyAIAuth; check Console for module errors.');
    const {token,url,apikey}=await window.furyAIAuth();
    if(!token || !url || !apikey)throw Error('Login credentials are unavailable. Please sign in again.');
    let response;
