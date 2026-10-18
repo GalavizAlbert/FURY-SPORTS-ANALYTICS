@@ -1834,7 +1834,7 @@ document.getElementById('analyzeButton')?.addEventListener('click',()=>{void fur
 const furyLogoLeagueKeys={laliga:'la_liga',la_liga:'la_liga',premier_league:'premier_league',bundesliga:'bundesliga',serie_a:'serie_a',ligue_1:'ligue_1',champions_league:'champions_league',eredivisie:'eredivisie',portugal_primeira_liga:'primeira_liga',primeira_liga:'primeira_liga',brasileirao_serie_a:'brasileirao_serie_a',championship:'championship',european_championship:'european_championship',world_cup:'world_cup',copa_libertadores:'copa_libertadores'};
 let furyLogoCatalog=null,furyLogoAliases=null;
 const furyLogoNormalize=name=>String(name||'').replace(/\s*\([^)]*\)\s*$/,'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
-const furyLogoNameAliases={'barcelona':'fc barcelona','brentford':'brentford fc','man city':'manchester city fc','man united':'manchester united fc','inter':'fc internazionale milano'};
+const furyLogoNameAliases={'barcelona':'fc barcelona','brentford':'brentford fc','man city':'manchester city fc','man united':'manchester united fc','inter':'fc internazionale milano','brighton':'brighton hove','brighton and hove albion':'brighton hove','brighton hove albion':'brighton hove','brighton & hove albion':'brighton hove'};
 function furyLogoTeamKey(name){const key=furyLogoNormalize(name);return furyLogoNormalize(furyLogoNameAliases[key]||key)}
 function furyLogoLeagueFromName(name){const m=String(name||'').match(/\(([^)]+)\)\s*$/);if(!m)return '';const k=furyLogoNormalize(m[1]);return {'la liga':'la_liga','premier league':'premier_league','bundesliga':'bundesliga','serie a':'serie_a','ligue 1':'ligue_1','champions league':'champions_league'}[k]||'';}
 async function furyLoadLogos(){
@@ -1851,8 +1851,15 @@ async function furyLoadLogos(){
   }
  }catch(err){console.warn('FURY team crests unavailable; displaying team names:',err.message)}
 }
+
+// Explicit crest IDs for provider short names; independent of the optional aliases JSON.
+const furyCrestOverrides={"sevilla":{"league":"la_liga","id":"559"},"racing santander":{"league":"la_liga","id":"5335"},"deportivo la coruna":{"league":"la_liga","id":"560"},"celta vigo":{"league":"la_liga","id":"558"},"hull":{"league":"premier_league","id":"322"},"ipswich":{"league":"premier_league","id":"349"},"leeds":{"league":"premier_league","id":"341"},"manchester united":{"league":"premier_league","id":"66"},"coventry":{"league":"premier_league","id":"1076"},"nottingham forest":{"league":"premier_league","id":"351"},"manchester city":{"league":"premier_league","id":"65"},"bayern munich":{"league":"bundesliga","id":"5"},"werder bremen":{"league":"bundesliga","id":"12"},"fc cologne":{"league":"bundesliga","id":"1"},"mainz 05":{"league":"bundesliga","id":"15"},"schalke 04":{"league":"bundesliga","id":"6"},"paderborn":{"league":"bundesliga","id":"29"},"borussia m gladbach":{"league":"bundesliga","id":"18"},"como":{"league":"serie_a","id":"7397"},"venezia":{"league":"serie_a","id":"454"},"rennes":{"league":"ligue_1","id":"529"},"lens":{"league":"ligue_1","id":"546"},"angers":{"league":"ligue_1","id":"532"},"sevilla fc":{"league":"la_liga","id":"559"},"racing de santander":{"league":"la_liga","id":"5335"},"deportivo":{"league":"la_liga","id":"560"},"celta de vigo":{"league":"la_liga","id":"558"},"hull city":{"league":"premier_league","id":"322"},"ipswich town":{"league":"premier_league","id":"349"},"leeds united":{"league":"premier_league","id":"341"},"man united":{"league":"premier_league","id":"66"},"man utd":{"league":"premier_league","id":"66"},"coventry city":{"league":"premier_league","id":"1076"},"nottm forest":{"league":"premier_league","id":"351"},"nott m forest":{"league":"premier_league","id":"351"},"man city":{"league":"premier_league","id":"65"},"bayern munchen":{"league":"bundesliga","id":"5"},"fc koln":{"league":"bundesliga","id":"1"},"1 fc koln":{"league":"bundesliga","id":"1"},"mainz":{"league":"bundesliga","id":"15"},"fsv mainz":{"league":"bundesliga","id":"15"},"schalke":{"league":"bundesliga","id":"6"},"sc paderborn":{"league":"bundesliga","id":"29"},"borussia monchengladbach":{"league":"bundesliga","id":"18"},"mgladbach":{"league":"bundesliga","id":"18"},"m gladbach":{"league":"bundesliga","id":"18"},"como 1907":{"league":"serie_a","id":"7397"},"stade rennes":{"league":"ligue_1","id":"529"},"stade rennais":{"league":"ligue_1","id":"529"},"racing lens":{"league":"ligue_1","id":"546"},"angers sco":{"league":"ligue_1","id":"532"}};
 function furyFindCrest(team,league){
- if(!furyLogoCatalog||!team)return '';
+ const override=furyCrestOverrides[furyLogoNormalize(team)];
+ if(override){const record=furyLogoCatalog?.[override.league]?.[override.id];if(record?.logo)return record.logo;}
+ if(!team)return '';
+ const emergency=furyCrestOverrides[furyLogoNormalize(team)];
+ if(!furyLogoCatalog)return emergency?'https://crests.football-data.org/'+emergency.id+'.png':'';
  const normalized=furyLogoTeamKey(team),key=furyLogoLeagueFromName(team)||furyLogoLeagueKeys[league]||league;
  const pools=key&&furyLogoCatalog[key]?[[key,furyLogoCatalog[key]]]:Object.entries(furyLogoCatalog);
  const lookup=(k,records)=>{
@@ -1873,7 +1880,7 @@ function furyFindCrest(team,league){
 function furyTeamElement(team,league){
  const span=document.createElement('span');span.className='fury-team-line';
  const logo=furyFindCrest(team,league);
- if(logo){const img=document.createElement('img');img.className='fury-team-crest';img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>img.remove();span.appendChild(img)}
+ if(logo){const img=document.createElement('img');img.className='fury-team-crest';img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>{const o=furyCrestOverrides[furyLogoNormalize(team)];if(o&&!img.dataset.remote){img.dataset.remote='1';img.src='https://crests.football-data.org/'+o.id+'.png'}else img.remove()};span.appendChild(img)}
  const label=document.createElement('span');label.textContent=team||'—';span.appendChild(label);return span;
 }
 function furyDecorateCell(cell,team,league){
@@ -2072,7 +2079,7 @@ function renderFuryPicks(events){
   const hero=document.createElement('div');hero.className='fury-pick-hero';
   const pickCrest=(team)=>{
    const logo=furyFindCrest(team,c.event.league);
-   if(logo){const img=document.createElement('img');img.className='fury-pick-crest';img.src=logo;img.alt=team+' crest';img.loading='lazy';img.onerror=()=>{const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();img.replaceWith(fallback)};return img}
+   if(logo){const img=document.createElement('img');img.className='fury-pick-crest';img.src=logo;img.alt=team+' crest';img.loading='lazy';img.onerror=()=>{const o=furyCrestOverrides[furyLogoNormalize(team)];if(o&&!img.dataset.remote){img.dataset.remote='1';img.src='https://crests.football-data.org/'+o.id+'.png';return;}const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();img.replaceWith(fallback)};return img}
    const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();return fallback;
   };
   const info=document.createElement('div');info.className='fury-pick-info';
