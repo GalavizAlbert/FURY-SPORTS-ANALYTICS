@@ -448,6 +448,15 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
 .projection-team-icon img{width:90%;height:90%;object-fit:contain}
 @media(max-width:520px){.fury-team-crest{width:20px;height:20px}.fury-pick-meta .fury-team-crest{width:25px;height:25px}}
 .fury-team-line{display:inline-flex;align-items:center;gap:8px;vertical-align:middle;white-space:nowrap}.fury-team-line .fury-team-crest{width:23px;height:23px;object-fit:contain;flex-shrink:0}.team-rank-click .fury-team-line,.team-leader-name .fury-team-line{font:inherit;color:inherit}#teamRows td:first-child,#playerRows td:nth-child(2){white-space:nowrap}
+
+/* Click-through picks and selection context */
+#oddsTab .fury-pick{cursor:pointer;transition:transform .18s ease,filter .18s ease}
+#oddsTab .fury-pick:hover{transform:translateY(-2px);filter:brightness(1.13)}
+#oddsTab .fury-pick:focus-visible{outline:3px solid #61d7ff;outline-offset:3px}
+.fury-selected-pick{margin:0 0 18px;padding:18px 20px;border:1px solid #17bd96;border-left:5px solid #21e8ad;border-radius:12px;background:#102b44;color:#eaf7ff}
+.fury-selected-pick strong{font-size:21px;color:#61d7ff}.fury-selected-pick .fury-selected-stats{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.fury-selected-pick .fury-selected-stats span{padding:6px 10px;border:1px solid #34516b;border-radius:7px;font-size:12px}
+.fury-selected-pick .fury-selected-sub{color:#b2c9db;margin-top:6px;font-size:13px}
 </style>
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
@@ -509,6 +518,22 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
 #oddsTab .fury-pick-stat{background:#10263b;color:#bad3e6;border:1px solid #28465c}
 #oddsTab .fury-pick-stat.fury-pick-stat-model{color:#b1eddb;border-color:#2b685d;background:#143b3b}
 #oddsTab .fury-pick-stat.fury-pick-stat-ev{color:#8af1b9;border-color:#327c61;background:#14372f;font-weight:800}
+
+/* Animated pick emphasis — only High Probability selection cards */
+@keyframes furyPickAccentPulse {
+  0%,100% {border-left-color:#20e3a0;box-shadow:0 5px 18px rgba(0,0,0,.13),inset 4px 0 13px rgba(32,227,160,.04)}
+  50% {border-left-color:#72e6ff;box-shadow:0 5px 22px rgba(25,181,237,.19),inset 4px 0 18px rgba(40,203,243,.13)}
+}
+@keyframes furyPickTitleGlow {
+  0%,100% {color:#f5faff;text-shadow:0 0 0 transparent}
+  50% {color:#6fe5ff;text-shadow:0 0 13px rgba(63,204,255,.52)}
+}
+#oddsTab .fury-pick {animation:furyPickAccentPulse 3.2s ease-in-out infinite}
+#oddsTab .fury-pick-title {animation:furyPickTitleGlow 3.2s ease-in-out infinite}
+#oddsTab .fury-pick:nth-child(2n),#oddsTab .fury-pick:nth-child(2n) .fury-pick-title {animation-delay:-1.6s}
+@media(prefers-reduced-motion:reduce){
+  #oddsTab .fury-pick,#oddsTab .fury-pick-title{animation:none!important}
+}
 </style><style id="fury-odds-range-css">
 /* Compact min/max odds filter — no sorting */
 #oddsTab .odds-range-filter{display:flex;align-items:center;gap:10px;min-width:0;align-self:end;min-height:45px;padding:6px 12px;border:1px solid #2b3545;border-radius:13px;background:#1a222f;color:#a8c9e5}
@@ -2042,6 +2067,37 @@ function furyEstimateEvent(event){
  const probs=poissonProjection(eh,ea);
  const result={probs,eh,ea,homeN:home.length,awayN:away.length};furyProjectionCache.set(cacheKey,result);return result;
 }
+function furyOpenSelectedPick(c){
+ const e=c.event;
+ showTab('match');
+ const homeLeague=document.getElementById('homeLeague'),awayLeague=document.getElementById('awayLeague');
+ const homeSelect=document.getElementById('homeTeam'),awaySelect=document.getElementById('awayTeam');
+ const matchTeam=(select,name)=>{
+  const key=typeof furyTeamKey==='function'?furyTeamKey(name):String(name).toLowerCase();
+  return [...select.options].find(o=>(typeof furyTeamKey==='function'?furyTeamKey(o.value):o.value.toLowerCase())===key)
+    || [...select.options].find(o=>typeof furyOddsMatch==='function'&&furyOddsMatch(o.value,name));
+ };
+ if([...homeLeague.options].some(o=>o.value===e.league)&&[...awayLeague.options].some(o=>o.value===e.league)){
+  homeLeague.value=e.league;awayLeague.value=e.league;
+  refreshCrossLeagueTeams();
+  const h=matchTeam(homeSelect,e.home_team),a=matchTeam(awaySelect,e.away_team);
+  if(h)homeSelect.value=h.value;
+  if(a)awaySelect.value=a.value;
+  if(h&&a){document.getElementById('analyzeButton')?.click();}
+ }
+ let banner=document.getElementById('furySelectedPick');
+ if(!banner){banner=document.createElement('div');banner.id='furySelectedPick';banner.className='fury-selected-pick';
+  document.getElementById('matchTab')?.insertBefore(banner,document.getElementById('matchTab').firstChild);}
+ banner.replaceChildren();
+ const heading=document.createElement('strong');heading.textContent=`Selected pick: ${c.name} · ${c.price.toFixed(2)}`;
+ const sub=document.createElement('div');sub.className='fury-selected-sub';sub.textContent=`${e.home_team} vs ${e.away_team} · ${oddsLeagueLabels[e.league]||e.league} · ${oddsKickoff(e)}`;
+ const stats=document.createElement('div');stats.className='fury-selected-stats';
+ for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,e.bookmaker||'Bookmaker unavailable']){
+  const el=document.createElement('span');el.textContent=value;stats.appendChild(el);
+ }
+ banner.append(heading,sub,stats);
+ banner.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function renderFuryPicks(events){
  const host=document.getElementById('furyPickList'),count=document.getElementById('furyPickCount');if(!host)return;
  const threshold=(Number(document.getElementById('pickMinProbability').value)||0)/100;
@@ -2096,7 +2152,12 @@ function renderFuryPicks(events){
   for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,`Home/Away sample ${c.model.homeN}/${c.model.awayN}`,c.event.bookmaker||'Bookmaker unavailable']){
    const item=document.createElement('span');item.className='fury-pick-stat';if(value.startsWith('FURY model '))item.classList.add('fury-pick-stat-model');if(value.startsWith('Model EV '))item.classList.add('fury-pick-stat-ev');item.textContent=value;stats.appendChild(item);
   }
-  card.append(hero,stats);host.appendChild(card);
+  card.append(hero,stats);
+  card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`Analyze ${c.event.home_team} versus ${c.event.away_team}, selection ${c.name}`);
+  const openPick=()=>furyOpenSelectedPick(c);
+  card.addEventListener('click',openPick);
+  card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openPick();}});
+  host.appendChild(card);
  }
  count.textContent=`${events.length} fixtures evaluated · ${events.length-missing} model eligible · ${candidates.length} qualifying selections · showing ${shown.length} · ${missing} excluded (unsupported league: ${reasons.unsupported}, historical files unavailable: ${reasons.noFile}, team name unmatched: ${reasons.noTeam}, insufficient valid home/away games: ${reasons.lowSample})`;
  if(reasons.noFile){const errors=[...furyModelErrors].map(([league,error])=>`${oddsLeagueLabels[league]||league}: ${error}`);count.title=errors.join(' | ');console.warn('FURY historical file diagnostics:',errors);}else count.removeAttribute('title');
