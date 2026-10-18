@@ -33,6 +33,39 @@
 @media(max-width:850px){.fury-scanner-hero{width:280px;flex-basis:280px}.fury-scanner{padding:12px}.fury-scanner-stage{height:132px}}
 @media(max-width:600px){.fury-scanner-hero{width:min(100%,330px);min-height:0;flex-basis:auto;margin:14px auto 0}.fury-scanner-stage{height:145px}}
 @media(prefers-reduced-motion:reduce){.fury-scanner-ring,.fury-scanner-beam,.fury-scanner-progress span,.fury-scanner-live::before{animation:none!important}.fury-scanner-beam{top:50%}.fury-scanner-progress span{width:100%}}
+
+/* FURY Match Scanner: responsive hero layout (overrides legacy emblem dimensions) */
+.hero > div:first-child{min-width:0;flex:1 1 0}
+.fury-hero-art.fury-scanner-hero{width:min(350px,100%);height:auto;min-height:0;flex:0 1 350px;max-width:100%;margin-left:auto;display:block;align-self:center}
+.fury-scanner-hero .fury-scanner{width:100%;min-width:0}
+.fury-scanner-hero .fury-scanner-stage{width:100%;min-width:0}
+.fury-scanner-hero .fury-scanner-pitch{max-width:90%;height:auto}
+.fury-scanner-hero .fury-scanner-top,.fury-scanner-hero .fury-scanner-bottom{min-width:0}
+@media(max-width:850px){
+ .hero{align-items:center;gap:20px}
+ .fury-hero-art.fury-scanner-hero{flex:0 1 290px;width:min(290px,100%)}
+}
+@media(max-width:650px){
+ .hero{display:flex;flex-direction:column;align-items:stretch;gap:16px;padding:27px 0 24px}
+ .hero > div:first-child{width:100%;flex:none}
+ .hero h1{font-size:clamp(30px,8vw,43px);line-height:1.1;margin:10px 0 12px}
+ .hero p{font-size:14px;line-height:1.55}
+ .fury-hero-art.fury-scanner-hero{width:100%;max-width:440px;flex:none;align-self:center;margin:0 auto;height:auto;min-height:0}
+ .fury-scanner-hero .fury-scanner{padding:12px 13px;border-radius:15px}
+ .fury-scanner-hero .fury-scanner-stage{height:clamp(128px,39vw,165px);margin:9px 0 8px}
+ .fury-scanner-hero .fury-scanner-pitch{width:min(260px,83%);height:auto}
+ .fury-scanner-hero .fury-scanner-heading{font-size:10px;letter-spacing:1px}
+ .fury-scanner-hero .fury-scanner-status{font-size:9px;min-width:0;flex:1}
+ .fury-scanner-hero .fury-scanner-progress{width:65px;flex-basis:65px}
+ .fury-scanner-hero .fury-scanner-demo{font-size:8px;margin-top:7px}
+}
+@media(max-width:380px){
+ .fury-scanner-hero .fury-scanner-heading{font-size:9px;letter-spacing:.5px}
+ .fury-scanner-hero .fury-scanner-live{font-size:8px}
+ .fury-scanner-hero .fury-scanner-stage{height:125px}
+ .fury-scanner-hero .fury-scanner-ring{width:78px;height:78px}
+ .fury-scanner-hero .fury-scanner-ball{width:44px;height:44px}
+}
 </style><style>
 /* Shared FURY portal header, identical across all pages */
 .fury-portal-header{width:100%;max-width:1450px;margin:0 auto;padding:0 30px!important;height:92px!important;min-height:92px;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px;border-bottom:1px solid #24364b!important;background:transparent!important;box-sizing:border-box;font-family:'Outfit',system-ui,sans-serif;position:relative;z-index:20}
