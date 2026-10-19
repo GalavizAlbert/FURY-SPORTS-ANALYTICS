@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>FURY Sports Analytics</title>
-<link href="fury-portal-mark.svg?v=6" rel="icon" type="image/svg+xml"/>
-<link href="favicon.ico?v=6" rel="icon" sizes="any"/>
-<link href="fury-portal-mark.png?v=6" rel="icon" type="image/png"/>
-<link href="apple-touch-icon.png?v=6" rel="apple-touch-icon" sizes="180x180"/>
+<link href="favicon.ico?v=5" rel="icon" sizes="any"/>
+<link href="fury-icon.png?v=5" rel="icon" type="image/png"/>
+<link href="apple-touch-icon.png?v=5" rel="apple-touch-icon" sizes="180x180"/>
 <meta content="FURY Sports AI" name="apple-mobile-web-app-title"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet">
@@ -449,15 +448,6 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
 .projection-team-icon img{width:90%;height:90%;object-fit:contain}
 @media(max-width:520px){.fury-team-crest{width:20px;height:20px}.fury-pick-meta .fury-team-crest{width:25px;height:25px}}
 .fury-team-line{display:inline-flex;align-items:center;gap:8px;vertical-align:middle;white-space:nowrap}.fury-team-line .fury-team-crest{width:23px;height:23px;object-fit:contain;flex-shrink:0}.team-rank-click .fury-team-line,.team-leader-name .fury-team-line{font:inherit;color:inherit}#teamRows td:first-child,#playerRows td:nth-child(2){white-space:nowrap}
-
-/* Click-through picks and selection context */
-#oddsTab .fury-pick{cursor:pointer;transition:transform .18s ease,filter .18s ease}
-#oddsTab .fury-pick:hover{transform:translateY(-2px);filter:brightness(1.13)}
-#oddsTab .fury-pick:focus-visible{outline:3px solid #61d7ff;outline-offset:3px}
-.fury-selected-pick{margin:0 0 18px;padding:18px 20px;border:1px solid #17bd96;border-left:5px solid #21e8ad;border-radius:12px;background:#102b44;color:#eaf7ff}
-.fury-selected-pick strong{font-size:21px;color:#61d7ff}.fury-selected-pick .fury-selected-stats{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
-.fury-selected-pick .fury-selected-stats span{padding:6px 10px;border:1px solid #34516b;border-radius:7px;font-size:12px}
-.fury-selected-pick .fury-selected-sub{color:#b2c9db;margin-top:6px;font-size:13px}
 </style>
 <style>
 .fury-extra{margin:18px 0;padding:18px;border:1px solid #28465b;border-radius:14px;background:linear-gradient(135deg,#101d30,#0b1725)}
@@ -497,44 +487,6 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
  #oddsTab .odds-summary{font-size:12px}
 }
 @media(max-width:370px){#oddsTab .odds-controls{grid-template-columns:minmax(0,1fr)}#oddsTab .odds-table tbody tr{padding:10px;gap:6px}}
-
-/* High Probability picks — navy surfaces with restrained green accents */
-#oddsTab .fury-pick{
-  position:relative;
-  background:linear-gradient(135deg,#182f48 0%,#14283e 70%,#112337 100%);
-  border:1px solid #36546b;
-  border-left:3px solid #43d69c;
-  box-shadow:0 5px 18px rgba(0,0,0,.13);
-  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
-}
-#oddsTab .fury-pick:hover{
-  border-color:#4d9c91;
-  border-left-color:#67e6b3;
-  box-shadow:0 9px 24px rgba(0,0,0,.22);
-  transform:translateY(-2px);
-}
-#oddsTab .fury-pick-title{color:#f5faff;font-size:14px;letter-spacing:.1px}
-#oddsTab .fury-pick-price{color:#6ed8ff;font-size:19px}
-#oddsTab .fury-pick-meta{color:#9fb7cb}
-#oddsTab .fury-pick-stat{background:#10263b;color:#bad3e6;border:1px solid #28465c}
-#oddsTab .fury-pick-stat.fury-pick-stat-model{color:#b1eddb;border-color:#2b685d;background:#143b3b}
-#oddsTab .fury-pick-stat.fury-pick-stat-ev{color:#8af1b9;border-color:#327c61;background:#14372f;font-weight:800}
-
-/* Animated pick emphasis — only High Probability selection cards */
-@keyframes furyPickAccentPulse {
-  0%,100% {border-left-color:#20e3a0;box-shadow:0 5px 18px rgba(0,0,0,.13),inset 4px 0 13px rgba(32,227,160,.04)}
-  50% {border-left-color:#72e6ff;box-shadow:0 5px 22px rgba(25,181,237,.19),inset 4px 0 18px rgba(40,203,243,.13)}
-}
-@keyframes furyPickTitleGlow {
-  0%,100% {color:#f5faff;text-shadow:0 0 0 transparent}
-  50% {color:#6fe5ff;text-shadow:0 0 13px rgba(63,204,255,.52)}
-}
-#oddsTab .fury-pick {animation:furyPickAccentPulse 3.2s ease-in-out infinite}
-#oddsTab .fury-pick-title {animation:furyPickTitleGlow 3.2s ease-in-out infinite}
-#oddsTab .fury-pick:nth-child(2n),#oddsTab .fury-pick:nth-child(2n) .fury-pick-title {animation-delay:-1.6s}
-@media(prefers-reduced-motion:reduce){
-  #oddsTab .fury-pick,#oddsTab .fury-pick-title{animation:none!important}
-}
 </style><style id="fury-odds-range-css">
 /* Compact min/max odds filter — no sorting */
 #oddsTab .odds-range-filter{display:flex;align-items:center;gap:10px;min-width:0;align-self:end;min-height:45px;padding:6px 12px;border:1px solid #2b3545;border-radius:13px;background:#1a222f;color:#a8c9e5}
@@ -828,25 +780,8 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
  .fury-mobile-empty{color:#b8c7d8;padding:14px}
 }
 </style>
-<style id="fury-picks-crest-design">
-/* Premium selection cards: deep navy, emerald edge, large crests */
-#oddsTab .fury-pick-list{gap:14px}
-#oddsTab .fury-pick{position:relative;overflow:hidden;background:linear-gradient(125deg,#112b43 0%,#0a2036 100%);border:1px solid #2d5974;border-left:5px solid #28e3a1;border-radius:14px;padding:17px 18px;box-shadow:0 8px 24px #0003}
-#oddsTab .fury-pick:hover{border-color:#399a98;border-left-color:#39efad;box-shadow:0 12px 30px #0005;transform:translateY(-2px)}
-#oddsTab .fury-pick-hero{display:grid;grid-template-columns:74px minmax(0,1fr) 74px;align-items:center;gap:13px;min-height:108px}
-#oddsTab .fury-pick-crest{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 3px 8px #0006)}
-#oddsTab .fury-pick-crest-fallback{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;background:#173a51;border:1px solid #376c82;color:#d4f6ff;font-size:18px;font-weight:900}
-#oddsTab .fury-pick-info{min-width:0}
-#oddsTab .fury-pick-top{gap:12px;align-items:flex-start}
-#oddsTab .fury-pick-title{font:800 clamp(16px,1.8vw,22px) 'Outfit',sans-serif;color:#f4f9ff;line-height:1.25}
-#oddsTab .fury-pick-price{font:900 clamp(22px,2.2vw,29px) 'Outfit',sans-serif;color:#61d7ff;flex:none}
-#oddsTab .fury-pick-match{margin-top:8px;font-size:12px;color:#e1edf9;font-weight:650;overflow-wrap:anywhere}
-#oddsTab .fury-pick-match .fury-vs{color:#8eaec5;padding:0 8px}
-#oddsTab .fury-pick-meta{margin-top:7px;color:#9cb9d0;font-size:11px}
-#oddsTab .fury-pick-stats{margin-top:13px;gap:8px}
-#oddsTab .fury-pick-stat{background:#10273e;border:1px solid #34516b;border-radius:7px;color:#d5e7f4;font-size:11px;padding:6px 9px}
-#oddsTab .fury-pick-stat.fury-pick-stat-model,#oddsTab .fury-pick-stat.fury-pick-stat-ev{background:#102f32;border-color:#169e78;color:#63f1b0;font-weight:800}
-@media(max-width:600px){#oddsTab .fury-pick{padding:13px 10px}#oddsTab .fury-pick-hero{grid-template-columns:46px minmax(0,1fr) 46px;gap:8px;min-height:80px}#oddsTab .fury-pick-crest,#oddsTab .fury-pick-crest-fallback{width:45px;height:45px}#oddsTab .fury-pick-title{font-size:16px}#oddsTab .fury-pick-price{font-size:21px}#oddsTab .fury-pick-stat{font-size:10px;padding:5px 7px}}
+<style id="fury-team-benchmark-style">
+#teamsTab .team-spotlight{min-width:0}#teamsTab .team-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#teamsTab .fury-team-identity{display:flex;align-items:center;gap:20px;padding:16px 18px;margin:14px 0 18px;background:linear-gradient(115deg,#102c45,#0a1c30);border:1px solid #23455e;border-radius:18px;min-height:126px;color:#a8c6d9}#teamsTab .fury-identity-crest{width:94px;height:94px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:20px;background:#112f49;font-size:27px;font-weight:900;color:#53c8ff}#teamsTab .fury-identity-crest img{width:80px;height:80px;object-fit:contain}#teamsTab .fury-identity-info span{font-size:10px;font-weight:850;letter-spacing:1.5px;color:#45bdf1}#teamsTab .fury-identity-info h3{font-size:26px;margin:6px 0;color:#f3f9ff}#teamsTab .fury-identity-info p{font-size:12px;color:#99b9d0;margin:0}#teamsTab .fury-benchmark{padding:17px;border-radius:16px;background:linear-gradient(150deg,#11283c,#0a1a2a);border:1px solid #28435a;min-width:0;box-shadow:0 8px 18px #0002}#teamsTab .fury-benchmark.good{border-color:#1b735f}#teamsTab .fury-benchmark.bad{border-color:#8b3c50}#teamsTab .fury-benchmark-top{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px;color:#b7cee0;font-weight:700}#teamsTab .fury-benchmark-flag{font-size:9px;letter-spacing:.5px;font-weight:850;white-space:nowrap;color:#a8bfd0}#teamsTab .fury-benchmark.good .fury-benchmark-flag,#teamsTab .fury-benchmark.good .fury-benchmark-number,#teamsTab .fury-benchmark.good .fury-benchmark-delta{color:#43dfa9}#teamsTab .fury-benchmark.bad .fury-benchmark-flag,#teamsTab .fury-benchmark.bad .fury-benchmark-number,#teamsTab .fury-benchmark.bad .fury-benchmark-delta{color:#ff7187}#teamsTab .fury-benchmark-number{font-size:31px;font-weight:850;letter-spacing:-1px;margin:12px 0 3px;color:#e9f6ff;font-variant-numeric:tabular-nums}#teamsTab .fury-benchmark-league{font-size:11px;color:#8aaec7}#teamsTab .fury-benchmark-track{height:6px;border-radius:99px;background:#29435b;overflow:hidden;margin:14px 0 10px}#teamsTab .fury-benchmark-fill{height:100%;border-radius:99px;background:#6b91aa}#teamsTab .fury-benchmark.good .fury-benchmark-fill{background:#38d9a1}#teamsTab .fury-benchmark.bad .fury-benchmark-fill{background:#f26c86}#teamsTab .fury-benchmark-delta{font-size:11px;font-weight:750;color:#abc4d7}@media(max-width:620px){#teamsTab .team-compare{grid-template-columns:1fr}#teamsTab .fury-identity-crest{width:76px;height:76px}#teamsTab .fury-identity-crest img{width:66px;height:66px}#teamsTab .fury-identity-info h3{font-size:21px}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -886,10 +821,10 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
 <div class="fury-legacy-back-link" style="margin:8px 0 16px"><a href="./index.html" style="color:#66cfff;text-decoration:none;font-weight:750">← All tools</a></div><nav aria-label="Dashboard sections" class="tabs"><button class="active" data-tab="teams">Team Statistics</button><button data-tab="players">Player Statistics</button><button data-tab="match">Match Analysis</button><button data-tab="odds">Odds &amp; Schedule</button><a href="./league_rankings.html" style="display:inline-flex;align-items:center;padding:10px 14px;color:#43baf6;font-weight:800;text-decoration:none">League Rankings ↗</a></nav>
 <section id="teamsTab">
 <div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / TEAM INTELLIGENCE</div><h2>Team Performance Center</h2><p>Explore league leaders, compare team trends, and analyze attacking and defensive performance across your selected league.</p><span class="player-hero-tag">● Five leagues · Season 2026–27</span></div>
-<div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div aria-label="Team statistics venue" class="team-venue-bar" role="group"><span>Match venue</span><button aria-pressed="true" class="team-venue-btn active" data-venue="all" type="button">All</button><button aria-pressed="false" class="team-venue-btn" data-venue="home" type="button">Home</button><button aria-pressed="false" class="team-venue-btn" data-venue="away" type="button">Away</button><span class="hint" id="teamVenueNote">All matches</span></div><div class="controls"><label class="fury-context-league">League<select id="furyTeamLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="teamFilter"><option value="">All teams</option></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input autocomplete="off" id="teamSearch" placeholder="Search club name"/></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% uses the selected venue across the full season.</p></div>
+<div class="panel player-filter-panel team-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">TEAM INTELLIGENCE</span><h3>Explore team data</h3></div><span class="filter-chip">FILTERS</span></div><div aria-label="Team statistics venue" class="team-venue-bar" role="group"><span>Match venue</span><button aria-pressed="true" class="team-venue-btn active" data-venue="all" type="button">All</button><button aria-pressed="false" class="team-venue-btn" data-venue="home" type="button">Home</button><button aria-pressed="false" class="team-venue-btn" data-venue="away" type="button">Away</button><span class="hint" id="teamVenueNote">All matches</span></div><div class="controls"><label class="fury-context-league">League<select id="furyTeamLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="teamFilter"></select></label><label>Period<select id="teamPeriod"><option value="avg">Season average</option><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Ranking metric<select id="teamMetric"><option value="corners">Corners</option><option value="shots">Shots</option><option value="shots_on_target">Shots on target</option><option value="goals">Goals</option><option value="fouls">Fouls</option><option value="yellow_cards">Yellow cards</option><option value="red_cards">Red cards</option><option value="xg">Expected goals (xG)</option><option value="xg_diff">xG differential</option></select></label><label>View<select id="teamDirection"><option value="for">Produced (For)</option><option value="against">Allowed (Against)</option></select></label><label>Find team<input autocomplete="off" id="teamSearch" placeholder="Search club name"/></label></div><p class="hint">Rankings and table averages use the selected period. Corner over 9.5% uses the selected venue across the full season.</p></div>
 <div class="tiles player-kpis"><div class="tile"><span>Teams</span><strong id="teamCount">—</strong></div><div class="tile"><span>Corners for / game</span><strong id="teamCorners">—</strong></div><div class="tile"><span>Shots for / game</span><strong id="teamShots">—</strong></div><div class="tile"><span>Goals for / game</span><strong id="teamGoals">—</strong></div></div>
 <div class="team-insights team-center-layout">
-<div class="panel team-spotlight team-center-panel"><div class="team-section-head"><h2 id="teamSpotlightTitle">Team performance snapshot</h2><span class="team-pill" id="teamSpotlightBadge">Season</span></div><p class="hint" id="teamSpotlightHint">Choose a team to compare its attack and defense with league averages.</p><div class="team-compare" id="teamSpotlight"></div></div>
+<div class="panel team-spotlight team-center-panel"><div class="team-section-head"><h2 id="teamSpotlightTitle">Team performance snapshot</h2><span class="team-pill" id="teamSpotlightBadge">Season</span></div><p class="hint" id="teamSpotlightHint">Choose a team to compare its attack and defense with league averages.</p><div id="furyTeamIdentity" class="fury-team-identity"></div><div class="team-compare" id="teamSpotlight"></div></div>
 <div class="panel team-center-panel"><div class="team-section-head"><h2>League leaders</h2><span class="team-pill">Top 3</span></div><div class="team-leaders" id="teamLeaders"></div></div>
 </div>
 <div class="panel team-center-panel"><div class="team-section-head"><h2 id="teamRankTitle">Team ranking</h2><span class="hint">Click a club to inspect it</span></div><div id="teamRanking"></div></div><div class="panel team-center-panel"><div class="team-section-head"><h2>Team statistics</h2><span class="hint" id="teamTableCount"></span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Team</th><th>Matches</th><th>Corners for</th><th>Corners against</th><th>Shots for</th><th>Shots against</th><th>SOT for</th><th>SOT against</th><th>Goals for</th><th>Goals against</th><th>Over 9.5 corners (season)</th><th>xG / game</th><th>xGA / game</th><th>xG diff / game</th></tr></thead><tbody id="teamRows"></tbody></table></div></div><div class="fury-note">xG metrics are calculated from recorded player-match xG; missing matches are not estimated.</div>
@@ -1170,16 +1105,40 @@ function renderTeams(){
   const leaders=$('teamLeaders');leaders.replaceChildren();
   valid.slice(0,3).forEach((r,i)=>{const item=document.createElement('div');item.className='team-leader';const number=document.createElement('span');number.className='team-leader-num';number.textContent='#'+(i+1);const btn=document.createElement('button');btn.className='team-leader-name';btn.appendChild(furyTeamElement(r.team,document.getElementById('leagueSelect')?.value));btn.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()});const value=document.createElement('span');value.className='team-leader-value';value.textContent=f(r[key(m)]);item.append(number,btn,value);leaders.appendChild(item)});
   if(!valid.length)leaders.textContent='No league leaders available.';
+  // Single-team focus, with league-wide baselines independent of the selected club.
   const focus=selected.length===1?selected[0]:null;
-  $('teamSpotlightTitle').textContent=focus?focus.team+' · team profile':'League performance overview';
-  $('teamSpotlightHint').textContent=focus?'Team averages compared with the league baseline for the same period.':'Select a club to compare its numbers against the league average.';
+  $('teamSpotlightTitle').textContent=focus?focus.team+' · Performance overview':'Team performance overview';
+  $('teamSpotlightHint').textContent='Green = better than league average · Red = worse · Defensive metrics reward lower values.';
+  const identity=$('furyTeamIdentity');identity.replaceChildren();
+  if(focus){
+    const crestWrap=document.createElement('div');crestWrap.className='fury-identity-crest';
+    const crest=furyFindCrest(focus.team,document.getElementById('leagueSelect')?.value);
+    if(crest){const img=document.createElement('img');img.src=crest;img.alt=focus.team+' crest';img.onerror=()=>{img.remove();crestWrap.textContent=focus.team.slice(0,2).toUpperCase()};crestWrap.appendChild(img)}
+    else crestWrap.textContent=focus.team.slice(0,2).toUpperCase();
+    const info=document.createElement('div');info.className='fury-identity-info';
+    const kicker=document.createElement('span');kicker.textContent='CLUB PERFORMANCE · '+(p==='avg'?'SEASON':p);
+    const title=document.createElement('h3');title.textContent=focus.team;
+    const meta=document.createElement('p');meta.textContent=(focus.matches??'—')+' matches · '+(teamVenue==='all'?'All venues':teamVenue==='home'?'Home':'Away')+' · '+$('furyTeamLeague').selectedOptions[0].textContent.trim();
+    info.append(kicker,title,meta);identity.append(crestWrap,info);
+  } else {identity.textContent='Choose one team above to view its club profile and league comparisons.'}
   const cards=$('teamSpotlight');cards.replaceChildren();
-  [['goals','Goals'],['shots','Shots'],['shots_on_target','Shots on target'],['corners','Corners'],['fouls','Fouls'],['yellow_cards','Yellow cards']].forEach(([metric,label])=>{
-    const value=mean(focus?[focus]:selected,metric),baseline=mean(venueTeams,metric),card=document.createElement('div');card.className='team-metric-card';
-    const title=document.createElement('div');title.className='team-metric-title';title.textContent=label+' / game';
-    const main=document.createElement('div');main.className='team-metric-main';const strong=document.createElement('strong');strong.textContent=f(value);const comparison=document.createElement('span');comparison.textContent='League: '+f(baseline);
-    main.append(strong,comparison);const meter=document.createElement('div');meter.className='team-meter';const fill=document.createElement('div');fill.style.width=(value===null||baseline===null?'0':Math.min(100,Math.max(0,value/Math.max(0.1,baseline*1.6)*100)))+'%';meter.appendChild(fill);
-    const note=document.createElement('div');note.className='hint';note.textContent=focus&&value!==null&&baseline!==null?(value>=baseline?'+':'')+f(value-baseline)+' vs league':'Selected teams average';card.append(title,main,meter,note);cards.appendChild(card);
+  const metrics=[['goals','for','Goals scored',true],['goals','against','Goals conceded',false],['shots','for','Shots',true],['shots','against','Shots conceded',false],['shots_on_target','for','Shots on target',true],['shots_on_target','against','SOT conceded',false],['corners','for','Corners won',true],['corners','against','Corners conceded',false]];
+  metrics.forEach(([metric,dir,label,higherBetter])=>{
+    const value=focus?n(focus[metric+'_'+dir+'_'+p]):null;
+    const baseline=mean(venueTeams,metric,dir);
+    const delta=value===null||baseline===null?null:value-baseline;
+    const neutral=delta===null||Math.abs(delta)<0.005;
+    const good=!neutral&&(higherBetter?delta>0:delta<0);
+    const status=neutral?'neutral':good?'good':'bad';
+    const card=document.createElement('div');card.className='fury-benchmark '+status;
+    const top=document.createElement('div');top.className='fury-benchmark-top';
+    const heading=document.createElement('span');heading.textContent=label;
+    const flag=document.createElement('span');flag.className='fury-benchmark-flag';flag.textContent=neutral?'● LEAGUE AVG':good?'↗ ABOVE AVG':'↘ BELOW AVG';top.append(heading,flag);
+    const number=document.createElement('div');number.className='fury-benchmark-number';number.textContent=value===null?'—':value.toFixed(2);
+    const baselineText=document.createElement('div');baselineText.className='fury-benchmark-league';baselineText.textContent='League avg  '+(baseline===null?'—':baseline.toFixed(2))+' / match';
+    const meter=document.createElement('div');meter.className='fury-benchmark-track';const fill=document.createElement('div');fill.className='fury-benchmark-fill';fill.style.width=(value===null||baseline===null?'0':Math.min(100,Math.max(0,100*value/Math.max(value,baseline,0.01))))+'%';meter.appendChild(fill);
+    const foot=document.createElement('div');foot.className='fury-benchmark-delta';foot.textContent=delta===null?'No comparison available':(delta>0?'+':'')+delta.toFixed(2)+' vs league · '+(neutral?'Equal':good?'Better':'Worse');
+    card.append(top,number,baselineText,meter,foot);cards.appendChild(card);
   });
   $('teamRows').replaceChildren();sorted.forEach(r=>{const tr=row($('teamRows'),[r.team,r.matches,f(r['corners_for_'+p]),f(r['corners_against_'+p]),f(r['shots_for_'+p]),f(r['shots_against_'+p]),f(r['shots_on_target_for_'+p]),f(r['shots_on_target_against_'+p]),f(r['goals_for_'+p]),f(r['goals_against_'+p]),n(r['corners_over_9.5_pct'])===null?'N/A':f(r['corners_over_9.5_pct'],1)+'%',f(r['xg_for_'+p]),f(r['xg_against_'+p]),f(r['xg_diff_'+p])]);furyDecorateCell(tr.cells[0],r.team);tr.title='Click to inspect '+r.team;tr.style.cursor='pointer';tr.addEventListener('click',()=>{$('teamFilter').value=r.team;renderTeams()})});
   applyStatIndicators('teamRows',2,[3,5,7,9]);insertStatLegend('teamRows');renderTeamLast15();
@@ -1817,7 +1776,7 @@ window.startFuryDashboard = init;
 
 
 </script>
-<script src="./fury-auth.js?v=ai-auth-20261017-2" type="module"></script>
+<script src="./fury-auth.js" type="module"></script>
 <script>
 // The Odds API integration. Access tokens and bookmaker API key never enter the page source.
 let furyOddsGeneration=0;
@@ -1860,7 +1819,7 @@ document.getElementById('analyzeButton')?.addEventListener('click',()=>{void fur
 const furyLogoLeagueKeys={laliga:'la_liga',la_liga:'la_liga',premier_league:'premier_league',bundesliga:'bundesliga',serie_a:'serie_a',ligue_1:'ligue_1',champions_league:'champions_league',eredivisie:'eredivisie',portugal_primeira_liga:'primeira_liga',primeira_liga:'primeira_liga',brasileirao_serie_a:'brasileirao_serie_a',championship:'championship',european_championship:'european_championship',world_cup:'world_cup',copa_libertadores:'copa_libertadores'};
 let furyLogoCatalog=null,furyLogoAliases=null;
 const furyLogoNormalize=name=>String(name||'').replace(/\s*\([^)]*\)\s*$/,'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
-const furyLogoNameAliases={'barcelona':'fc barcelona','brentford':'brentford fc','man city':'manchester city fc','man united':'manchester united fc','inter':'fc internazionale milano','brighton':'brighton hove','brighton and hove albion':'brighton hove','brighton hove albion':'brighton hove','brighton & hove albion':'brighton hove'};
+const furyLogoNameAliases={'barcelona':'fc barcelona','brentford':'brentford fc','man city':'manchester city fc','man united':'manchester united fc','inter':'fc internazionale milano'};
 function furyLogoTeamKey(name){const key=furyLogoNormalize(name);return furyLogoNormalize(furyLogoNameAliases[key]||key)}
 function furyLogoLeagueFromName(name){const m=String(name||'').match(/\(([^)]+)\)\s*$/);if(!m)return '';const k=furyLogoNormalize(m[1]);return {'la liga':'la_liga','premier league':'premier_league','bundesliga':'bundesliga','serie a':'serie_a','ligue 1':'ligue_1','champions league':'champions_league'}[k]||'';}
 async function furyLoadLogos(){
@@ -1869,7 +1828,6 @@ async function furyLoadLogos(){
   furyLogoCatalog=catalog.leagues||{};furyLogoAliases=aliases.leagues||{};if(document.getElementById('teamsTab')&&!document.getElementById('teamsTab').classList.contains('hidden'))renderTeams();
   if(document.getElementById('playersTab')&&!document.getElementById('playersTab').classList.contains('hidden'))renderPlayers();
   furyRefreshVisibleCrests();
-  if(typeof renderOddsSchedule==='function' && typeof oddsScheduleData!=='undefined' && oddsScheduleData.length)renderOddsSchedule();
   if(document.getElementById('oddsTab')&&!document.getElementById('oddsTab').classList.contains('hidden'))renderOddsSchedule();
   if(document.getElementById('projectionHome')?.textContent&&document.getElementById('projectionPanel')){
    furySetProjectionCrest('projectionHomeIcon',document.getElementById('projectionHome').textContent);
@@ -1877,15 +1835,8 @@ async function furyLoadLogos(){
   }
  }catch(err){console.warn('FURY team crests unavailable; displaying team names:',err.message)}
 }
-
-// Explicit crest IDs for provider short names; independent of the optional aliases JSON.
-const furyCrestOverrides={"sevilla":{"league":"la_liga","id":"559"},"racing santander":{"league":"la_liga","id":"5335"},"deportivo la coruna":{"league":"la_liga","id":"560"},"celta vigo":{"league":"la_liga","id":"558"},"hull":{"league":"premier_league","id":"322"},"ipswich":{"league":"premier_league","id":"349"},"leeds":{"league":"premier_league","id":"341"},"manchester united":{"league":"premier_league","id":"66"},"coventry":{"league":"premier_league","id":"1076"},"nottingham forest":{"league":"premier_league","id":"351"},"manchester city":{"league":"premier_league","id":"65"},"bayern munich":{"league":"bundesliga","id":"5"},"werder bremen":{"league":"bundesliga","id":"12"},"fc cologne":{"league":"bundesliga","id":"1"},"mainz 05":{"league":"bundesliga","id":"15"},"schalke 04":{"league":"bundesliga","id":"6"},"paderborn":{"league":"bundesliga","id":"29"},"borussia m gladbach":{"league":"bundesliga","id":"18"},"como":{"league":"serie_a","id":"7397"},"venezia":{"league":"serie_a","id":"454"},"rennes":{"league":"ligue_1","id":"529"},"lens":{"league":"ligue_1","id":"546"},"angers":{"league":"ligue_1","id":"532"},"sevilla fc":{"league":"la_liga","id":"559"},"racing de santander":{"league":"la_liga","id":"5335"},"deportivo":{"league":"la_liga","id":"560"},"celta de vigo":{"league":"la_liga","id":"558"},"hull city":{"league":"premier_league","id":"322"},"ipswich town":{"league":"premier_league","id":"349"},"leeds united":{"league":"premier_league","id":"341"},"man united":{"league":"premier_league","id":"66"},"man utd":{"league":"premier_league","id":"66"},"coventry city":{"league":"premier_league","id":"1076"},"nottm forest":{"league":"premier_league","id":"351"},"nott m forest":{"league":"premier_league","id":"351"},"man city":{"league":"premier_league","id":"65"},"bayern munchen":{"league":"bundesliga","id":"5"},"fc koln":{"league":"bundesliga","id":"1"},"1 fc koln":{"league":"bundesliga","id":"1"},"mainz":{"league":"bundesliga","id":"15"},"fsv mainz":{"league":"bundesliga","id":"15"},"schalke":{"league":"bundesliga","id":"6"},"sc paderborn":{"league":"bundesliga","id":"29"},"borussia monchengladbach":{"league":"bundesliga","id":"18"},"mgladbach":{"league":"bundesliga","id":"18"},"m gladbach":{"league":"bundesliga","id":"18"},"como 1907":{"league":"serie_a","id":"7397"},"stade rennes":{"league":"ligue_1","id":"529"},"stade rennais":{"league":"ligue_1","id":"529"},"racing lens":{"league":"ligue_1","id":"546"},"angers sco":{"league":"ligue_1","id":"532"}};
 function furyFindCrest(team,league){
- const override=furyCrestOverrides[furyLogoNormalize(team)];
- if(override){const record=furyLogoCatalog?.[override.league]?.[override.id];if(record?.logo)return record.logo;}
- if(!team)return '';
- const emergency=furyCrestOverrides[furyLogoNormalize(team)];
- if(!furyLogoCatalog)return emergency?'https://crests.football-data.org/'+emergency.id+'.png':'';
+ if(!furyLogoCatalog||!team)return '';
  const normalized=furyLogoTeamKey(team),key=furyLogoLeagueFromName(team)||furyLogoLeagueKeys[league]||league;
  const pools=key&&furyLogoCatalog[key]?[[key,furyLogoCatalog[key]]]:Object.entries(furyLogoCatalog);
  const lookup=(k,records)=>{
@@ -1906,7 +1857,7 @@ function furyFindCrest(team,league){
 function furyTeamElement(team,league){
  const span=document.createElement('span');span.className='fury-team-line';
  const logo=furyFindCrest(team,league);
- if(logo){const img=document.createElement('img');img.className='fury-team-crest';img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>{const o=furyCrestOverrides[furyLogoNormalize(team)];if(o&&!img.dataset.remote){img.dataset.remote='1';img.src='https://crests.football-data.org/'+o.id+'.png'}else img.remove()};span.appendChild(img)}
+ if(logo){const img=document.createElement('img');img.className='fury-team-crest';img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>img.remove();span.appendChild(img)}
  const label=document.createElement('span');label.textContent=team||'—';span.appendChild(label);return span;
 }
 function furyDecorateCell(cell,team,league){
@@ -2068,37 +2019,6 @@ function furyEstimateEvent(event){
  const probs=poissonProjection(eh,ea);
  const result={probs,eh,ea,homeN:home.length,awayN:away.length};furyProjectionCache.set(cacheKey,result);return result;
 }
-function furyOpenSelectedPick(c){
- const e=c.event;
- showTab('match');
- const homeLeague=document.getElementById('homeLeague'),awayLeague=document.getElementById('awayLeague');
- const homeSelect=document.getElementById('homeTeam'),awaySelect=document.getElementById('awayTeam');
- const matchTeam=(select,name)=>{
-  const key=typeof furyTeamKey==='function'?furyTeamKey(name):String(name).toLowerCase();
-  return [...select.options].find(o=>(typeof furyTeamKey==='function'?furyTeamKey(o.value):o.value.toLowerCase())===key)
-    || [...select.options].find(o=>typeof furyOddsMatch==='function'&&furyOddsMatch(o.value,name));
- };
- if([...homeLeague.options].some(o=>o.value===e.league)&&[...awayLeague.options].some(o=>o.value===e.league)){
-  homeLeague.value=e.league;awayLeague.value=e.league;
-  refreshCrossLeagueTeams();
-  const h=matchTeam(homeSelect,e.home_team),a=matchTeam(awaySelect,e.away_team);
-  if(h)homeSelect.value=h.value;
-  if(a)awaySelect.value=a.value;
-  if(h&&a){document.getElementById('analyzeButton')?.click();}
- }
- let banner=document.getElementById('furySelectedPick');
- if(!banner){banner=document.createElement('div');banner.id='furySelectedPick';banner.className='fury-selected-pick';
-  document.getElementById('matchTab')?.insertBefore(banner,document.getElementById('matchTab').firstChild);}
- banner.replaceChildren();
- const heading=document.createElement('strong');heading.textContent=`Selected pick: ${c.name} · ${c.price.toFixed(2)}`;
- const sub=document.createElement('div');sub.className='fury-selected-sub';sub.textContent=`${e.home_team} vs ${e.away_team} · ${oddsLeagueLabels[e.league]||e.league} · ${oddsKickoff(e)}`;
- const stats=document.createElement('div');stats.className='fury-selected-stats';
- for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,e.bookmaker||'Bookmaker unavailable']){
-  const el=document.createElement('span');el.textContent=value;stats.appendChild(el);
- }
- banner.append(heading,sub,stats);
- banner.scrollIntoView({behavior:'smooth',block:'start'});
-}
 function renderFuryPicks(events){
  const host=document.getElementById('furyPickList'),count=document.getElementById('furyPickCount');if(!host)return;
  const threshold=(Number(document.getElementById('pickMinProbability').value)||0)/100;
@@ -2120,7 +2040,7 @@ function renderFuryPicks(events){
    continue;
   }
   const selections=[];
-  if(market!=='totals')selections.push([`${e.home_team} Win`,e.h2h?.home,model.probs.home],['Draw',e.h2h?.draw,model.probs.draw],[`${e.away_team} Win`,e.h2h?.away,model.probs.away]);
+  if(market!=='totals')selections.push(['Home win',e.h2h?.home,model.probs.home],['Draw',e.h2h?.draw,model.probs.draw],['Away win',e.h2h?.away,model.probs.away]);
   if(market!=='h2h'&&Number(e.totals?.point??2.5)===2.5)selections.push(['Over 2.5',e.totals?.over,model.probs.over],['Under 2.5',e.totals?.under,model.probs.under]);
   for(const [name,raw,prob] of selections){
    const price=oddsValidPrice(raw);if(price===null||!Number.isFinite(prob))continue;
@@ -2133,32 +2053,15 @@ function renderFuryPicks(events){
  host.replaceChildren();const shown=candidates.slice(0,20);
  for(const c of shown){
   const card=document.createElement('article');card.className='fury-pick';
-  const hero=document.createElement('div');hero.className='fury-pick-hero';
-  const pickCrest=(team)=>{
-   const logo=furyFindCrest(team,c.event.league);
-   if(logo){const img=document.createElement('img');img.className='fury-pick-crest';img.src=logo;img.alt=team+' crest';img.loading='lazy';img.onerror=()=>{const o=furyCrestOverrides[furyLogoNormalize(team)];if(o&&!img.dataset.remote){img.dataset.remote='1';img.src='https://crests.football-data.org/'+o.id+'.png';return;}const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();img.replaceWith(fallback)};return img}
-   const fallback=document.createElement('span');fallback.className='fury-pick-crest-fallback';fallback.textContent=team.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();return fallback;
-  };
-  const info=document.createElement('div');info.className='fury-pick-info';
   const top=document.createElement('div');top.className='fury-pick-top';
   const name=document.createElement('span');name.className='fury-pick-title';name.textContent=c.name;
   const price=document.createElement('span');price.className='fury-pick-price';price.textContent=c.price.toFixed(2);top.append(name,price);
-  const match=document.createElement('div');match.className='fury-pick-match';
-  const vs=document.createElement('span');vs.className='fury-vs';vs.textContent='VS';
-  match.append(document.createTextNode(c.event.home_team+' '),vs,document.createTextNode(' '+c.event.away_team));
-  const fixture=document.createElement('div');fixture.className='fury-pick-meta';fixture.textContent=`${oddsLeagueLabels[c.event.league]||c.event.league} · ${oddsKickoff(c.event)}`;
-  info.append(top,match,fixture);
-  hero.append(pickCrest(c.event.home_team),info,pickCrest(c.event.away_team));
+  const fixture=document.createElement('div');fixture.className='fury-pick-meta';fixture.append(furyFixtureElement(c.event.home_team,c.event.away_team,c.event.league),document.createTextNode(` · ${oddsLeagueLabels[c.event.league]||c.event.league} · ${oddsKickoff(c.event)}`));
   const stats=document.createElement('div');stats.className='fury-pick-stats';
   for(const value of [`FURY model ${(c.prob*100).toFixed(1)}%`,`Implied ${(100/c.price).toFixed(1)}%`,`Edge ${c.edge>=0?'+':''}${(c.edge*100).toFixed(1)} pp`,`Model EV ${c.ev>=0?'+':''}${(c.ev*100).toFixed(1)}%`,`Home/Away sample ${c.model.homeN}/${c.model.awayN}`,c.event.bookmaker||'Bookmaker unavailable']){
-   const item=document.createElement('span');item.className='fury-pick-stat';if(value.startsWith('FURY model '))item.classList.add('fury-pick-stat-model');if(value.startsWith('Model EV '))item.classList.add('fury-pick-stat-ev');item.textContent=value;stats.appendChild(item);
+   const item=document.createElement('span');item.className='fury-pick-stat';item.textContent=value;stats.appendChild(item);
   }
-  card.append(hero,stats);
-  card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`Analyze ${c.event.home_team} versus ${c.event.away_team}, selection ${c.name}`);
-  const openPick=()=>furyOpenSelectedPick(c);
-  card.addEventListener('click',openPick);
-  card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openPick();}});
-  host.appendChild(card);
+  card.append(top,fixture,stats);host.appendChild(card);
  }
  count.textContent=`${events.length} fixtures evaluated · ${events.length-missing} model eligible · ${candidates.length} qualifying selections · showing ${shown.length} · ${missing} excluded (unsupported league: ${reasons.unsupported}, historical files unavailable: ${reasons.noFile}, team name unmatched: ${reasons.noTeam}, insufficient valid home/away games: ${reasons.lowSample})`;
  if(reasons.noFile){const errors=[...furyModelErrors].map(([league,error])=>`${oddsLeagueLabels[league]||league}: ${error}`);count.title=errors.join(' | ');console.warn('FURY historical file diagnostics:',errors);}else count.removeAttribute('title');
@@ -2475,7 +2378,7 @@ async function furyAiRequest(payload){
  furyAiPending=true;button.disabled=true;button.textContent='Analyzing…';
  out.textContent='Reviewing available match data…';
  try{
-   if(typeof window.furyAIAuth!=='function')throw Error('AI authentication bridge missing. Verify fury-auth.js?v=ai-auth-20261017-2 is loaded (Network tab) and defines window.furyAIAuth; check Console for module errors.');
+   if(typeof window.furyAIAuth!=='function')throw Error('Authentication module is not loaded. Upload the updated fury-auth.js file.');
    const {token,url,apikey}=await window.furyAIAuth();
    if(!token || !url || !apikey)throw Error('Login credentials are unavailable. Please sign in again.');
    let response;
