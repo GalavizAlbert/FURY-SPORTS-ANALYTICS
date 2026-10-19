@@ -885,6 +885,111 @@ body .app-shell{margin-left:auto!important;margin-right:auto!important}
 @media(max-width:1100px){#teamsTab #teamSpotlight{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){#teamsTab .fury-profile{grid-template-columns:1fr;gap:10px}#teamsTab .fury-profile-crest{min-height:0;padding:10px}#teamsTab .fury-profile-crest .fury-team-line{flex-direction:row;align-items:center}#teamsTab .fury-profile-crest .fury-team-crest{width:46px!important;height:46px!important}#teamsTab .fury-profile-heading{margin-bottom:9px}#teamsTab .fury-compare-card{padding:10px}#teamsTab .fury-compare-values span{font-size:9px}#teamsTab .team-filter-panel .controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:380px){#teamsTab #teamSpotlight{gap:6px}#teamsTab .fury-compare-card{padding:8px}#teamsTab .fury-compare-top{font-size:10px}#teamsTab .fury-compare-values strong{font-size:18px}}
+</style><style id="fury-global-density-v2">
+/* FURY compact responsive design system: presentation-only overrides. */
+:root{--fury-space:12px}
+html{font-size:13px}body{font-size:13px;line-height:1.42}
+header,main{max-width:1520px;padding:12px 18px}
+main.app-shell{max-width:1520px;padding-top:8px}
+h1{font-size:23px}h2{font-size:17px;margin-bottom:10px}
+.panel,.tile{padding:13px;margin-bottom:12px;border-radius:12px}
+.player-hero{padding:15px 19px;margin-bottom:12px;border-radius:13px}
+.player-hero h2{font-size:clamp(19px,2.3vw,26px);margin-bottom:5px}
+.player-hero p{font-size:12px;line-height:1.45;max-width:850px}
+.player-eyebrow{font-size:9px;letter-spacing:1.4px;margin-bottom:6px}
+.player-hero-tag{margin-top:8px;padding:5px 9px;font-size:10px}
+.player-filter-panel{padding:13px;border-radius:12px}
+.filter-heading{margin-bottom:10px}.filter-heading h3{font-size:15px}.filter-eyebrow{font-size:9px;margin-bottom:3px}
+.filter-chip{padding:4px 8px;font-size:9px}
+.player-filter-panel .controls{gap:9px}
+.player-filter-panel .controls label{gap:5px;font-size:10px}
+.player-filter-panel .controls select,.player-filter-panel .controls input,.player-filter-panel .controls button{min-height:35px;padding:7px 9px;font-size:12px;border-radius:8px}
+.controls{gap:9px;margin-bottom:12px}.controls label{gap:4px;font-size:11px}
+select,input,button{padding:8px 10px;font-size:12px}
+.tiles,.player-kpis{gap:9px}.player-kpis .tile{padding:11px 13px;border-radius:11px}
+.player-kpis .tile span{font-size:10px;margin-bottom:4px}
+.player-kpis .tile strong{font-size:clamp(18px,2vw,24px)}
+.team-section-head,.player-panel-head{margin-bottom:10px!important}
+.team-section-head h2,.player-panel-head h2{font-size:16px}
+.player-layout,.team-insights,.split{gap:11px}
+.player-layout .panel{padding:12px}
+.player-table-wrap{max-height:520px;border-radius:10px}
+.player-table-wrap th,#teamsTab .player-table-wrap th,#matchTab .player-table-wrap th{padding:9px 8px;font-size:10px}
+.player-table-wrap td,#teamsTab .player-table-wrap td,#matchTab .player-table-wrap td{padding:8px;font-size:12px}
+.scroll{max-height:520px}table{font-size:12px}th,td{padding:8px}
+.player-detail{padding:13px;margin-bottom:12px}
+.pd-header h2{font-size:21px}.pd-filters{padding:10px;margin:10px 0}.pd-kpis{padding:10px;margin:10px 0}
+.pd-chart{min-height:190px;padding:10px}.pd-chart-track,.pd-col{height:170px}
+.fury-extra{margin:12px 0;padding:12px;border-radius:11px}.fury-grid{gap:9px;grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}.fury-stat{padding:10px}.fury-stat strong{font-size:20px}
+#teamsTab .team-spotlight{padding:12px}
+#teamsTab .fury-profile{grid-template-columns:108px minmax(0,1fr);gap:12px}
+#teamsTab .fury-profile-crest{min-height:108px}
+#teamsTab .fury-profile-crest .fury-team-crest{width:62px!important;height:62px!important}
+#teamsTab .fury-profile-heading{margin-bottom:7px}
+#teamsTab #teamSpotlight{gap:7px}
+#teamsTab .fury-compare-card{padding:8px;border-radius:9px}
+#teamsTab .fury-compare-top{font-size:10px;min-height:22px}
+#teamsTab .fury-compare-values strong{font-size:19px}
+#teamsTab .fury-compare-values span{font-size:9px}
+#teamsTab .fury-compare-track{height:4px}
+#matchTab .projection{padding:14px;border-radius:12px}
+#matchTab .projection-topline{margin-bottom:11px;font-size:10px}
+#matchTab .projection-hero{margin:6px 0 14px}
+#matchTab .projection-team-icon{width:39px;height:39px}
+#matchTab .projection-numbers{font-size:clamp(26px,3.6vw,39px)}
+#matchTab .projection-market{padding:11px 12px;margin:8px 0;border-radius:10px}
+#matchTab .projection-market-labels{margin-bottom:8px;font-size:13px}
+#matchTab .projection-odds-grid{gap:8px}
+#matchTab .projection-odds-grid>div{padding:10px 5px}
+#matchTab .projection-disciplinary{gap:8px;margin:9px 0}
+#matchTab .projection-card-box{padding:9px 7px}
+#matchTab .projection-corners-hero{padding:8px}
+#oddsTab .fury-picks-panel{padding:12px;margin:10px 0 14px}
+#oddsTab .fury-pick-list{gap:8px}
+#oddsTab .fury-pick{padding:10px;border-radius:10px}
+#oddsTab .fury-pick-title{font-size:14px}
+#oddsTab .fury-pick-price{font-size:18px}
+#oddsTab .fury-pick-stats{margin-top:8px;gap:5px}
+#oddsTab .fury-pick-stat{padding:4px 6px;font-size:10px}
+#oddsTab .odds-controls{gap:9px}
+#oddsTab .odds-table td,#oddsTab .odds-table th{padding:9px 8px}
+#oddsTab .odds-table-wrap{margin-top:11px}
+#oddsTab .odds-range-filter{min-height:38px;padding:4px 8px}
+#oddsTab .odds-range-filter input{min-height:30px}
+.fury-legacy-back-link{margin:3px 0 10px!important}
+@media(min-width:1450px){#teamsTab #teamSpotlight{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:950px){header,main{padding:10px 13px}.player-layout{grid-template-columns:1fr}.player-hero{padding:13px}.player-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:680px){
+ html,body{max-width:100%;overflow-x:hidden}
+ header,main{padding:9px 10px!important}main.app-shell{padding-top:4px!important}
+ .panel,.tile{padding:10px;margin-bottom:10px}
+ .player-hero{padding:12px;margin-bottom:10px}.player-hero h2{font-size:20px}.player-hero p{font-size:11px}
+ .player-filter-panel{padding:10px}.filter-heading{margin-bottom:9px}.filter-heading h3{font-size:14px}
+ #teamsTab .team-filter-panel .controls,#playersTab .player-filter-panel .controls,#matchTab .match-filter-panel .controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .player-filter-panel .controls select,.player-filter-panel .controls input,.player-filter-panel .controls button{min-height:36px;font-size:12px;padding:7px}
+ .player-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.player-kpis .tile{padding:9px 10px}.player-kpis .tile strong{font-size:20px}
+ #teamsTab .fury-profile{grid-template-columns:1fr;gap:8px}
+ #teamsTab .fury-profile-crest{min-height:0;padding:8px}
+ #teamsTab .fury-profile-crest .fury-team-crest{width:40px!important;height:40px!important}
+ #teamsTab .fury-profile-crest .fury-team-line{flex-direction:row;align-items:center;gap:9px;font-size:12px}
+ #teamsTab #teamSpotlight{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ #teamsTab .fury-compare-card{padding:8px}
+ #teamsTab .fury-compare-values strong{font-size:18px}
+ #teamsTab .fury-compare-top{font-size:10px}
+ #matchTab .projection{padding:10px}
+ #matchTab .projection-hero{grid-template-columns:minmax(0,1fr) minmax(110px,1.8fr) minmax(0,1fr);gap:4px}
+ #matchTab .projection-numbers{font-size:clamp(23px,6vw,30px)}
+ #matchTab .projection-market{padding:9px}
+ #oddsTab .fury-picks-panel{padding:9px}
+ #oddsTab .fury-pick{padding:10px}
+ #oddsTab .odds-table tbody tr{padding:10px;gap:6px}
+ #oddsTab .odds-table tbody td{font-size:12px}
+ #oddsTab .odds-table tbody td:nth-child(6),#oddsTab .odds-table tbody td:nth-child(7),#oddsTab .odds-table tbody td:nth-child(8){font-size:15px;padding:8px 2px}
+ .player-table-wrap{max-height:470px}
+ .fury-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .fury-stat{padding:9px}
+}
+@media(max-width:380px){#teamsTab .fury-compare-values span{white-space:normal;text-align:right}#teamsTab .fury-compare-card{padding:7px}.player-filter-panel .controls label{font-size:9px}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
