@@ -1020,6 +1020,21 @@ select,input,button{padding:8px 10px;font-size:12px}
  #teamsTab .team-filter-panel .controls select,#playersTab .player-filter-panel .controls select,#playersTab .player-filter-panel .controls input,#matchTab .match-filter-panel .controls select,#oddsTab .odds-controls input{font-size:16px!important}
  #oddsTab .odds-range-filter{grid-column:1/-1}
 }
+</style><style>
+/* Player detail opens as its own dedicated page */
+body.fury-player-detail-page #playersTab > :not(#playerDetail){display:none!important}
+body.fury-player-detail-page #playerDetail{display:block!important;margin:0 auto 18px;max-width:1200px;padding:16px}
+body.fury-player-detail-page #playersTab{max-width:1250px;margin:auto}
+body.fury-player-detail-page #playerDetail #furyPropsPanel{margin-top:16px!important}
+body.fury-player-detail-page #playerDetail .pd-header{padding-bottom:12px;border-bottom:1px solid #30445d}
+body.fury-player-detail-page #playerDetail .pd-header h2{font-size:clamp(20px,2.5vw,28px)}
+body.fury-player-detail-page #playerDetail .pd-filters{padding:10px;gap:8px;margin:12px 0}
+body.fury-player-detail-page #playerDetail .pd-filters select{min-height:35px;padding:7px;font-size:12px}
+body.fury-player-detail-page #playerDetail .fury-combined-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+body.fury-player-detail-page #playerDetail .fury-combined-controls label{min-width:0;font-size:11px}
+body.fury-player-detail-page #playerDetail .fury-combined-controls select{width:100%;min-width:0;min-height:36px;padding:7px;font-size:12px}
+body.fury-player-detail-page #playerDetail #furyPropsPanel .fury-grid{gap:8px}
+@media(max-width:650px){body.fury-player-detail-page #playerDetail{padding:10px}body.fury-player-detail-page #playerDetail .fury-combined-controls{grid-template-columns:repeat(2,minmax(0,1fr))}body.fury-player-detail-page #playerDetail .pd-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}body.fury-player-detail-page #playerDetail .pd-filters label{min-width:0}body.fury-player-detail-page #playerDetail #furyPropsPanel{padding:10px}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -1069,7 +1084,9 @@ select,input,button{padding:8px 10px;font-size:12px}
 <div class="panel team-center-panel" id="teamHistoryPanel"><div class="team-section-head"><div><h2>Last 15 Matches · Historical Results</h2><p class="hint" id="teamHistoryDescription">Select a club to review its latest recorded results, corners and shooting data.</p></div><label class="team-history-selector">Team<select aria-label="Select team for last 15 matches" id="teamHistoryTeam"></select></label></div><div class="scroll player-table-wrap"><table><thead><tr><th>Date</th><th>Venue</th><th>Opponent</th><th>Score</th><th>Result</th><th>Corners For</th><th>Corners Against</th><th>Shots For</th><th>Shots Against</th><th>SOT For</th><th>SOT Against</th></tr></thead><tbody id="teamHistoryRows"></tbody></table></div><p class="hint" id="teamHistoryCount"></p></div></section>
 <section class="hidden" id="playersTab">
 <div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / PLAYER INTELLIGENCE</div><h2>Player Performance Center</h2><p>Compare season leaders, explore shooting trends, and select a player to inspect individual match results, hit rates and recent form.</p><span class="player-hero-tag">● Five leagues · Season 2026–27</span></div>
-<div class="panel player-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">PLAYER INTELLIGENCE</span><h3>Explore player data</h3></div><span class="filter-chip">FILTERS</span></div><div aria-label="Player filter mode" class="fury-filter-mode" role="group"><button aria-pressed="true" class="fury-mode-button active" data-mode="stats" type="button">Player Statistics</button><button aria-pressed="false" class="fury-mode-button" data-mode="props" type="button">Player Props</button></div><div class="controls fury-filter-group" data-fury-mode="stats"><label class="fury-context-league">League<select id="furyPlayerLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"/></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">Expected assists (xA)</option><option value="key_passes">Key passes</option><option value="np_xg">Non-penalty xG</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Hit-rate stat<select id="furyHitStat"><option value="sot">Shots on target</option><option value="shots">Shots</option><option value="goals">Goals</option><option value="key_passes">Key passes</option></select></label><label>Over line<select id="furyHitLine"><option value="0.5">0.5</option><option selected="" value="1.5">1.5</option><option value="2.5">2.5</option><option value="3.5">3.5</option></select></label></div><div class="controls fury-combined-controls fury-filter-group" data-fury-mode="props">
+<div class="panel player-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">PLAYER INTELLIGENCE</span><h3>Explore player data</h3></div><span class="filter-chip">FILTERS</span></div><div class="controls fury-filter-group" data-fury-mode="stats"><label class="fury-context-league">League<select id="furyPlayerLeague"><option value="laliga">🇪🇸 La Liga</option><option value="premier_league">🇬🇧 Premier League</option><option value="bundesliga">🇩🇪 Bundesliga</option><option value="serie_a">🇮🇹 Serie A</option><option value="ligue_1">🇫🇷 Ligue 1</option></select></label><label>Team<select id="playerTeam"><option value="">All teams</option></select></label><label>Search player<input id="playerSearch" placeholder="Player name"/></label><label>Sort by<select id="playerSort"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="minutes">Minutes</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">Expected assists (xA)</option><option value="key_passes">Key passes</option><option value="np_xg">Non-penalty xG</option></select></label><label>Recent period<select id="playerPeriod"><option value="L5">Last 5</option><option value="L10">Last 10</option></select></label><label>Hit-rate stat<select id="furyHitStat"><option value="sot">Shots on target</option><option value="shots">Shots</option><option value="goals">Goals</option><option value="key_passes">Key passes</option></select></label><label>Over line<select id="furyHitLine"><option value="0.5">0.5</option><option selected="" value="1.5">1.5</option><option value="2.5">2.5</option><option value="3.5">3.5</option></select></label></div></div>
+<div class="player-detail hidden" id="playerDetail">
+<div class="pd-header"><div><div class="hint">FURYSPORTS AI · PLAYER GAME LOG</div><h2 id="pdName">Player</h2><div class="hint" id="pdTeam"></div></div><button id="pdClose" type="button">← Back to players</button></div><div class="fury-combined-controls">
 <label>Team<select id="furyPropsTeam"><option value="">All teams</option></select></label>
 <label>Player<select id="furyPropsPlayer"></select></label>
 <label>Market<select id="furyPropsMarket"><option value="shots">Total shots</option><option value="sot">Shots on target</option></select></label>
@@ -1077,23 +1094,20 @@ select,input,button{padding:8px 10px;font-size:12px}
 <label>Period<select id="furyShotPeriod"><option value="5">Last 5 matches</option><option value="10">Last 10 matches</option><option selected="" value="0">Full season</option></select></label>
 <label>Venue<select id="furyPropsVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label>
 <label>Shot result<select id="furyShotResult"><option value="all">All shots</option><option value="goal">Goals</option><option value="saved">Saved shots</option><option value="missed">Off target</option><option value="blocked">Blocked</option></select></label>
-</div></div>
-<div class="player-detail hidden" id="playerDetail">
-<div class="pd-header"><div><div class="hint">FURYSPORTS AI · PLAYER GAME LOG</div><h2 id="pdName">Player</h2><div class="hint" id="pdTeam"></div></div><button id="pdClose" type="button">✕ Close player</button></div>
+</div>
 <div class="pd-filters"><label>Statistic<select id="pdStat"><option value="shots">Shots</option><option value="goals">Goals</option><option value="xg">xG</option><option value="assists">Assists</option><option value="sot">Shots on target</option><option value="xa">xA</option><option value="key_passes">Key passes</option><option value="np_xg">npxG</option></select></label><label>Line<select id="pdLine"></select></label><label>Games<select id="pdGames"><option value="5">Last 5</option><option selected="" value="10">Last 10</option><option value="0">All available</option></select></label><label>Venue<select id="pdVenue"><option value="all">All matches</option><option value="home">Home</option><option value="away">Away</option></select></label></div>
 <div class="pd-kpis" id="pdSummary"></div><div class="pd-chart" id="pdChart"></div><div class="hint" id="pdMessage"></div>
 <div class="scroll pd-table"><table><thead><tr><th>Date</th><th>Opponent / Match</th><th>Venue</th><th>Minutes</th><th>Shots</th><th>Goals</th><th>xG</th><th>Selected stat</th><th>Over line?</th></tr></thead><tbody id="pdRows"></tbody></table></div>
-</div>
-<p class="hint" id="playerDataStatus" role="status" style="margin:12px 2px;color:#9fd6f7"></p>
-<div class="tiles player-kpis"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
 <div class="panel fury-advanced-panel" id="furyPropsPanel"><div class="player-panel-head"><h2>Player Props &amp; Shot Map · Understat</h2><span class="player-panel-kicker">SHOTS · SOT · xG · SHOT LOCATIONS</span></div>
-
 <p class="fury-note" id="furyPlayerAvailability" role="status">Loading league players…</p>
 <div aria-live="polite" class="fury-props-identity" id="furyPropsIdentity"></div><div class="fury-grid" id="furyPropsKpis"></div><div class="fury-grid" id="furyPropsHistory" style="margin-top:14px"></div><p class="fury-note" id="furyPropsNote">Select a player. Hit rates are descriptive, not future probabilities.</p><div class="fury-combined-map" id="furyShotMapPanel"><h3>Player Shot Map</h3><div class="fury-grid" id="furyShotKpis"></div>
 <div class="fury-shotmap-wrap"><svg aria-label="Attacking-direction shot map with the goal at the right" id="furyShotPitch" role="img" viewbox="0 0 920 540"><rect fill="#102f35" height="508" rx="12" width="888" x="16" y="16"></rect><g fill="none" opacity=".65" stroke="#b9d8d3" stroke-width="2.3"><rect height="468" width="848" x="36" y="36"></rect><path d="M460 36V504"></path><circle cx="460" cy="270" r="67"></circle><rect height="300" width="138" x="746" y="120"></rect><rect height="130" width="56" x="828" y="205"></rect><path d="M746 194A85 85 0 0 0 746 346"></path><circle cx="770" cy="270" fill="#b9d8d3" r="3"></circle><rect height="300" width="138" x="36" y="120"></rect><rect height="130" width="56" x="36" y="205"></rect><path d="M174 194A85 85 0 0 1 174 346"></path></g><g id="furyShotDots"></g><text fill="#d7efeb" font-size="13" text-anchor="end" x="865" y="28">ATTACK →</text></svg></div>
 <div class="fury-shot-legend"><span><i style="background:#39db9e"></i> Goal</span><span><i style="background:#4bbaf6"></i> Saved</span><span><i style="background:#e9a44d"></i> Missed</span><span><i style="background:#ef6782"></i> Blocked / other</span><span>Circle size = shot xG</span></div>
 <p class="fury-note" id="furyShotStatus" role="status">Choose a player to display recorded shot locations. Hover or tap a shot for details.</p>
-</div></div>
+</div></div></div>
+<p class="hint" id="playerDataStatus" role="status" style="margin:12px 2px;color:#9fd6f7"></p>
+<div class="tiles player-kpis"><div class="tile"><span>Players shown</span><strong id="playerCount">—</strong></div><div class="tile"><span>Total shots</span><strong id="playerShots">—</strong></div><div class="tile"><span>Total goals</span><strong id="playerGoals">—</strong></div><div class="tile"><span>Total xG</span><strong id="playerXg">—</strong></div></div>
+
 <style id="fury-shotmap-css">
 .fury-shotmap-panel{margin-top:20px}.fury-shotmap-wrap{margin-top:16px;background:#0a2028;border:1px solid rgba(125,202,213,.22);border-radius:15px;overflow:hidden}.fury-shotmap-wrap svg{display:block;width:100%;height:auto;max-height:520px}.fury-shot-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:13px 0;color:#c5d9e4;font-size:12px}.fury-shot-legend span{display:inline-flex;align-items:center;gap:6px}.fury-shot-legend i{display:inline-block;width:10px;height:10px;border-radius:50%}.fury-combined-map{margin-top:24px;border-top:1px solid rgba(125,202,213,.22);padding-top:18px}.fury-combined-map h3{margin:0 0 12px}.fury-combined-controls{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
 </style>
@@ -2756,4 +2770,41 @@ window.addEventListener('load',()=>{
  const props=btn.dataset.mode==='props';root.classList.toggle('fury-props-active',props);
  root.querySelectorAll('.fury-mode-button').forEach(function(b){const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
  });});
-});</script></body></html>
+});</script><script>
+(function(){
+ const detailPage=location.pathname.toLowerCase().endsWith('/player.html');
+ const q=new URLSearchParams(location.search);
+ function playerUrl(name,team){const u=new URL('./player.html',location.href);u.searchParams.set('tab','players');u.searchParams.set('player',name);u.searchParams.set('team',team);const league=document.getElementById('leagueSelect')?.value;if(league)u.searchParams.set('league',league);return u.href;}
+ if(!detailPage){
+   // Capture clicks before the legacy openPlayer handler runs.
+   document.addEventListener('click',function(e){const btn=e.target.closest('.pd-player-link,.fury-mobile-details');if(!btn)return;const row=btn.closest('tr');const name=btn.classList.contains('pd-player-link')?btn.textContent.trim():btn.closest('.fury-mobile-prop')?.querySelector('.fury-mobile-prop-name strong')?.textContent?.trim();const team=row?.cells?.[1]?.textContent?.trim()||btn.closest('.fury-mobile-prop')?.querySelector('.fury-mobile-prop-name span')?.textContent?.trim()||document.getElementById('playerTeam')?.value||'';if(name){e.preventDefault();e.stopImmediatePropagation();location.href=playerUrl(name,team)}},true);
+   return;
+ }
+ document.body.classList.add('fury-player-detail-page');
+ const name=q.get('player')||'',team=q.get('team')||'';
+ const close=document.getElementById('pdClose');if(close){close.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();location.href='./analytics.html?tab=players'},true)}
+ let loaded=false;
+ function sync(){
+  if(!name)return;
+  const title=document.getElementById('pdName'),status=document.getElementById('playerDataStatus');
+  const records=(typeof playerMatchData!=='undefined'?playerMatchData:[]);
+  const roster=(typeof players!=='undefined'?players:[]);
+  const player=roster.find(r=>r.player?.toLowerCase()===name.toLowerCase()&&(!team||r.team?.toLowerCase()===team.toLowerCase()))||records.find(r=>r.player?.toLowerCase()===name.toLowerCase()&&(!team||r.team?.toLowerCase()===team.toLowerCase()));
+  if(!player){if(title)title.textContent=name;return;}
+  if(!loaded){loaded=true; if(typeof openPlayer==='function')openPlayer(player);}
+  const teamSel=document.getElementById('furyPropsTeam'),playerSel=document.getElementById('furyPropsPlayer');
+  if(teamSel&&playerSel){
+   const matchTeam=Array.from(teamSel.options).find(o=>o.value.toLowerCase()===String(player.team).toLowerCase());
+   if(matchTeam&&teamSel.value!==matchTeam.value){teamSel.value=matchTeam.value;teamSel.dispatchEvent(new Event('change',{bubbles:true}));}
+   const opt=Array.from(playerSel.options).find(o=>o.textContent.trim().toLowerCase()===name.toLowerCase()||o.textContent.toLowerCase().startsWith(name.toLowerCase()+' ·'));
+   if(opt){playerSel.value=opt.value;playerSel.dispatchEvent(new Event('change',{bubbles:true}));}
+  }
+ }
+ window.addEventListener('load',function(){
+  const league=q.get('league'),sel=document.getElementById('leagueSelect');if(league&&sel&&sel.value!==league){sel.value=league;sel.dispatchEvent(new Event('change',{bubbles:true}));}
+  document.querySelector('.tabs [data-tab="players"]')?.click();
+  sync();
+  const target=document.getElementById('playerRows');if(target)new MutationObserver(sync).observe(target,{childList:true,subtree:false});
+ });
+})();
+</script></body></html>
