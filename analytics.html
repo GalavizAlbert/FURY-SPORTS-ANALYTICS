@@ -535,6 +535,7 @@ header .site-title>span{flex-wrap:nowrap!important;white-space:nowrap}
 @media(prefers-reduced-motion:reduce){
   #oddsTab .fury-pick,#oddsTab .fury-pick-title{animation:none!important}
 }
+ .projection-league-rank{font-size:11px;color:#91bad2;font-weight:600;line-height:1.35;letter-spacing:.15px}
 </style><style id="fury-odds-range-css">
 /* Compact min/max odds filter — no sorting */
 #oddsTab .odds-range-filter{display:flex;align-items:center;gap:10px;min-width:0;align-self:end;min-height:45px;padding:6px 12px;border:1px solid #2b3545;border-radius:13px;background:#1a222f;color:#a8c9e5}
@@ -1119,9 +1120,9 @@ body.fury-player-detail-page #playerDetail #furyPropsPanel .fury-grid{gap:8px}
 <div aria-live="polite" class="projection match-center-projection" id="projectionPanel">
 <div class="projection-topline"><span>◷ FURYSPORTS AI · MATCH PROJECTION</span><span>◉ Poisson model</span></div>
 <div class="projection-hero">
-<div class="projection-side"><div class="projection-team-icon" id="projectionHomeIcon">H</div><div class="projection-name" id="projectionHome">Home</div></div>
+<div class="projection-side"><div class="projection-team-icon" id="projectionHomeIcon">H</div><div class="projection-name" id="projectionHome">Home</div><div class="projection-league-rank" id="projectionHomeRank">Rank —</div></div>
 <div class="projection-center"><div class="projection-total" id="projectionTotal">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div class="projection-scoreline" id="projectionScoreline">Most likely score: —</div></div>
-<div class="projection-side"><div class="projection-team-icon" id="projectionAwayIcon">A</div><div class="projection-name" id="projectionAway">Away</div></div>
+<div class="projection-side"><div class="projection-team-icon" id="projectionAwayIcon">A</div><div class="projection-name" id="projectionAway">Away</div><div class="projection-league-rank" id="projectionAwayRank">Rank —</div></div>
 </div>
 <div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
 <div class="projection-market" id="projectionCornersMarket"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option selected="" value="9.5">9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
@@ -1591,6 +1592,10 @@ function renderProjection(home,away,homeGames,awayGames){
   const af=avg(awayGames,'goals_for'),aa=avg(awayGames,'goals_against');
   $('projectionHome').textContent=home;
   $('projectionAway').textContent=away;
+  for(const [side,team,leagueId] of [['Home',home,'homeLeague'],['Away',away,'awayLeague']]){
+    const rank=furyLeagueStrength(team,$(leagueId)?.value);
+    $('projection'+side+'Rank').textContent=rank?'League rank #'+rank.position+' / '+rank.total:'League rank unavailable';
+  }
   if([hf,ha,af,aa].some(v=>v===null)){
     $('projectionTotal').textContent='Not enough goals data to project';
     $('projectionPanel').querySelectorAll('.projection-market,.projection-scoreline,.projection-foot,.projection-odds-title,.projection-odds-grid').forEach(e=>e.hidden=true);
