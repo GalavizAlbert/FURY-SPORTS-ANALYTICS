@@ -1114,7 +1114,7 @@ body.fury-player-detail-page #playerDetail #furyPropsPanel .fury-grid{gap:8px}
 </style>
 <div aria-label="Mobile player prop cards" class="fury-mobile-props-list" id="furyMobilePropsList"></div>
 <div id="playerRanking" hidden aria-hidden="true"></div><div class="player-layout fury-player-fullwidth"><div class="panel"><div class="player-panel-head"><h2>Player statistics</h2><span class="player-panel-kicker">CLICK A PLAYER FOR GAME LOG</span></div><div class="scroll player-table-wrap fury-player-table-scroll"><table id="furyPlayerStatsTable"><thead><tr><th>Player</th><th>Team</th><th>Matches</th><th>Minutes</th><th>Goals</th><th>Assists</th><th>Shots</th><th>xG</th><th>Shots / 90</th><th>xG / 90</th><th id="recentShotsHead">L5 shots / game</th><th id="recentHitHead">L5 hit rate</th><th>SOT</th><th>xA</th><th>Key passes</th><th>npxG</th><th>SOT / 90</th></tr></thead><tbody id="playerRows"></tbody></table></div><div class="fury-extra" id="furyPlayerTrends"><h3>Recent shooting trends · selected player</h3><p class="fury-note">Click a player name to see the last 5 / last 10 shot and SOT chart here.</p></div><p class="hint player-table-hint">Recent hit rates use the player recent-form JSON. Shots per 90 are calculated from recorded minutes. Select any player name for game-by-game analysis.</p></div></div></section>
-<section class="hidden" id="matchTab"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Compare teams across leagues</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p class="hint" id="matchStatus"></p><p class="hint">Choose a home league and an away league independently, then select a team from each. Cross-league projections use domestic league performances and do not adjust for league strength.</p></div>
+<section class="hidden" id="matchTab"><div class="player-hero"><div class="player-eyebrow">FURYSPORTS AI / MATCH INTELLIGENCE</div><h2>Match Analysis Center</h2><p>Compare home and away form, review model projections and betting-market hit rates, and explore complete match histories.</p><span class="player-hero-tag">● Venue-specific analytics · Poisson estimates</span></div><div class="panel player-filter-panel match-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH INTELLIGENCE</span><h3>Compare teams across leagues</h3></div><span class="filter-chip">MATCHUP FILTERS</span></div><div class="controls"><label>Home league<select id="homeLeague"></select></label><label>Home team<select id="homeTeam"></select></label><label>Away league<select id="awayLeague"></select></label><label>Away team<select id="awayTeam"></select></label><label>Venue-specific sample<select id="matchPeriod"><option value="5">Last 5 at venue</option><option value="10">Last 10 at venue</option><option value="0">Full season at venue</option></select></label><label>Action<button id="analyzeButton">Analyze match</button></label></div><p class="hint" id="matchStatus"></p><p class="hint">Choose a home league and an away league independently, then select a team from each. League-table ranking is an additional model factor: same-league strength differences adjust expected goals by up to ±8% before Poisson probabilities. Cross-league rankings do not modify projections.</p></div>
 <section aria-label="AI match analysis" class="fury-ai-panel" id="furyAiMatchPanel"><div class="fury-ai-head"><div><small>✦ FURY SPORTS AI</small><h2>AI Match Analysis</h2></div><button class="fury-ai-button" id="furyAiAnalyze" type="button">✦ Analyze with AI</button></div><p class="fury-ai-meta" id="furyAiContext">Select two teams and click Analyze match to load their statistics, then request an AI explanation.</p><div aria-live="polite" class="fury-ai-result" hidden="" id="furyAiResult" role="status"></div><p class="fury-ai-meta">AI commentary is based on supplied match records and projections. Estimates are not guarantees or betting advice.</p></section>
 <div aria-live="polite" class="projection match-center-projection" id="projectionPanel">
 <div class="projection-topline"><span>◷ FURYSPORTS AI · MATCH PROJECTION</span><span>◉ Poisson model</span></div>
@@ -1135,10 +1135,10 @@ body.fury-player-detail-page #playerDetail #furyPropsPanel .fury-grid{gap:8px}
 <div class="panel match-center-panel" id="furyBookmakerOdds" style="margin:20px 0"><div class="player-panel-head"><h2>Live bookmaker odds</h2><span class="player-panel-kicker">THE ODDS API · DECIMAL</span></div><p class="hint" id="furyOddsStatus">Choose a matchup to load upcoming bookmaker odds.</p><div class="fury-grid" id="furyOddsResults"></div><p class="hint">Only upcoming fixtures returned by the provider. Scores and historical matches are not betting lines. Market availability varies by league, region and bookmaker. Implied probabilities include bookmaker margin.</p></div>
 <div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
 <div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
-<div class="projection-foot"><div class="projection-sub" id="projectionSample"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
+<div class="projection-foot"><div class="projection-sub" id="furyRankingModelNote">League ranking adjustment: pending analysis.</div><div class="projection-sub" id="projectionSample"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
 </div>
 <div class="tiles player-kpis"><div class="tile"><span>Estimated total goals</span><strong id="matchGoals">—</strong></div><div class="tile"><span>Estimated total corners</span><strong id="matchCorners">—</strong></div><div class="tile"><span>Estimated total shots</span><strong id="matchShots">—</strong></div><div class="tile"><span>Estimated total SOT</span><strong id="matchSot">—</strong></div></div>
-<div class="panel match-center-panel"><div class="player-panel-head"><h2>Attacking vs. defensive matchup</h2><span class="player-panel-kicker">MODEL COMPARISON</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Metric</th><th id="homeHead">Home</th><th id="awayHead">Away</th><th>Estimated total</th><th>Comparison</th></tr></thead><tbody id="matchComparison"></tbody></table></div><p class="hint">Each team's baseline = average of its own for-per-game and the opponent's against-per-game, using the selected home/away samples. Not a calibrated forecast.</p></div>
+<div class="fury-extra" id="furyLeagueStrengthCompare"><h3>League ranking · Strength comparison</h3><p class="fury-note">Select teams and click Analyze match to calculate their league positions.</p></div><div class="panel match-center-panel"><div class="player-panel-head"><h2>Attacking vs. defensive matchup</h2><span class="player-panel-kicker">MODEL COMPARISON</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Metric</th><th id="homeHead">Home</th><th id="awayHead">Away</th><th>Estimated total</th><th>Comparison</th></tr></thead><tbody id="matchComparison"></tbody></table></div><p class="hint">Each team's baseline = average of its own for-per-game and the opponent's against-per-game, using the selected home/away samples. Not a calibrated forecast.</p></div>
 <div class="fury-extra" id="furyAdvancedMatch"><h3>Advanced match intelligence</h3><div class="fury-grid" id="furyAdvancedMetrics"></div><p class="fury-note" id="furyAdvancedNote">Venue-based historical averages. NPxG, PPDA, xPTS and deep completions require source data; unavailable values are never estimated.</p></div>
 <div class="fury-extra" id="furyMatchQuality"><h3>Shot quality · venue splits</h3><div class="fury-grid" id="furyQualityGrid"></div><p class="fury-note">Observed xG, xGA and shot quality from completed match events; not model-implied probabilities.</p></div>
 <div class="fury-extra" id="furyMatchPlayers"><h3>Player home / away performance</h3><div class="controls"><label>Team<select id="furyMatchPlayerTeam"></select></label><label>Player<select id="furyMatchPlayer"></select></label></div><div class="fury-grid" id="furyPlayerVenue"></div><h3 style="margin-top:18px">Recent shooting trend</h3><div class="fury-chart" id="furyMatchTrend"></div></div>
@@ -1600,8 +1600,14 @@ function renderProjection(home,away,homeGames,awayGames){
   }
   $('projectionPanel').querySelectorAll('.projection-market,.projection-scoreline,.projection-foot,.projection-odds-title,.projection-odds-grid').forEach(e=>e.hidden=false);
   $('projectionCornersMarket').hidden=!validCorners;
-  const eh=Math.max(0,(hf+aa)/2),ea=Math.max(0,(af+ha)/2);
+  const baseEh=Math.max(0,(hf+aa)/2),baseEa=Math.max(0,(af+ha)/2);
+  const ranking=furyRankingGoalAdjustment(home,away);
+  const eh=baseEh*ranking.homeMultiplier,ea=baseEa*ranking.awayMultiplier;
   const p=poissonProjection(eh,ea);
+  const rankingInfo=document.getElementById('furyRankingModelNote');
+  if(rankingInfo)rankingInfo.textContent=ranking.available
+    ?`League ranking adjustment: ${ranking.homePosition} vs ${ranking.awayPosition} · home xG ×${ranking.homeMultiplier.toFixed(3)}, away xG ×${ranking.awayMultiplier.toFixed(3)} (max ±8%; same-league only).`
+    :'League ranking adjustment: not applied (rankings unavailable or teams in different leagues).';
   const pct=x=>(100*x).toFixed(1)+'%';
   const odds=x=>x>0?(1/x).toFixed(2):'N/A';
   $('projectionHomeXg').textContent=String(p.best.h);
@@ -2666,6 +2672,54 @@ document.getElementById('oddsRefresh').addEventListener('click',()=>void loadOdd
  document.addEventListener('DOMContentLoaded',refresh);
 })();
 </script>
+<script id="fury-league-strength-module">
+// League position is computed from loaded domestic match results, not a live standings feed.
+function furyLeagueTable(league){
+ const suffix=' ('+(typeof LEAGUES!=='undefined'?LEAGUES[league]?.label:'')+')';
+ const teams=(typeof matchTeamsByLeague!=='undefined'?matchTeamsByLeague[league]:[])||[];
+ const table=teams.map(team=>{
+  const seen=new Set();let played=0,w=0,d=0,l=0,gf=0,ga=0;
+  for(const r of matchPool.filter(x=>x.team===team)){
+   const a=Number(r.goals_for),b=Number(r.goals_against);
+   if(r.goals_for==null||r.goals_against==null||!Number.isFinite(a)||!Number.isFinite(b))continue;
+   const key=String(r.date||'')+'|'+String(r.venue||'')+'|'+String(r.opponent||'');
+   if(seen.has(key))continue;seen.add(key);played++;gf+=a;ga+=b;
+   if(a>b)w++;else if(a===b)d++;else l++;
+  }
+  return {team,played,w,d,l,gf,ga,gd:gf-ga,points:3*w+d};
+ }).filter(x=>x.played);
+ table.sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf||a.team.localeCompare(b.team));
+ return table.map((x,i)=>({...x,position:i+1,total:table.length,strength:table.length>1?Math.round(100*(table.length-i-1)/(table.length-1)):50,pointsPerGame:x.points/x.played}));
+}
+function furyLeagueStrength(team,league){return furyLeagueTable(league).find(x=>x.team===team)||null;}
+// Additional factor, not a replacement for the venue-based goals model.
+// Strength difference ranges -1..1; symmetric adjustment capped at 8%.
+function furyRankingGoalAdjustment(home,away){
+ const hl=document.getElementById('homeLeague')?.value,al=document.getElementById('awayLeague')?.value;
+ const neutral={available:false,homeMultiplier:1,awayMultiplier:1};
+ if(!hl||hl!==al)return neutral;
+ const h=furyLeagueStrength(home,hl),a=furyLeagueStrength(away,al);
+ if(!h||!a||h.total<2||a.total<2||h.played<3||a.played<3)return neutral;
+ const delta=(h.strength-a.strength)/100;
+ const factor=0.08*delta;
+ return {available:true,homePosition:h.position,awayPosition:a.position,homeMultiplier:1+factor,awayMultiplier:1-factor,strengthDifference:h.strength-a.strength};
+}
+
+function furyUpdateLeagueComparison(){
+ const home=document.getElementById('homeTeam')?.value,away=document.getElementById('awayTeam')?.value;
+ const hl=document.getElementById('homeLeague')?.value,al=document.getElementById('awayLeague')?.value;
+ const h=furyLeagueStrength(home,hl),a=furyLeagueStrength(away,al);
+ const box=document.getElementById('furyLeagueStrengthCompare');if(!box)return;
+ const label=x=>x?`#${x.position} / ${x.total} · ${x.points} pts · ${x.pointsPerGame.toFixed(2)} PPG`:'Ranking unavailable';
+ const strength=x=>x?`${x.strength}/100`:'N/A';
+ box.innerHTML='';const title=document.createElement('h3');title.textContent='League ranking · Strength comparison';box.append(title);
+ const grid=document.createElement('div');grid.className='fury-grid';
+ for(const [name,r] of [[home,h],[away,a]]){const card=document.createElement('div');card.className='fury-stat';const small=document.createElement('small');small.textContent=name||'Select team';const big=document.createElement('strong');big.textContent=strength(r);const info=document.createElement('div');info.textContent=label(r);info.className='fury-note';card.append(small,big,info);grid.append(card);}box.append(grid);
+ const note=document.createElement('p');note.className='fury-note';note.textContent='Strength score: 100 = first, 0 = last in the loaded league table. Rankings are calculated from available completed domestic matches; not official/live standings. Cross-league scores measure relative position only, not league quality. For same-league matches with at least 3 completed matches per team, this factor also adjusts expected goals by up to ±8% before Poisson probabilities are calculated.';box.append(note);
+ const body=document.getElementById('matchComparison');if(body){body.querySelector('#furyLeagueRankRow')?.remove();const tr=document.createElement('tr');tr.id='furyLeagueRankRow';for(const value of ['League position',label(h),label(a),'Relative league rank',`${strength(h)} vs ${strength(a)}`]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.prepend(tr);}
+}
+document.getElementById('analyzeButton')?.addEventListener('click',furyUpdateLeagueComparison);
+</script>
 <script id="fury-ai-module">
 // Configure a secure server-side endpoint. Never put an OpenAI API key in this HTML.
 // Endpoint is derived from the same Supabase project as fury-auth.js.
@@ -2675,14 +2729,14 @@ const furyAiEl = id => document.getElementById(id);
 const furyAiNumeric = value => { const x=Number(value);return Number.isFinite(x)?x:null; };
 function furyAiAvg(rows,key){const nums=rows.map(r=>r[key]).filter(v=>v!==null&&v!==undefined&&v!=='').map(Number).filter(Number.isFinite);return nums.length?Math.round(nums.reduce((a,b)=>a+b,0)/nums.length*100)/100:null;}
 function furyAiGames(team,venue){const count=Number(furyAiEl('matchPeriod')?.value||5);if(typeof venueGames!=='function')return [];return venueGames(team,venue,count).map(r=>({date:r.date,opponent:r.opponent,venue:r.venue,goals_for:r.goals_for,goals_against:r.goals_against,xg_for:r.xg_for,xg_against:r.xg_against,shots_for:r.shots_for,shots_against:r.shots_against,shots_on_target_for:r.shots_on_target_for,shots_on_target_against:r.shots_on_target_against,corners_for:r.corners_for,corners_against:r.corners_against}));}
-function furyAiMatchPayload(){const home=furyAiEl('homeTeam')?.value,away=furyAiEl('awayTeam')?.value;if(!home||!away||home===away)throw Error('Select two different teams first.');const homeGames=furyAiGames(home,'Home'),awayGames=furyAiGames(away,'Away');if(!homeGames.length||!awayGames.length)throw Error('Match history is unavailable for these teams.');return {source:'match-analysis',home_team:home,away_team:away,home_league:furyAiEl('homeLeague')?.value,away_league:furyAiEl('awayLeague')?.value,venue_sample:furyAiEl('matchPeriod')?.selectedOptions?.[0]?.textContent,home_games:homeGames,away_games:awayGames,model:{projected_box_score_home:furyAiNumeric(furyAiEl('projectionHomeXg')?.textContent),projected_box_score_away:furyAiNumeric(furyAiEl('projectionAwayXg')?.textContent),most_likely_score:furyAiEl('projectionScoreline')?.textContent,home_win:furyAiEl('projectionWinHome')?.textContent,draw:furyAiEl('projectionDraw')?.textContent,away_win:furyAiEl('projectionWinAway')?.textContent,over_2_5:furyAiEl('projectionOver')?.textContent,btts_yes:furyAiEl('projectionBttsYes')?.textContent}};}
+function furyAiMatchPayload(){const home=furyAiEl('homeTeam')?.value,away=furyAiEl('awayTeam')?.value;if(!home||!away||home===away)throw Error('Select two different teams first.');const homeGames=furyAiGames(home,'Home'),awayGames=furyAiGames(away,'Away');if(!homeGames.length||!awayGames.length)throw Error('Match history is unavailable for these teams.');return {source:'match-analysis',home_team:home,away_team:away,home_league:furyAiEl('homeLeague')?.value,away_league:furyAiEl('awayLeague')?.value,venue_sample:furyAiEl('matchPeriod')?.selectedOptions?.[0]?.textContent,home_games:homeGames,away_games:awayGames,league_strength:{home:furyLeagueStrength(home,furyAiEl('homeLeague')?.value),away:furyLeagueStrength(away,furyAiEl('awayLeague')?.value),method:'Position among teams in loaded completed domestic match records; normalized 0-100; not official standings or cross-league quality',instruction:'League ranking is an additional factor in the existing model. For same-league teams with sufficient records, expected goals and derived Poisson probabilities already include the bounded ranking adjustment; do not apply it again. Distinguish ranking from form and venue statistics',adjustment:furyRankingGoalAdjustment(home,away)},model:{projected_box_score_home:furyAiNumeric(furyAiEl('projectionHomeXg')?.textContent),projected_box_score_away:furyAiNumeric(furyAiEl('projectionAwayXg')?.textContent),most_likely_score:furyAiEl('projectionScoreline')?.textContent,home_win:furyAiEl('projectionWinHome')?.textContent,draw:furyAiEl('projectionDraw')?.textContent,away_win:furyAiEl('projectionWinAway')?.textContent,over_2_5:furyAiEl('projectionOver')?.textContent,btts_yes:furyAiEl('projectionBttsYes')?.textContent}};}
 function furyAiFromOdds(event){const home=event.home_team,away=event.away_team;const homeLeague=furyAiEl('homeLeague'),awayLeague=furyAiEl('awayLeague');const hleague=event.league;const homeOption=[...homeLeague.options].find(o=>o.value===hleague);const awayOption=[...awayLeague.options].find(o=>o.value===hleague);if(homeOption&&awayOption){homeLeague.value=hleague;awayLeague.value=hleague;homeLeague.dispatchEvent(new Event('change'));awayLeague.dispatchEvent(new Event('change'));const h=furyAiEl('homeTeam'),a=furyAiEl('awayTeam');const hOpt=[...h.options].find(o=>o.value.toLowerCase()===String(home).toLowerCase());const aOpt=[...a.options].find(o=>o.value.toLowerCase()===String(away).toLowerCase());if(hOpt&&aOpt){h.value=hOpt.value;a.value=aOpt.value;furyAiEl('analyzeButton')?.click();}}
 const tab=furyAiEl('matchTab');if(tab?.classList.contains('hidden')){const matchTabBtn=[...document.querySelectorAll('button')].find(b=>b.getAttribute('data-tab')==='matchTab'||b.getAttribute('data-target')==='matchTab');if(matchTabBtn)matchTabBtn.click();else{const tabs=[...document.querySelectorAll('.tabs button')];const button=tabs.find(b=>/match analysis/i.test(b.textContent));button?.click();}}
 const panel=furyAiEl('furyAiMatchPanel');panel?.scrollIntoView({behavior:'smooth',block:'start'});
 const ctx=furyAiEl('furyAiContext');if(ctx)ctx.textContent=`${home} vs ${away} · ${oddsKickoff(event)} · ${event.bookmaker||'Bookmaker unavailable'}`;
 const payload={source:'odds-schedule',home_team:home,away_team:away,league:event.league,kickoff:event.commence_time,bookmaker:event.bookmaker,odds:{moneyline:event.h2h,totals:event.totals}};
 // If matching history is available, include it as additional context.
-try{const p=furyAiMatchPayload();if(p.home_team.toLowerCase()===String(home).toLowerCase()&&p.away_team.toLowerCase()===String(away).toLowerCase())Object.assign(payload,{home_games:p.home_games,away_games:p.away_games,model:p.model});}catch(_){}
+try{const p=furyAiMatchPayload();if(p.home_team.toLowerCase()===String(home).toLowerCase()&&p.away_team.toLowerCase()===String(away).toLowerCase())Object.assign(payload,{home_games:p.home_games,away_games:p.away_games,league_strength:p.league_strength,model:p.model});}catch(_){}
 void furyAiRequest(payload);
 }
 async function furyAiRequest(payload){
