@@ -1059,7 +1059,34 @@ body.fury-player-detail-page #playerDetail .pd-filters select{display:block;box-
  body.fury-player-detail-page #playerDetail .fury-combined-controls label:nth-child(2){grid-column:auto;}
 }
 </style>
-<style id="fury-player-identity-lock">body.fury-player-detail-page .fury-identity-hidden{display:none!important}body.fury-player-detail-page .fury-combined-controls{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:650px){body.fury-player-detail-page .fury-combined-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}</style></head>
+<style id="fury-player-identity-lock">body.fury-player-detail-page .fury-identity-hidden{display:none!important}body.fury-player-detail-page .fury-combined-controls{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:650px){body.fury-player-detail-page .fury-combined-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="fury-theme-style">
+/* FURY cross-page light theme; dark styling remains unchanged by default. */
+html[data-fury-theme="light"]{color-scheme:light;--bg:#f3f7fc;--panel:#fff;--panel2:#edf3fa;--line:#cbd9e7;--border:#cbd9e7;--txt:#14253b;--text:#14253b;--muted:#536b83;--blue:#087eb8;--green:#087d57}
+html[data-fury-theme="light"] body{background:#f3f7fc!important;color:#14253b!important}
+html[data-fury-theme="light"] :is(header,main,.shell,.app-shell,.app-content){color:#14253b}
+html[data-fury-theme="light"] :is(.panel,.tile,.card,.stats>div,.league-sidebar,.league-switch,.tabs,.player-hero,.player-detail,.player-filter-panel,.team-metric-card,.team-center-panel,.match-center-panel,.projection,.projection-market,.projection-odds-grid>div,.projection-card-box,.fury-extra,.fury-stat,.fury-picks-panel,.fury-pick,.fury-selected-pick,.pd-filters,.pd-kpis,.pd-chart,.player-table-wrap,.odds-table-wrap,.fury-side-panel,.fury-scanner,.fury-scanner-stage,.fury-portal-header,.mark,.icon,.track,.market-prob-bar){background:#fff!important;border-color:#cbd9e7!important;color:#14253b!important;box-shadow:none!important}
+html[data-fury-theme="light"] :is(.player-table-wrap tbody tr:nth-child(even),#teamRows tr:nth-child(even),.odds-table tbody tr,.player-table-wrap th,th,.pd-table th,.odds-table th){background:#edf3fa!important;color:#243e56!important}
+html[data-fury-theme="light"] :is(select,input,textarea,.search,.league-header-trigger,.league-menu,.odds-range-filter,.odds-range-filter input){background:#fff!important;color:#14253b!important;border-color:#b8cbdd!important}
+html[data-fury-theme="light"] :is(.muted,.hint,p,.note,.status,.projection-sub,.projection-topline,.projection-total,.projection-market-title,.projection-scoreline,.fury-pick-meta,.player-hero p,.card p,.fury-scanner-status){color:#536b83!important}
+html[data-fury-theme="light"] :is(h1,h2,h3,.brand,.brand-fury,.projection-name,.projection-numbers,.card h3,.player-hero h2,.site-title,.fury-portal-brand,.fury-portal-logo){color:#14253b!important}
+html[data-fury-theme="light"] :is(.tabs button,.league-menu-item,.fury-side-link,.team-rank-click,.team-leader button){color:#28445f!important}
+html[data-fury-theme="light"] :is(.tabs button.active,.league-menu-item.active,.fury-side-link.active){background:#d9eefb!important;color:#075b88!important;border-color:#79bce0!important}
+html[data-fury-theme="light"] :is(.brand-sports,.brand b,.hero h1 span){color:#087eb8!important}
+html[data-fury-theme="light"] :is(.fury-portal-header,.header){border-bottom-color:#cbd9e7!important}
+html[data-fury-theme="light"] :is(.fury-scanner-stage,.fury-scanner-ball){background:#e3f3fd!important}
+html[data-fury-theme="light"] :is(.projection-bar,.track,.team-meter){background:#dce7f1!important}
+html[data-fury-theme="light"] :is(.pd-player-link,.team-leader-value,.foot,.eyebrow){color:#086e9d!important}
+html[data-fury-theme="light"] :is(.projection-team-icon,.fury-pick-stat,.fury-pick-stat-model,.fury-pick-stat-ev,.team-pill){background:#e7f3fc!important;color:#125b83!important;border-color:#c0daea!important}
+html[data-fury-theme="light"] :is(.stat-high,.stat-above,.stat-mid,.stat-low,.stat-na){color:inherit}
+html[data-fury-theme="light"] :is(.fury-portal-mark,.mark){background:#e0f1fc!important;color:#076d9d!important}
+html[data-fury-theme="light"] :is(.projection-caption,.pd-hit){color:#087d57!important}
+html[data-fury-theme="light"] .fury-icon-rain{opacity:.12}
+#fury-theme-toggle{position:fixed;right:17px;bottom:17px;z-index:2147483000;display:flex;align-items:center;gap:8px;border:1px solid #50718d;border-radius:999px;background:#14283d;color:#f4f9ff;padding:11px 16px;box-shadow:0 5px 22px #0004;font:700 13px 'Outfit',system-ui,sans-serif;cursor:pointer;min-width:0;width:auto;min-height:43px}
+#fury-theme-toggle:hover{border-color:#43baf6}
+#fury-theme-toggle:focus-visible{outline:3px solid #43baf6;outline-offset:3px}
+html[data-fury-theme="light"] #fury-theme-toggle{background:#fff;color:#12314a;border-color:#b8cbdd;box-shadow:0 5px 18px #243e5626}
+@media(max-width:600px){#fury-theme-toggle{right:12px;bottom:12px;padding:10px 13px;font-size:12px}}
+</style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
 <div class="fury-side-scroll">
@@ -2848,4 +2875,27 @@ function furyPlayerDetailUrl(name,team){
  const league=document.getElementById('furyPlayerLeague')?.value||document.getElementById('leagueSelect')?.value;
  if(league)u.searchParams.set('league',league);return u.href;
 }
-</script></body></html>
+</script>
+<script id="fury-theme-script">
+(function(){
+  const key='fury-sports-theme';
+  function read(){try{return localStorage.getItem(key)==='light'?'light':'dark'}catch(_){return 'dark'}}
+  function apply(mode){
+    document.documentElement.setAttribute('data-fury-theme',mode);
+    document.documentElement.style.colorScheme=mode;
+    const b=document.getElementById('fury-theme-toggle');
+    if(b){b.textContent=mode==='light'?'☾ Dark mode':'☀ Light mode';b.setAttribute('aria-label','Switch to '+(mode==='light'?'dark':'light')+' mode');b.setAttribute('aria-pressed',String(mode==='light'));}
+    const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=mode==='light'?'#f3f7fc':'#080f1c';
+  }
+  apply(read());
+  function mount(){
+    if(document.getElementById('fury-theme-toggle'))return;
+    const b=document.createElement('button');b.id='fury-theme-toggle';b.type='button';b.title='Switch website appearance';
+    b.addEventListener('click',()=>{const mode=document.documentElement.getAttribute('data-fury-theme')==='light'?'dark':'light';try{localStorage.setItem(key,mode)}catch(_){}apply(mode)});
+    document.body.appendChild(b);apply(read());
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+  window.addEventListener('storage',e=>{if(e.key===key)apply(read())});
+})();
+</script>
+</body></html>
