@@ -1120,6 +1120,26 @@ html[data-fury-theme="light"] .fury-matchai-market{border-color:#cbdde9}
 html[data-fury-theme="light"] .fury-matchai-score small{color:#007b70}
 @media(max-width:900px){.fury-matchai-grid{grid-template-columns:1fr}}
 @media(max-width:450px){.fury-matchai-score{flex-basis:88px}.fury-matchai-score strong{font-size:24px}.fury-matchai-team{font-size:11px}}
+
+/* Projections: ultra-compact responsive match cards */
+.fury-matchai-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0 16px}
+.fury-matchai-card{padding:10px 11px;border-radius:11px}
+.fury-matchai-meta{font-size:9px;gap:4px}
+.fury-matchai-fixture{margin:7px 0 5px;gap:4px}
+.fury-matchai-team{font-size:10px;gap:3px;min-width:0;overflow-wrap:anywhere}
+.fury-matchai-team img{width:26px;height:26px;object-fit:contain}
+.fury-matchai-logo-fallback{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:900;background:#254c67;color:#e3f7ff;border:1px solid #4a7894}
+.fury-matchai-score{flex-basis:72px}.fury-matchai-score strong{font-size:21px}.fury-matchai-score small{font-size:8px}
+.fury-matchai-xg{font-size:9px;margin-bottom:5px}
+.fury-matchai-metrics{margin:5px 0;gap:4px}.fury-matchai-metric{padding:4px 2px}.fury-matchai-metric small{font-size:8px;margin-bottom:2px}.fury-matchai-metric strong{font-size:11px}
+.fury-matchai-market{padding:5px 0}.fury-matchai-market-head{font-size:9px;margin-bottom:3px}.fury-matchai-market-values{font-size:9px;margin-bottom:3px}.fury-matchai-bar{height:4px}
+.fury-matchai-odds{margin:5px 0;gap:4px}.fury-matchai-odd{padding:4px 2px}.fury-matchai-odd small{font-size:8px}.fury-matchai-odd strong{font-size:11px}
+.fury-matchai-action{margin-top:5px;padding:7px;font-size:10px}
+#matchaiTab .player-hero{padding-top:13px;padding-bottom:13px;margin-bottom:12px}#matchaiTab .player-hero p{margin:5px 0}
+#matchaiTab .player-filter-panel{padding:12px;margin-bottom:9px}#matchaiTab .controls{gap:7px;margin-bottom:5px}#matchaiTab .controls label{min-width:125px;flex:1}#matchaiTab .controls input{min-width:120px}
+html[data-fury-theme="light"] .fury-matchai-logo-fallback{background:#e5f2fc;color:#174260;border-color:#a8c8dd}
+@media(max-width:1100px){.fury-matchai-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.fury-matchai-grid{grid-template-columns:1fr}.fury-matchai-card{padding:10px}.fury-matchai-team{font-size:11px}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -1240,7 +1260,7 @@ html[data-fury-theme="light"] .fury-matchai-score small{color:#007b70}
 <section class="hidden" id="matchaiTab">
 <div class="player-hero"><div class="player-eyebrow">FURY SPORTS AI / FIXTURE INTELLIGENCE</div><h2>Projections</h2><p>Compact Poisson match projections for every fixture in Odds &amp; Schedule: projected score, expected goals, 1X2 probabilities, over/under and BTTS. Select Analyze with AI for the existing detailed AI workflow.</p><span class="player-hero-tag">Same protected schedule feed · No extra API calls per card</span></div>
 <div class="panel player-filter-panel"><div class="filter-heading"><div><span class="filter-eyebrow">MATCH SCANNER</span><h3>Upcoming matches</h3></div><span class="filter-chip">FURY AI</span></div>
-<div class="controls"><label>Find team<input id="matchAiSearch" type="search" placeholder="Search fixtures…" autocomplete="off"></label><label>Date<select id="matchAiDate"><option value="all">All upcoming dates</option></select></label><label>Model availability<select id="matchAiModel"><option value="all">All fixtures</option><option value="ready">Model available</option><option value="missing">No model estimate</option></select></label><label>Refresh<button id="matchAiRefresh" type="button">Refresh schedule</button></label></div>
+<div class="controls"><label>League<select id="matchAiLeague"><option value="all">All available leagues</option><option value="laliga">La Liga</option><option value="premier_league">Premier League</option><option value="bundesliga">Bundesliga</option><option value="serie_a">Serie A</option><option value="ligue_1">Ligue 1</option><option value="liga_mx">Liga MX</option><option value="champions_league">Champions League</option><option value="eredivisie" disabled>Eredivisie (feed unavailable)</option><option value="portugal_primeira_liga" disabled>Liga Portugal (feed unavailable)</option></select></label><label>Find team<input id="matchAiSearch" type="search" placeholder="Search fixtures…" autocomplete="off"></label><label>Date<select id="matchAiDate"><option value="all">All upcoming dates</option></select></label><label>Model availability<select id="matchAiModel"><option value="all">All fixtures</option><option value="ready">Model available</option><option value="missing">No model estimate</option></select></label><label>Refresh<button id="matchAiRefresh" type="button">Refresh schedule</button></label></div>
 <p class="hint" id="matchAiStatus" aria-live="polite">Open this section to load the schedule.</p></div>
 <div class="fury-matchai-grid" id="matchAiCards"></div>
 <p class="hint">Bookmaker probabilities are market-derived, not AI predictions. FURY model values are displayed only when the required historical match data is available. AI commentary is generated on demand via the existing Match Analysis tool.</p>
@@ -1318,7 +1338,7 @@ function ranking(container,items,key,label){container.replaceChildren();const va
 
 
 
-function showTab(name){['teams','players','match','odds','matchai'].forEach(t=>{$(t+'Tab').classList.toggle('hidden',t!==name);document.querySelector('[data-tab="'+t+'"]').classList.toggle('active',t===name)});if(name==='teams')renderTeams();if(name==='players')renderPlayers();if(name==='match')analyze();if(name==='odds'||name==='matchai')void loadOddsSchedule();if(name==='matchai'&&typeof furyRenderMatchAiCards==='function')furyRenderMatchAiCards()}
+function showTab(name){['teams','players','match','odds','matchai'].forEach(t=>{$(t+'Tab').classList.toggle('hidden',t!==name);document.querySelector('[data-tab="'+t+'"]').classList.toggle('active',t===name)});if(name==='teams')renderTeams();if(name==='players')renderPlayers();if(name==='match')analyze();if(name==='matchai'){const projectionLeague=document.getElementById('matchAiLeague');if(projectionLeague){oddsLeagueEl.value=projectionLeague.value;}}if(name==='odds'||name==='matchai')void loadOddsSchedule();if(name==='matchai'&&typeof furyRenderMatchAiCards==='function')furyRenderMatchAiCards()}
 
 
 
@@ -2508,8 +2528,9 @@ function furyRenderMatchAiCards(){
  dateSelect.replaceChildren(new Option('All upcoming dates','all'));
  for(const d of dates)dateSelect.add(new Option(new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}),d));
  dateSelect.value=dates.includes(previous)?previous:'all';
- const date=dateSelect.value,modelFilter=document.getElementById('matchAiModel').value;
+ const date=dateSelect.value,modelFilter=document.getElementById('matchAiModel').value,projectionLeague=document.getElementById('matchAiLeague').value;
  const items=oddsScheduleData.filter(e=>{
+  if(projectionLeague!=='all'&&e.league!==projectionLeague)return false;
   if(date!=='all'&&oddsDateKey(e)!==date)return false;
   if(search&&!`${e.home_team} ${e.away_team} ${oddsLeagueLabels[e.league]||e.league}`.toLowerCase().includes(search))return false;
   const ready=!!furyEstimateEvent(e);return modelFilter==='all'||(modelFilter==='ready'?ready:!ready);
@@ -2521,7 +2542,7 @@ function furyRenderMatchAiCards(){
   const league=document.createElement('span');league.textContent=(oddsLeagueLabels[e.league]||e.league)+' · MATCH PROJECTION';
   const kickoff=document.createElement('span');kickoff.textContent=oddsKickoff(e);meta.append(league,kickoff);
   const fixture=document.createElement('div');fixture.className='fury-matchai-fixture';
-  const addTeam=name=>{const team=document.createElement('div');team.className='fury-matchai-team';const logo=typeof furyCrest==='function'?furyCrest(name,e.league):'';if(logo){const img=document.createElement('img');img.src=logo;img.alt='';img.loading='lazy';img.onerror=()=>img.remove();team.append(img)}const label=document.createElement('span');label.textContent=name||'Unknown';team.append(label);fixture.append(team)};
+  const addTeam=name=>{const team=document.createElement('div');team.className='fury-matchai-team';const logo=typeof furyCrest==='function'?furyCrest(name,e.league):'';const fallback=document.createElement('span');fallback.className='fury-matchai-logo-fallback';fallback.textContent=String(name||'?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();if(logo){const img=document.createElement('img');img.src=logo;img.alt=name+' logo';img.loading='lazy';img.onerror=()=>img.replaceWith(fallback);team.append(img)}else{team.append(fallback)}const label=document.createElement('span');label.textContent=name||'Unknown';team.append(label);fixture.append(team)};
   addTeam(e.home_team);
   const score=document.createElement('div');score.className='fury-matchai-score';
   const scoreNum=document.createElement('strong');const scoreNote=document.createElement('small');
@@ -2544,6 +2565,7 @@ function furyRenderMatchAiCards(){
  document.getElementById('matchAiStatus').textContent=`${items.length} compact match projections · ${oddsScheduleData.length} fixtures loaded · ${items.filter(e=>!!furyEstimateEvent(e)).length} with historical model data`;
  if(!items.length){const empty=document.createElement('div');empty.className='panel';empty.textContent=oddsScheduleData.length?'No fixtures match these filters.':'No fixtures loaded. Sign in and load the Odds & Schedule feed.';host.append(empty)}
 }
+document.getElementById('matchAiLeague').addEventListener('change',()=>{oddsLeagueEl.value=document.getElementById('matchAiLeague').value;void loadOddsSchedule(false)});
 for(const id of ['matchAiSearch','matchAiDate','matchAiModel'])document.getElementById(id).addEventListener('input',furyRenderMatchAiCards);
 document.getElementById('matchAiRefresh').addEventListener('click',()=>void loadOddsSchedule(true));
 
