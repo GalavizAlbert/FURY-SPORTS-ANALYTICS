@@ -74,7 +74,9 @@
       "coventry city fc": "1076",
       "coventry city": "1076",
       "coventry": "1076",
-      "cov": "1076"
+      "cov": "1076",
+      "manchester united": "66",
+      "manchester city": "65"
     },
     "la_liga": {
       "athletic club": "77",
@@ -280,7 +282,8 @@
       "monza": "5911",
       "mon": "5911",
       "como 1907": "7397",
-      "com": "7397"
+      "com": "7397",
+      "como": "7397"
     },
     "ligue_1": {
       "toulouse fc": "511",
