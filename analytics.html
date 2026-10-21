@@ -2361,21 +2361,25 @@ Object.assign(furyNameAliases,{
 });
 // Resolve historical model team names and bookmaker names through the same league-specific crest ID.
 // Only trust a club ID when it is present in the requested league; never guess across leagues.
-function furyCanonicalClubId(name,league){
+function furyCanonicalClubIdentity(name,league){
  const key=furyLogoNormalize(name),lg=furyLogoLeagueKeys[league]||league;
- const records=furyLogoCatalog?.[lg],aliases=furyLogoAliases?.[lg]||{};
- if(!records)return '';
- const override=furyCrestOverrides[key];
- if(override?.league===lg&&records[String(override.id)])return String(override.id);
- const id=aliases[key]||aliases[key.replace(/ /g,'')];
- if(id&&records[String(id)])return String(id);
- for(const [recordId,record] of Object.entries(records)){
-  if([record.name,record.shortName,record.tla].some(v=>furyLogoNormalize(v)===key))return String(recordId);
+ const candidates=[lg];
+ // Cross-league fixtures need domestic aliases, not only the competition alias pool.
+ if(lg==='champions_league'||lg==='europa_league'||lg==='conference_league')
+  candidates.push('premier_league','la_liga','serie_a','bundesliga','ligue_1','eredivisie','primeira_liga');
+ const override=furyCrestOverrides[key];if(override&&!candidates.includes(override.league))candidates.push(override.league);
+ for(const pool of candidates){
+  const aliases=furyLogoAliases?.[pool]||{};
+  const id=aliases[key]||aliases[key.replace(/ /g,'')]||(override?.league===pool?override.id:null);
+  if(id)return String(id);
+  for(const [recordId,record] of Object.entries(furyLogoCatalog?.[pool]||{}))
+   if([record.name,record.shortName,record.tla].some(v=>furyLogoNormalize(v)===key))return String(recordId);
  }
  return '';
 }
+function furyCanonicalClubId(name,league){return furyCanonicalClubIdentity(name,league)}
 function furyModelClubKey(name,league){
- const id=furyCanonicalClubId(name,league);
+ const id=furyCanonicalClubIdentity(name,league);
  return id?'club:'+id:'name:'+furyTeamKey(name);
 }
 function furyProjectionCrestCandidates(name,league){
@@ -2394,7 +2398,7 @@ function furyTeamKey(value){
  return furyNameAliases[v]||v;
 }
 async function furyEnsureModels(events){
- const leagues=[...new Set(events.map(e=>e.league).filter(l=>furyModelFiles[l]))];
+ const leagues=[...new Set(events.some(e=>e.league==='champions_league')?Object.keys(furyModelFiles):events.map(e=>e.league).filter(l=>furyModelFiles[l]))];
  await Promise.all(leagues.map(async league=>{
   if(furyModelCache.has(league))return;
   if(!furyModelPending.has(league)){
@@ -2420,16 +2424,25 @@ async function furyEnsureModels(events){
 function furyEstimateEvent(event){
  const cacheKey=[event.league,furyModelClubKey(event.home_team,event.league),furyModelClubKey(event.away_team,event.league)].join('|');
  if(furyProjectionCache.has(cacheKey))return furyProjectionCache.get(cacheKey);
- const rows=furyModelCache.get(event.league);
- if(!Array.isArray(rows)||!rows.length)return null;
  const homeKey=furyModelClubKey(event.home_team,event.league),awayKey=furyModelClubKey(event.away_team,event.league);
+ // Continental fixtures use each club's domestic historical matches, when available.
+ const sources=event.league==='champions_league'?[...furyModelCache.entries()].filter(([lg])=>lg!=='champions_league'):[ [event.league,furyModelCache.get(event.league)] ];
+ const collect=(key)=>{
+  for(const [lg,rows] of sources){if(!Array.isArray(rows)||!rows.length)continue;
+   const matched=rows.filter(r=>furyModelClubKey(r.team,lg)===key);
+   if(matched.length)return matched;
+  }
+  return [];
+ };
+ const homeRows=collect(homeKey),awayRows=collect(awayKey);
+ if(!homeRows.length||!awayRows.length)return null;
  // Exact normalized matches only; never silently compare the wrong clubs.
- const home=rows.filter(r=>furyModelClubKey(r.team,event.league)===homeKey&&String(r.venue||'').toLowerCase()==='home'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
- const away=rows.filter(r=>furyModelClubKey(r.team,event.league)===awayKey&&String(r.venue||'').toLowerCase()==='away'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const home=homeRows.filter(r=>furyModelClubKey(r.team,event.league)===homeKey&&String(r.venue||'').toLowerCase()==='home'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const away=awayRows.filter(r=>furyModelClubKey(r.team,event.league)===awayKey&&String(r.venue||'').toLowerCase()==='away'&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
  // Early-season exports contain only 5-8 games per team, usually 2-4 per venue.
  // Require at least two at the relevant venue and five total for each club.
- const homeAll=rows.filter(r=>furyModelClubKey(r.team,event.league)===homeKey&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
- const awayAll=rows.filter(r=>furyModelClubKey(r.team,event.league)===awayKey&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const homeAll=homeRows.filter(r=>furyModelClubKey(r.team,event.league)===homeKey&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
+ const awayAll=awayRows.filter(r=>furyModelClubKey(r.team,event.league)===awayKey&&Number.isFinite(Number(r.goals_for))&&r.goals_for!==null&&Number.isFinite(Number(r.goals_against))&&r.goals_against!==null).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,10);
  if(home.length<2||away.length<2||homeAll.length<5||awayAll.length<5)return null;
  const mean=(list,key)=>list.reduce((total,r)=>total+Number(r[key]),0)/list.length;
  // Shrink small venue samples toward each team's all-venue form.
@@ -2480,7 +2493,7 @@ function renderFuryPicks(events){
  for(const e of events){
   const model=furyEstimateEvent(e);if(!model){
    missing++;
-   if(!furyModelFiles[e.league])reasons.unsupported++;
+   if(!furyModelFiles[e.league]&&e.league!=='champions_league')reasons.unsupported++;
    else if(!furyModelCache.get(e.league)?.length)reasons.noFile++;
    else{
     const rows=furyModelCache.get(e.league),homeKey=furyModelClubKey(e.home_team,e.league),awayKey=furyModelClubKey(e.away_team,e.league);
