@@ -2399,6 +2399,8 @@ Object.assign(furyNameAliases,{
  borussiadortmund:'dortmund',vfbstuttgart:'stuttgart',
  borussiamonchengladbach:'mgladbach',borussiamgladbach:'mgladbach',monchengladbach:'mgladbach',
  scfreiburg:'freiburg',tsghoffenheim:'hoffenheim',
+ scpaderborn07:'paderborn',scpaderborn:'paderborn',paderborn07:'paderborn',
+ hamburgsv:'hamburg',hamburgersv:'hamburg',hamburg:'hamburg',
  nottmforest:'nottmforest',nottinghamforest:'nottmforest',
  ipswichtown:'ipswich',coventrycity:'coventry',
  brightonandhovealbion:'brighton',brightonhovealbion:'brighton',
@@ -2414,6 +2416,8 @@ Object.assign(furyNameAliases,{
 // Only trust a club ID when it is present in the requested league; never guess across leagues.
 function furyCanonicalClubIdentity(name,league){
  const key=furyLogoNormalize(name),lg=furyLogoLeagueKeys[league]||league;
+ const germanFallback={'sc paderborn 07':'29','sc paderborn':'29','paderborn':'29','paderborn 07':'29','hamburg sv':'7','hamburger sv':'7','hamburg':'7','hsv':'7'};
+ if(lg==='bundesliga'&&germanFallback[key])return germanFallback[key];
  const candidates=[lg];
  // Cross-league fixtures need domestic aliases, not only the competition alias pool.
  if(lg==='champions_league'||lg==='europa_league'||lg==='conference_league')
@@ -2614,6 +2618,20 @@ function furyCompactMarket(title,labels,values){
  values.forEach((value,i)=>{const v=Math.max(0,Math.min(1,Number(value)||0));const label=document.createElement('span');label.textContent=labels[i]+' '+(100*v).toFixed(1)+'%';nums.append(label);const segment=document.createElement('span');segment.style.width=(v*100)+'%';bar.append(segment)});
  market.append(heading,nums,bar);return market;
 }
+function furyProjectionMissingReason(e){
+ const rows=furyModelCache.get(e.league);
+ if(!Array.isArray(rows)||!rows.length)return 'No historical match data loaded for '+(oddsLeagueLabels[e.league]||e.league)+'. Check data/*_team_matches.json.';
+ const diagnose=(name,venue)=>{
+  const key=furyModelClubKey(name,e.league);
+  const matches=rows.filter(r=>furyModelClubKey(r.team,e.league)===key);
+  const valid=matches.filter(r=>r.goals_for!=null&&r.goals_against!=null&&Number.isFinite(Number(r.goals_for))&&Number.isFinite(Number(r.goals_against)));
+  const venueCount=valid.filter(r=>String(r.venue||'').toLowerCase()===venue).length;
+  if(!matches.length)return name+': no matching club in historical dataset';
+  if(valid.length<5||venueCount<2)return name+': insufficient history ('+valid.length+' valid matches, '+venueCount+' '+venue+' matches; need 5 total and 2 '+venue+')';
+  return '';
+ };
+ return [diagnose(e.home_team,'home'),diagnose(e.away_team,'away')].filter(Boolean).join(' · ')||'Model unavailable; check historical data and club matching.';
+}
 function furyRenderMatchAiCards(){
  const host=document.getElementById('matchAiCards');if(!host)return;
  const search=document.getElementById('matchAiSearch').value.trim().toLowerCase();
@@ -2651,7 +2669,7 @@ function furyRenderMatchAiCards(){
    const p=model.probs;card.append(furyCompactMarket('Moneyline · FURY 1X2 model',[e.home_team,'Draw',e.away_team],[p.home,p.draw,p.away]));
    if(Number.isFinite(p.over))card.append(furyCompactMarket('Over / Under 2.5 goals',['Over','Under'],[p.over,1-p.over]));
    const btts=(1-Math.exp(-model.eh))*(1-Math.exp(-model.ea));card.append(furyCompactMarket('Both teams to score',['Yes','No'],[btts,1-btts]));
-  }else{const missing=document.createElement('div');missing.className='fury-matchai-unavailable';missing.textContent='Historical data unavailable or insufficient. No model probabilities generated.';card.append(missing)}
+  }else{const missing=document.createElement('div');missing.className='fury-matchai-unavailable';missing.textContent=furyProjectionMissingReason(e);card.append(missing)}
   const odds=document.createElement('div');odds.className='fury-matchai-odds';
   for(const [label,price] of [['Home odds',e.h2h?.home],['Draw odds',e.h2h?.draw],['Away odds',e.h2h?.away]]){const item=document.createElement('div');item.className='fury-matchai-odd';const small=document.createElement('small');small.textContent=label;const strong=document.createElement('strong');strong.textContent=oddsPrice(price);item.append(small,strong);odds.append(item)}card.append(odds);
   const button=document.createElement('button');button.type='button';button.className='fury-matchai-action';button.textContent='✦ Full Match AI Analysis';button.addEventListener('click',()=>furyAiFromOdds(e));card.append(button);host.append(card);
