@@ -1192,6 +1192,9 @@ html[data-fury-theme="light"] :is(.fury-matchai-action,.tabs button.active,.fury
 html[data-fury-theme="light"] :is(a,.pd-player-link,.team-rank-click){color:#086c9d}
 html[data-fury-theme="light"] :is(.good,.projection-caption,.pd-hit){color:#087b54!important}
 html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
+</style><style id="fury-v2-css">
+#matchTab .fury-v2-panel{padding:19px;margin:17px 0;background:linear-gradient(120deg,#10283c,#111e30);border:1px solid #32718c;border-radius:16px}
+.fury-v2-panel h3{color:#9be9ff;margin:0 0 12px}.fury-v2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px;margin:14px 0}.fury-v2-tile{background:#162e44;border:1px solid #33536c;border-radius:10px;padding:13px}.fury-v2-tile small{display:block;color:#b1cadd;font-size:11px}.fury-v2-tile strong{display:block;color:#f5faff;font-size:23px;margin-top:5px}.fury-v2-tile em{display:block;color:#8fb2c8;font-size:11px;font-style:normal;margin-top:4px}.fury-v2-panel .scroll{max-height:320px}.fury-v2-panel table th{background:#173149}.fury-v2-panel .fury-note{line-height:1.6}.fury-v2-warn{color:#ffca83!important}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -1295,7 +1298,7 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 <div class="projection-foot"><div class="projection-sub" id="furyRankingModelNote">League ranking adjustment: pending analysis.</div><div class="projection-sub" id="projectionSample"></div><div class="projection-sub">Experimental independent-Poisson model for goals and corners based on venue-specific for/against averages. No bookmaker odds, injury adjustments, or calibrated simulations. Estimates are not guaranteed.</div></div>
 </div>
 <div class="tiles player-kpis"><div class="tile"><span>Estimated total goals</span><strong id="matchGoals">—</strong></div><div class="tile"><span>Estimated total corners</span><strong id="matchCorners">—</strong></div><div class="tile"><span>Estimated total shots</span><strong id="matchShots">—</strong></div><div class="tile"><span>Estimated total SOT</span><strong id="matchSot">—</strong></div></div>
-<div class="fury-extra" id="furyLeagueStrengthCompare"><h3>League ranking · Strength comparison</h3><p class="fury-note">Select teams and click Analyze match to calculate their league positions.</p></div><div class="panel match-center-panel"><div class="player-panel-head"><h2>Attacking vs. defensive matchup</h2><span class="player-panel-kicker">MODEL COMPARISON</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Metric</th><th id="homeHead">Home</th><th id="awayHead">Away</th><th>Estimated total</th><th>Comparison</th></tr></thead><tbody id="matchComparison"></tbody></table></div><p class="hint">Each team's baseline = average of its own for-per-game and the opponent's against-per-game, using the selected home/away samples. Not a calibrated forecast.</p></div>
+<section class="fury-v2-panel" id="furyV2Panel" aria-live="polite"><h3>FURY AI 2.0 · Opponent-adjusted attack &amp; defense</h3><p class="fury-note">Choose teams and Analyze match to calculate offensive strength, defensive strength, recent form and opponent difficulty from loaded records.</p><div id="furyV2Content"></div></section><div class="fury-extra" id="furyLeagueStrengthCompare"><h3>League ranking · Strength comparison</h3><p class="fury-note">Select teams and click Analyze match to calculate their league positions.</p></div><div class="panel match-center-panel"><div class="player-panel-head"><h2>Attacking vs. defensive matchup</h2><span class="player-panel-kicker">MODEL COMPARISON</span></div><div class="scroll player-table-wrap"><table><thead><tr><th>Metric</th><th id="homeHead">Home</th><th id="awayHead">Away</th><th>Estimated total</th><th>Comparison</th></tr></thead><tbody id="matchComparison"></tbody></table></div><p class="hint">Each team's baseline = average of its own for-per-game and the opponent's against-per-game, using the selected home/away samples. Not a calibrated forecast.</p></div>
 <div class="fury-extra" id="furyAdvancedMatch"><h3>Advanced match intelligence</h3><div class="fury-grid" id="furyAdvancedMetrics"></div><p class="fury-note" id="furyAdvancedNote">Venue-based historical averages. NPxG, PPDA, xPTS and deep completions require source data; unavailable values are never estimated.</p></div>
 <div class="fury-extra" id="furyMatchQuality"><h3>Shot quality · venue splits</h3><div class="fury-grid" id="furyQualityGrid"></div><p class="fury-note">Observed xG, xGA and shot quality from completed match events; not model-implied probabilities.</p></div>
 <div class="fury-extra" id="furyMatchPlayers"><h3>Player home / away performance</h3><div class="controls"><label>Team<select id="furyMatchPlayerTeam"></select></label><label>Player<select id="furyMatchPlayer"></select></label></div><div class="fury-grid" id="furyPlayerVenue"></div><h3 style="margin-top:18px">Recent shooting trend</h3><div class="fury-chart" id="furyMatchTrend"></div></div>
@@ -1771,7 +1774,9 @@ function renderProjection(home,away,homeGames,awayGames){
   $('projectionCornersMarket').hidden=!validCorners;
   const baseEh=Math.max(0,(hf+aa)/2),baseEa=Math.max(0,(af+ha)/2);
   const ranking=furyRankingGoalAdjustment(home,away);
-  const eh=baseEh*ranking.homeMultiplier,ea=baseEa*ranking.awayMultiplier;
+  const enhanced=window.furyV2Compute?.(home,away,homeGames,awayGames);
+  const eh=(enhanced?.available?enhanced.homeLambda:baseEh)*ranking.homeMultiplier,ea=(enhanced?.available?enhanced.awayLambda:baseEa)*ranking.awayMultiplier;
+  if(window.furyV2Render)window.furyV2Render(enhanced,eh,ea,ranking);
   const p=poissonProjection(eh,ea);
   const rankingInfo=document.getElementById('furyRankingModelNote');
   if(rankingInfo)rankingInfo.textContent=ranking.available
@@ -3167,4 +3172,92 @@ function mode(){try{return localStorage.getItem(key)==='light'?'light':'dark'}ca
 function apply(v){document.documentElement.setAttribute('data-fury-theme',v);document.documentElement.style.colorScheme=v;document.querySelectorAll('#fury-theme-toggle').forEach(b=>{b.textContent=v==='light'?'☾ Dark mode':'☀ Light mode';b.setAttribute('aria-label','Switch to '+(v==='light'?'dark':'light')+' mode');b.setAttribute('aria-pressed',String(v==='light'))});const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=v==='light'?'#f3f7fc':'#080f1c'}
 function mount(){document.querySelectorAll('#fury-theme-toggle').forEach(b=>b.addEventListener('click',()=>{const v=document.documentElement.getAttribute('data-fury-theme')==='light'?'dark':'light';try{localStorage.setItem(key,v)}catch(e){}apply(v)}));apply(mode());}
 apply(mode());if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();window.addEventListener('storage',e=>{if(e.key===key)apply(mode())});
-})();</script><script id="fury-login-deeplink">(function(){if(new URLSearchParams(location.search).get('login')!=='1')return;function openLogin(){const el=document.getElementById('furyAccountMenu');if(el){el.open=true;el.querySelector('summary')?.focus()}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',openLogin);else openLogin()})();</script></body></html>
+})();</script><script id="fury-login-deeplink">(function(){if(new URLSearchParams(location.search).get('login')!=='1')return;function openLogin(){const el=document.getElementById('furyAccountMenu');if(el){el.open=true;el.querySelector('summary')?.focus()}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',openLogin);else openLogin()})();</script><script id="fury-v2-engine">
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const numeric=v=>v===null||v===undefined||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const key=s=>String(s||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const avg=(rs,k)=>{const v=rs.map(r=>numeric(r[k])).filter(v=>v!==null);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null};
+const wt=(rows,fn)=>{let num=0,den=0;rows.forEach((r,i)=>{const v=fn(r,i);if(v===null||!Number.isFinite(v))return;const w=Math.pow(.85,i);num+=w*v;den+=w});return den?num/den:null};
+const metric=(rows,k)=>wt(rows,r=>numeric(r[k]));
+const ratio=(a,b)=>a===null||b===null||b<=0?null:a/b;
+const leagueTeams=league=>typeof matchTeamsByLeague!=='undefined'?(matchTeamsByLeague[league]||[]):[];
+function previousOpponent(r,league){
+ const opponent=r.opponent,when=String(r.date||'').slice(0,10);
+ if(!opponent||!when||!league||!leagueTeams(league).some(t=>key(t)===key(opponent)))return null;
+ const teams=leagueTeams(league),scores=[];
+ for(const team of teams){const games=matchPool.filter(g=>g.team===team&&String(g.date||'').slice(0,10)<when&&numeric(g.goals_for)!==null&&numeric(g.goals_against)!==null);let pts=0,gf=0,ga=0;const unique=new Set();for(const g of games){const id=String(g.date)+'|'+g.opponent+'|'+g.venue;if(unique.has(id))continue;unique.add(id);const f=numeric(g.goals_for),a=numeric(g.goals_against);pts+=f>a?3:f===a?1:0;gf+=f;ga+=a}scores.push({team,played:unique.size,pts,gd:gf-ga,gf})}
+ const candidate=scores.find(t=>key(t.team)===key(opponent));if(!candidate||candidate.played<3)return null;
+ const ranked=scores.filter(t=>t.played>=3).sort((a,b)=>b.pts/b.played-a.pts/a.played||b.gd/b.played-a.gd/a.played||b.gf/b.played-a.gf/a.played);
+ if(ranked.length<4)return null;
+ const position=ranked.findIndex(t=>key(t.team)===key(opponent))+1;
+ return position?{position,total:ranked.length,strength:(ranked.length-position)/(ranked.length-1)}:null;
+}
+function leagueMean(league,k){const teams=leagueTeams(league);const vals=matchPool.filter(r=>teams.includes(r.team)).map(r=>numeric(r[k])).filter(v=>v!==null);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
+function computeSide(team,rows,league){
+ const opponents=rows.map(r=>previousOpponent(r,league));
+ const sos=wt(rows,(_,i)=>opponents[i]?.strength??null);
+ const adjusted=(field,attack)=>wt(rows,(r,i)=>{const v=numeric(r[field]);if(v===null)return null;const strength=opponents[i]?.strength;return strength===undefined? v :v*(attack?(.85+.30*strength):(1.15-.30*strength))});
+ const gf=adjusted('goals_for',true),ga=adjusted('goals_against',false);
+ const sh=adjusted('shots_for',true),sot=adjusted('shots_on_target_for',true);
+ const sha=adjusted('shots_against',false),sota=adjusted('shots_on_target_against',false);
+ const xg=adjusted('xg_for',true),xga=adjusted('xg_against',false);
+ const conversion=sh>0?gf/sh:null,oppConversion=sha>0?ga/sha:null;
+ const components=(defense)=>{
+  const fields=defense?[[ga,'goals_against',.30],[sota,'shots_on_target_against',.30],[sha,'shots_against',.20],[oppConversion,null,.20]]:[[gf,'goals_for',.30],[sot,'shots_on_target_for',.30],[sh,'shots_for',.20],[conversion,null,.20]];
+  let sum=0,weight=0;for(const [value,field,w] of fields){let base=field?leagueMean(league,field):null;
+   if(!field){const g=leagueMean(league,defense?'goals_against':'goals_for'),s=leagueMean(league,defense?'shots_against':'shots_for');base=g!==null&&s>0?g/s:null}
+   if(value===null||base===null||base<=0)continue;
+   const rel=defense?base/Math.max(.03,value):value/base;
+   sum+=w*clamp(50*rel,0,100);weight+=w;
+  }return weight>=.5?sum/weight:null;
+ };
+ const form=wt(rows,r=>{const g=numeric(r.goals_for),a=numeric(r.goals_against);return g===null||a===null?null:(g>a?3:g===a?1:0)/3});
+ return {team,rows,opponents,sos,gf,ga,sh,sot,sha,sota,xg,xga,conversion,form,os:components(false),ds:components(true),rankCoverage:opponents.filter(Boolean).length};
+}
+window.furyV2Compute=function(home,away,homeGames,awayGames){
+ try{
+ const hl=$('homeLeague')?.value,al=$('awayLeague')?.value;
+ const h=computeSide(home,homeGames,hl),a=computeSide(away,awayGames,al);
+ const baseH=h.gf!==null&&a.ga!==null?(h.gf+a.ga)/2:null,baseA=a.gf!==null&&h.ga!==null?(a.gf+h.ga)/2:null;
+ if(baseH===null||baseA===null)return {available:false,reason:'Goals history missing',h,a};
+ // Shot/SOT and xG factors are relative to each team's own historical goals rate;
+ // caps prevent noisy short samples from dominating. Missing stats = neutral multiplier.
+ const shooting=(attack,defense)=>{
+  const s=ratio(attack.sot,leagueMean(attack===h?hl:al,'shots_on_target_for'));
+  const d=ratio(defense.sota,leagueMean(defense===h?hl:al,'shots_on_target_against'));
+  const shots=ratio(attack.sh,leagueMean(attack===h?hl:al,'shots_for'));
+  const allow=ratio(defense.sha,leagueMean(defense===h?hl:al,'shots_against'));
+  const values=[[s,.35],[d,.35],[shots,.15],[allow,.15]].filter(([v])=>v!==null);
+  if(values.length<2)return 1;
+  const w=values.reduce((s,[,w])=>s+w,0),r=values.reduce((s,[v,w])=>s+w*v,0)/w;
+  return clamp(1+.20*(r-1),.88,1.12);
+ };
+ const xgFactor=(attack,defense)=>{
+  if(attack.xg===null||defense.xga===null)return 1;
+  const observed=(attack.gf+defense.ga)/2,expected=(attack.xg+defense.xga)/2;
+  return observed>0?clamp(1+.25*(expected/observed-1),.9,1.1):1;
+ };
+ const homeLambda=clamp(baseH*shooting(h,a)*xgFactor(h,a),.05,6);
+ const awayLambda=clamp(baseA*shooting(a,h)*xgFactor(a,h),.05,6);
+ return {available:true,h,a,homeLambda,awayLambda,baseH,baseA};
+ }catch(e){console.warn('FURY 2.0 model:',e);return {available:false,reason:String(e.message||e)}}
+};
+window.furyV2Render=function(data,homeLambda,awayLambda,ranking){
+ const target=$('furyV2Content');if(!target)return;target.replaceChildren();
+ const add=(tag,cls,content,parent=target)=>{const e=document.createElement(tag);if(cls)e.className=cls;e.textContent=content;parent.append(e);return e};
+ if(!data?.available){add('p','fury-note fury-v2-warn',data?.reason||'Insufficient data');return}
+ const {h,a}=data;const grid=add('div','fury-v2-grid','');
+ for(const [name,side] of [['HOME',h],['AWAY',a]])for(const [label,v,detail] of [['Offensive Strength',side.os,'0–100 · league-relative'],['Defensive Strength',side.ds,'0–100 · higher = stronger'],['Recent Form',side.form===null?null:side.form*100,'Recency-weighted · W/D/L'],['Opponent SOS',side.sos===null?null:side.sos*100,side.rankCoverage+'/'+side.rows.length+' historical ranks']]){
+ const tile=add('div','fury-v2-tile','',grid);add('small','',name+' · '+label,tile);add('strong','',v===null?'N/A':v.toFixed(1),tile);add('em','',detail,tile);
+ }
+ const summary=add('p','fury-note','');summary.textContent=`Opponent-adjusted baseline: ${data.baseH.toFixed(2)} / ${data.baseA.toFixed(2)} · Shot/SOT + optional xG correction: ${data.homeLambda.toFixed(2)} / ${data.awayLambda.toFixed(2)} · After existing league-ranking factor: ${homeLambda.toFixed(2)} / ${awayLambda.toFixed(2)}. Strength indices are descriptive, not win probabilities.`;
+ const warning=add('p','fury-note'+(h.rankCoverage<h.rows.length||a.rankCoverage<a.rows.length?' fury-v2-warn':''),'');warning.textContent='Opponent ranks are reconstructed using only earlier loaded match records (minimum 3 prior matches per opponent); unavailable rankings remain neutral. SOS coverage: '+h.rankCoverage+'/'+h.rows.length+' home, '+a.rankCoverage+'/'+a.rows.length+' away. Rankings are approximate, not official historical tables. No future results are used for historical ranking.';
+ const wrap=add('div','scroll','');const table=document.createElement('table');wrap.append(table);const thead=document.createElement('thead');table.append(thead);const tr=document.createElement('tr');thead.append(tr);for(const name of ['Metric (weighted / match)',h.team,a.team])add('th','',name,tr);const body=document.createElement('tbody');table.append(body);
+ for(const [label,k] of [['Goals for','gf'],['Goals against','ga'],['Shots for','sh'],['Shots on target','sot'],['Shots allowed','sha'],['SOT allowed','sota'],['xG (when available)','xg'],['xGA (when available)','xga'],['Shot conversion','conversion']]){const row=add('tr','','',body);add('td','',label,row);for(const side of [h,a])add('td','',side[k]===null?'N/A':(k==='conversion'?(side[k]*100).toFixed(1)+'%':side[k].toFixed(2)),row)}
+ add('p','fury-note','Method: last 5/10/full venue sample; exponential recency weighting 0.85^game index; opponent ranking adjusts historical production by up to ±15%; shot/SOT correction bounded ±12%; optional xG correction ±10%; original ranking adjustment ±8%. These are experimental heuristics, not calibrated machine learning. Missing shots or xG are not invented.');
+};
+})();
+</script></body></html>
