@@ -1216,6 +1216,25 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 .fury-strength-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}.fury-strength-title strong{font:800 16px 'Outfit',sans-serif}.fury-strength-title small{color:#92b8d0}
 .fury-strength-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fury-strength-card{background:#132b42;border:1px solid #31506a;border-radius:12px;padding:14px;min-width:0}.fury-strength-card h4{font-size:13px;line-height:1.4;margin:0 0 13px;overflow-wrap:anywhere}.fury-strength-line{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin:8px 0 5px;color:#b7cee1}.fury-strength-line b{color:#f3faff;font-variant-numeric:tabular-nums}.fury-strength-track{height:9px;background:#294159;border-radius:99px;overflow:hidden}.fury-strength-fill{height:100%;border-radius:99px;transition:width .3s ease}.fury-strength-fill.attack{background:linear-gradient(90deg,#168fca,#64d9ff)}.fury-strength-fill.defense{background:linear-gradient(90deg,#0c957b,#65e6b5)}.fury-strength-result{margin-top:12px;padding:9px 10px;background:#0d2033;border:1px solid #2b4a60;border-radius:9px;font-size:12px;color:#c6e4f5;line-height:1.5}.fury-strength-result strong{color:#fff}.fury-strength-foot{margin:11px 0 0;color:#9fb7ca;font-size:11px;line-height:1.5}
 @media(max-width:650px){.fury-strength-grid{grid-template-columns:1fr}.fury-strength-matchup{padding:12px}}
+</style><style id="fury-corners-visual-css">
+#matchTab .fury-corners-visual{margin-top:12px}
+.fury-corners-visual-content{display:grid;gap:12px}
+.fury-corners-row{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:center}
+.fury-corners-crest{width:40px;height:40px;display:grid;place-items:center;border-radius:9px;background:#142d44;color:#c5e8fa;font-weight:900}
+.fury-corners-crest img{width:36px;height:36px;object-fit:contain}
+.fury-corners-detail{min-width:0}
+.fury-corners-label{display:flex;justify-content:space-between;gap:10px;font-weight:750;margin-bottom:7px}
+.fury-corners-label span{overflow-wrap:anywhere}
+.fury-corners-label b{white-space:nowrap;font-variant-numeric:tabular-nums}
+.fury-corners-track{height:13px;border-radius:8px;overflow:hidden;background:#263b53}
+.fury-corners-fill{height:100%;border-radius:8px;transition:width .3s}
+.fury-corners-fill.higher{background:linear-gradient(90deg,#14875a,#24e29b)}
+.fury-corners-fill.lower{background:linear-gradient(90deg,#aa344b,#ff596b)}
+.fury-corners-fill.tie{background:#58bde7}
+.fury-corners-label b.higher{color:#43e8a8}.fury-corners-label b.lower{color:#ff6b7c}.fury-corners-label b.tie{color:#79d7ff}
+.fury-corners-summary{background:#132c42;border:1px solid #2e5470;border-radius:10px;padding:12px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.fury-corners-summary strong{color:#b6ecff}
+@media(max-width:520px){.fury-corners-row{grid-template-columns:32px minmax(0,1fr);gap:8px}.fury-corners-crest{width:32px;height:32px}.fury-corners-crest img{width:30px;height:30px}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -1315,6 +1334,11 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 <div class="projection-card-box red"><div class="projection-card-heading"><span aria-hidden="true" class="projection-card-symbol"></span><span>EXPECTED RED CARDS</span></div><div class="projection-card-numbers"><span id="projectionRedHome">N/A</span><em>–</em><span id="projectionRedAway">N/A</span></div><div class="projection-card-total" id="projectionRedTotal">No card data available</div><div class="projection-card-detail" id="projectionRedProb"></div></div>
 </div>
 <section id="furyStrengthMatchup" class="fury-strength-matchup" aria-live="polite"><div class="fury-strength-title"><strong>⚔ Offensive vs Defensive Strength</strong><small>FURY AI 2.1 · Head-to-head model inputs</small></div><div id="furyStrengthMatchupContent" class="fury-strength-grid"><p class="fury-note">Select teams and click Analyze match to compare attacking and defensive strength.</p></div><p class="fury-strength-foot">League-relative indices (0–100), not win probabilities. Higher defensive strength means better resistance. Model multipliers are capped at ±10% per component.</p></section>
+<section id="furyCornersVisual" class="fury-strength-matchup fury-corners-visual" aria-live="polite">
+ <div class="fury-strength-title"><strong>⚑ CORNERS MATCHUP</strong><small>Projected corners · Home vs Away</small></div>
+ <div id="furyCornersVisualContent" class="fury-corners-visual-content"><p class="fury-note">Select teams and click Analyze Match to view projected corners.</p></div>
+ <p class="fury-strength-foot">Each team's estimate is the average of its venue-specific corners won and its opponent's venue-specific corners conceded. Green indicates the higher projection; red the lower. This visualization does not modify the model.</p>
+</section>
 <div class="panel match-center-panel" id="furyBookmakerOdds" style="margin:20px 0"><div class="player-panel-head"><h2>Live bookmaker odds</h2><span class="player-panel-kicker">THE ODDS API · DECIMAL</span></div><p class="hint" id="furyOddsStatus">Choose a matchup to load upcoming bookmaker odds.</p><div class="fury-grid" id="furyOddsResults"></div><p class="hint">Only upcoming fixtures returned by the provider. Scores and historical matches are not betting lines. Market availability varies by league, region and bookmaker. Implied probabilities include bookmaker margin.</p></div>
 <div class="projection-odds-title">MODEL-IMPLIED FAIR ODDS · NOT SPORTSBOOK LINES</div>
 <div class="projection-odds-grid"><div><small>Home win</small><strong id="projectionOddsHome">—</strong></div><div><small>Draw</small><strong id="projectionOddsDraw">—</strong></div><div><small>Away win</small><strong id="projectionOddsAway">—</strong></div></div>
@@ -1772,12 +1796,14 @@ function renderProjection(home,away,homeGames,awayGames){
   $('projectionCornersMarket').hidden=!validCorners;
   if(validCorners){
     const homeCorners=Math.max(0,(chf+caa)/2),awayCorners=Math.max(0,(caf+cha)/2);
+    if(window.furyRenderCornersVisual)window.furyRenderCornersVisual(home,away,homeCorners,awayCorners);
     $('projectionCornersHome').textContent=homeCorners.toFixed(1);
     $('projectionCornersAway').textContent=awayCorners.toFixed(1);
     $('projectionCornersTotal').textContent=(homeCorners+awayCorners).toFixed(1)+' total expected corners';
     $('projectionCornersMarket').dataset.expected=String(homeCorners+awayCorners);
     updateCornersMarket();
   }
+  if(!validCorners&&window.furyRenderCornersVisual)window.furyRenderCornersVisual(home,away,null,null);
   const hf=avg(homeGames,'goals_for'),ha=avg(homeGames,'goals_against');
   const af=avg(awayGames,'goals_for'),aa=avg(awayGames,'goals_against');
   $('projectionHome').textContent=home;
@@ -3346,6 +3372,39 @@ window.furyV2Render=function(data,homeLambda,awayLambda,ranking){
    }else text(result,'div','','Strength adjustment unavailable');
    if(Number.isFinite(m.goals))text(result,'div','','Final projected goals: '+m.goals.toFixed(2)+' (all model factors)');
   }
+ };
+})();
+</script><script id="fury-corners-visual-engine">
+(function(){
+ window.furyRenderCornersVisual=function(home,away,homeCorners,awayCorners){
+  const host=document.getElementById('furyCornersVisualContent');if(!host)return;
+  host.replaceChildren();
+  const add=(parent,tag,cls,value)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(value!==undefined)el.textContent=value;parent.appendChild(el);return el;};
+  if(!Number.isFinite(homeCorners)||!Number.isFinite(awayCorners)){
+   add(host,'p','fury-note','Corner records are unavailable for one or both teams. Load the relevant *_team_matches.json data to enable this comparison.');return;
+  }
+  const max=Math.max(homeCorners,awayCorners,0.1),total=homeCorners+awayCorners;
+  const league=document.getElementById('leagueSelect')?.value||'';
+  for(const [team,value,other,side] of [[home,homeCorners,awayCorners,'HOME'],[away,awayCorners,homeCorners,'AWAY']]){
+   const tone=Math.abs(value-other)<0.00001?'tie':value>other?'higher':'lower';
+   const row=add(host,'div','fury-corners-row');
+   const badge=add(row,'span','fury-corners-crest');
+   const url=typeof furyFindCrest==='function'?furyFindCrest(team,league):null;
+   if(url){const img=document.createElement('img');img.src=url;img.alt=team+' logo';img.loading='lazy';img.onerror=()=>img.remove();badge.appendChild(img)}
+   else badge.textContent=(team||'?').slice(0,2).toUpperCase();
+   const detail=add(row,'div','fury-corners-detail');
+   const line=add(detail,'div','fury-corners-label');
+   add(line,'span','',team+' · '+side);
+   add(line,'b',tone,value.toFixed(1)+' corners');
+   const track=add(detail,'div','fury-corners-track');
+   const fill=add(track,'div','fury-corners-fill '+tone);
+   fill.style.width=(100*value/max).toFixed(1)+'%';
+  }
+  const summary=add(host,'div','fury-corners-summary');
+  add(summary,'span','','Expected total: ');
+  add(summary,'strong','',total.toFixed(1)+' corners');
+  const edge=homeCorners-awayCorners;
+  add(summary,'span','',Math.abs(edge)<0.05?'Even matchup':(edge>0?home:away)+' projected +'+Math.abs(edge).toFixed(1)+' corners');
  };
 })();
 </script></body></html>
