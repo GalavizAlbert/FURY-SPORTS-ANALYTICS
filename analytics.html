@@ -2558,8 +2558,21 @@ function furyEstimateEvent(event){
  const mean=(list,key)=>list.reduce((total,r)=>total+Number(r[key]),0)/list.length;
  // Shrink small venue samples toward each team's all-venue form.
  const blended=(venue,all,key)=>.65*mean(venue,key)+.35*mean(all,key);
- const eh=Math.max(.05,Math.min(5,(blended(home,homeAll,'goals_for')+blended(away,awayAll,'goals_against'))/2));
- const ea=Math.max(.05,Math.min(5,(blended(away,awayAll,'goals_for')+blended(home,homeAll,'goals_against'))/2));
+ // Match Analysis Center 2.0 is the authoritative expected-goals engine.
+ // Use the same venue-specific historical rows, recency weights, opponent SOS,
+ // shot/SOT, optional xG, and offensive/defensive strength in Projections.
+ // Unlike the previous compact model, do not blend venue stats a second time.
+ const contextRows=sources.flatMap(([,rows])=>Array.isArray(rows)?rows:[]);
+ const leagueTeams=[...new Set(contextRows.map(r=>r.team).filter(Boolean))];
+ const enriched=typeof window.furyV2Compute==='function'
+  ?window.furyV2Compute(homeRows[0].team,awayRows[0].team,home,away,{league:event.league,rows:contextRows,teams:leagueTeams})
+  :null;
+ if(!enriched?.available)return null;
+ // Preserve Match Analysis's same-league ranking multiplier; no ranking
+ // adjustment for continental/cross-league fixtures.
+ const ranking={homeMultiplier:1,awayMultiplier:1}; // No DOM-dependent ranking adjustment on compact cards; opponent SOS is already included.
+ const eh=Math.max(.05,Math.min(6,enriched.homeLambda*(ranking?.homeMultiplier||1)));
+ const ea=Math.max(.05,Math.min(6,enriched.awayLambda*(ranking?.awayMultiplier||1)));
  const probs=poissonProjection(eh,ea);
  const result={probs,eh,ea,homeN:home.length,awayN:away.length};furyProjectionCache.set(cacheKey,result);return result;
 }
@@ -3234,19 +3247,21 @@ const avg=(rs,k)=>{const v=rs.map(r=>numeric(r[k])).filter(v=>v!==null);return v
 const wt=(rows,fn)=>{let num=0,den=0;rows.forEach((r,i)=>{const v=fn(r,i);if(v===null||!Number.isFinite(v))return;const w=Math.pow(.85,i);num+=w*v;den+=w});return den?num/den:null};
 const metric=(rows,k)=>wt(rows,r=>numeric(r[k]));
 const ratio=(a,b)=>a===null||b===null||b<=0?null:a/b;
-const leagueTeams=league=>typeof matchTeamsByLeague!=='undefined'?(matchTeamsByLeague[league]||[]):[];
+let projectionContext=null;
+const leagueTeams=league=>projectionContext?.teams||(typeof matchTeamsByLeague!=='undefined'?(matchTeamsByLeague[league]||[]):[]);
+const modelPool=()=>projectionContext?.rows||(typeof matchPool!=='undefined'?matchPool:[]);
 function previousOpponent(r,league){
  const opponent=r.opponent,when=String(r.date||'').slice(0,10);
  if(!opponent||!when||!league||!leagueTeams(league).some(t=>key(t)===key(opponent)))return null;
  const teams=leagueTeams(league),scores=[];
- for(const team of teams){const games=matchPool.filter(g=>g.team===team&&String(g.date||'').slice(0,10)<when&&numeric(g.goals_for)!==null&&numeric(g.goals_against)!==null);let pts=0,gf=0,ga=0;const unique=new Set();for(const g of games){const id=String(g.date)+'|'+g.opponent+'|'+g.venue;if(unique.has(id))continue;unique.add(id);const f=numeric(g.goals_for),a=numeric(g.goals_against);pts+=f>a?3:f===a?1:0;gf+=f;ga+=a}scores.push({team,played:unique.size,pts,gd:gf-ga,gf})}
+ for(const team of teams){const games=modelPool().filter(g=>g.team===team&&String(g.date||'').slice(0,10)<when&&numeric(g.goals_for)!==null&&numeric(g.goals_against)!==null);let pts=0,gf=0,ga=0;const unique=new Set();for(const g of games){const id=String(g.date)+'|'+g.opponent+'|'+g.venue;if(unique.has(id))continue;unique.add(id);const f=numeric(g.goals_for),a=numeric(g.goals_against);pts+=f>a?3:f===a?1:0;gf+=f;ga+=a}scores.push({team,played:unique.size,pts,gd:gf-ga,gf})}
  const candidate=scores.find(t=>key(t.team)===key(opponent));if(!candidate||candidate.played<3)return null;
  const ranked=scores.filter(t=>t.played>=3).sort((a,b)=>b.pts/b.played-a.pts/a.played||b.gd/b.played-a.gd/a.played||b.gf/b.played-a.gf/a.played);
  if(ranked.length<4)return null;
  const position=ranked.findIndex(t=>key(t.team)===key(opponent))+1;
  return position?{position,total:ranked.length,strength:(ranked.length-position)/(ranked.length-1)}:null;
 }
-function leagueMean(league,k){const teams=leagueTeams(league);const vals=matchPool.filter(r=>teams.includes(r.team)).map(r=>numeric(r[k])).filter(v=>v!==null);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
+function leagueMean(league,k){const teams=leagueTeams(league);const vals=modelPool().filter(r=>teams.includes(r.team)).map(r=>numeric(r[k])).filter(v=>v!==null);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
 function computeSide(team,rows,league){
  const opponents=rows.map(r=>previousOpponent(r,league));
  const sos=wt(rows,(_,i)=>opponents[i]?.strength??null);
@@ -3268,9 +3283,10 @@ function computeSide(team,rows,league){
  const form=wt(rows,r=>{const g=numeric(r.goals_for),a=numeric(r.goals_against);return g===null||a===null?null:(g>a?3:g===a?1:0)/3});
  return {team,rows,opponents,sos,gf,ga,sh,sot,sha,sota,xg,xga,conversion,form,os:components(false),ds:components(true),rankCoverage:opponents.filter(Boolean).length};
 }
-window.furyV2Compute=function(home,away,homeGames,awayGames){
+window.furyV2Compute=function(home,away,homeGames,awayGames,context=null){
+ const priorContext=projectionContext;projectionContext=context;
  try{
- const hl=$('homeLeague')?.value,al=$('awayLeague')?.value;
+ const hl=context?.league||$('homeLeague')?.value,al=context?.league||$('awayLeague')?.value;
  const h=computeSide(home,homeGames,hl),a=computeSide(away,awayGames,al);
  const baseH=h.gf!==null&&a.ga!==null?(h.gf+a.ga)/2:null,baseA=a.gf!==null&&h.ga!==null?(a.gf+h.ga)/2:null;
  if(baseH===null||baseA===null)return {available:false,reason:'Goals history missing',h,a};
@@ -3305,6 +3321,7 @@ window.furyV2Compute=function(home,away,homeGames,awayGames){
  const awayLambda=clamp(baseA*shooting(a,h)*xgFactor(a,h)*awayStrength.combined,.05,6);
  return {available:true,h,a,homeLambda,awayLambda,baseH,baseA,homeStrength,awayStrength};
  }catch(e){console.warn('FURY 2.0 model:',e);return {available:false,reason:String(e.message||e)}}
+ finally{projectionContext=priorContext;}
 };
 window.furyV2Render=function(data,homeLambda,awayLambda,ranking){
  const target=$('furyV2Content');if(!target)return;target.replaceChildren();
