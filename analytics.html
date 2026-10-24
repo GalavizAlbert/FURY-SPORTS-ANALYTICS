@@ -1195,6 +1195,27 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 </style><style id="fury-v2-css">
 #matchTab .fury-v2-panel{padding:19px;margin:17px 0;background:linear-gradient(120deg,#10283c,#111e30);border:1px solid #32718c;border-radius:16px}
 .fury-v2-panel h3{color:#9be9ff;margin:0 0 12px}.fury-v2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px;margin:14px 0}.fury-v2-tile{background:#162e44;border:1px solid #33536c;border-radius:10px;padding:13px}.fury-v2-tile small{display:block;color:#b1cadd;font-size:11px}.fury-v2-tile strong{display:block;color:#f5faff;font-size:23px;margin-top:5px}.fury-v2-tile em{display:block;color:#8fb2c8;font-size:11px;font-style:normal;margin-top:4px}.fury-v2-panel .scroll{max-height:320px}.fury-v2-panel table th{background:#173149}.fury-v2-panel .fury-note{line-height:1.6}.fury-v2-warn{color:#ffca83!important}
+</style><style id="fury-strength-matchup-css">
+/* FURY 2.4: logos beside comparison bars, relative matchup colors */
+#matchTab .fury-strength-metric{display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;gap:11px;margin:13px 0}
+#matchTab .fury-strength-bar-crest{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:9px;background:#0c2134;border:1px solid #34526b}
+#matchTab .fury-strength-bar-crest img{width:35px;height:35px;object-fit:contain}
+#matchTab .fury-strength-bar-detail{min-width:0}
+#matchTab .fury-strength-line{margin:0 0 7px;align-items:baseline}
+#matchTab .fury-strength-metric-name{overflow-wrap:anywhere}
+#matchTab .fury-strength-value.higher{color:#32e697}
+#matchTab .fury-strength-value.lower{color:#ff6576}
+#matchTab .fury-strength-value.tie,#matchTab .fury-strength-value.unknown{color:#a9c8e1}
+#matchTab .fury-strength-fill.higher{background:linear-gradient(90deg,#0ca46a,#36ed9a)}
+#matchTab .fury-strength-fill.lower{background:linear-gradient(90deg,#bd344d,#ff6175)}
+#matchTab .fury-strength-fill.tie,#matchTab .fury-strength-fill.unknown{background:linear-gradient(90deg,#5587a9,#9bc9e8)}
+@media(max-width:500px){#matchTab .fury-strength-metric{grid-template-columns:34px minmax(0,1fr);gap:8px}#matchTab .fury-strength-bar-crest{width:34px;height:34px}#matchTab .fury-strength-bar-crest img{width:29px;height:29px}}
+
+.fury-strength-card-heading{display:flex;align-items:center;gap:10px;flex-wrap:wrap!important;margin-bottom:14px!important}.fury-strength-team{display:inline-flex;align-items:center;gap:7px;min-width:0;font-weight:800;color:#eaf7ff}.fury-strength-crest{width:30px;height:30px;object-fit:contain;flex:none}.fury-strength-versus{color:#87adc5;font-size:10px;letter-spacing:.5px;font-weight:800}.fury-strength-metric-team{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}.fury-strength-metric-team .fury-strength-crest{width:19px;height:19px}@media(max-width:500px){.fury-strength-crest{width:24px;height:24px}.fury-strength-card-heading{gap:7px}}
+#matchTab .fury-strength-matchup{margin:12px 0 22px;padding:17px;background:#0d2033;border:1px solid #315574;border-radius:15px}
+.fury-strength-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}.fury-strength-title strong{font:800 16px 'Outfit',sans-serif}.fury-strength-title small{color:#92b8d0}
+.fury-strength-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fury-strength-card{background:#132b42;border:1px solid #31506a;border-radius:12px;padding:14px;min-width:0}.fury-strength-card h4{font-size:13px;line-height:1.4;margin:0 0 13px;overflow-wrap:anywhere}.fury-strength-line{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin:8px 0 5px;color:#b7cee1}.fury-strength-line b{color:#f3faff;font-variant-numeric:tabular-nums}.fury-strength-track{height:9px;background:#294159;border-radius:99px;overflow:hidden}.fury-strength-fill{height:100%;border-radius:99px;transition:width .3s ease}.fury-strength-fill.attack{background:linear-gradient(90deg,#168fca,#64d9ff)}.fury-strength-fill.defense{background:linear-gradient(90deg,#0c957b,#65e6b5)}.fury-strength-result{margin-top:12px;padding:9px 10px;background:#0d2033;border:1px solid #2b4a60;border-radius:9px;font-size:12px;color:#c6e4f5;line-height:1.5}.fury-strength-result strong{color:#fff}.fury-strength-foot{margin:11px 0 0;color:#9fb7ca;font-size:11px;line-height:1.5}
+@media(max-width:650px){.fury-strength-grid{grid-template-columns:1fr}.fury-strength-matchup{padding:12px}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -1283,6 +1304,7 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 <div class="projection-center"><div class="projection-total" id="projectionTotal">— total expected goals</div><div class="projection-numbers"><span id="projectionHomeXg">—</span> <span class="dash">–</span> <span id="projectionAwayXg">—</span></div><div class="projection-caption">Projected Box Score</div><div class="projection-scoreline" id="projectionScoreline">Most likely score: —</div></div>
 <div class="projection-side"><div class="projection-team-icon" id="projectionAwayIcon">A</div><div class="projection-name" id="projectionAway">Away</div><div class="projection-league-rank" id="projectionAwayRank">Rank —</div></div>
 </div>
+<section id="furyStrengthMatchup" class="fury-strength-matchup" aria-live="polite"><div class="fury-strength-title"><strong>⚔ Offensive vs Defensive Strength</strong><small>FURY AI 2.1 · Head-to-head model inputs</small></div><div id="furyStrengthMatchupContent" class="fury-strength-grid"><p class="fury-note">Select teams and click Analyze match to compare attacking and defensive strength.</p></div><p class="fury-strength-foot">League-relative indices (0–100), not win probabilities. Higher defensive strength means better resistance. Model multipliers are capped at ±10% per component.</p></section>
 <div class="projection-corners-hero"><span>EXPECTED CORNERS</span><strong><span id="projectionCornersHome">—</span> <em>–</em> <span id="projectionCornersAway">—</span></strong><small id="projectionCornersTotal">— total corners</small></div>
 <div class="projection-market" id="projectionCornersMarket"><div class="projection-market-title projection-corners-title"><span>Over / Under corners · Poisson estimate</span><label>Line <select id="projectionCornersLine"><option value="7.5">7.5</option><option value="8.5">8.5</option><option selected="" value="9.5">9.5</option><option value="10.5">10.5</option><option value="11.5">11.5</option><option value="12.5">12.5</option></select></label></div><div class="projection-market-labels"><span id="projectionCornersOver">Over —</span><span id="projectionCornersUnder">Under —</span></div><div class="projection-bar"><div id="projectionCornersBarOver" style="background:#088e49"></div><div id="projectionCornersBarUnder" style="background:#a92437"></div></div></div>
 <div class="projection-market"><div class="projection-market-title">Moneyline · 1X2 model probability</div><div class="projection-market-labels three"><span id="projectionWinHome">Home —</span><span id="projectionDraw">Draw —</span><span id="projectionWinAway">Away —</span></div><div class="projection-bar"><div id="projectionBarHome" style="background:#ff652e"></div><div id="projectionBarDraw" style="background:#8592a4"></div><div id="projectionBarAway" style="background:#0a8f9f"></div></div></div>
@@ -1765,6 +1787,7 @@ function renderProjection(home,away,homeGames,awayGames){
   }
   if([hf,ha,af,aa].some(v=>v===null)){
     $('projectionTotal').textContent='Not enough goals data to project';
+    if(window.furyStrengthMatchupRender)window.furyStrengthMatchupRender(null,home,away);
     $('projectionPanel').querySelectorAll('.projection-market,.projection-scoreline,.projection-foot,.projection-odds-title,.projection-odds-grid').forEach(e=>e.hidden=true);
     $('projectionPanel').querySelector('.projection-corners-hero').hidden=!validCorners;
     $('projectionCornersMarket').hidden=!validCorners;
@@ -1777,6 +1800,7 @@ function renderProjection(home,away,homeGames,awayGames){
   const enhanced=window.furyV2Compute?.(home,away,homeGames,awayGames);
   const eh=(enhanced?.available?enhanced.homeLambda:baseEh)*ranking.homeMultiplier,ea=(enhanced?.available?enhanced.awayLambda:baseEa)*ranking.awayMultiplier;
   if(window.furyV2Render)window.furyV2Render(enhanced,eh,ea,ranking);
+  if(window.furyStrengthMatchupRender)window.furyStrengthMatchupRender(enhanced,home,away,eh,ea);
   const p=poissonProjection(eh,ea);
   const rankingInfo=document.getElementById('furyRankingModelNote');
   if(rankingInfo)rankingInfo.textContent=ranking.available
@@ -3269,5 +3293,58 @@ window.furyV2Render=function(data,homeLambda,awayLambda,ranking){
  for(const [label,k] of [['Goals for','gf'],['Goals against','ga'],['Shots for','sh'],['Shots on target','sot'],['Shots allowed','sha'],['SOT allowed','sota'],['xG (when available)','xg'],['xGA (when available)','xga'],['Shot conversion','conversion']]){const row=add('tr','','',body);add('td','',label,row);for(const side of [h,a])add('td','',side[k]===null?'N/A':(k==='conversion'?(side[k]*100).toFixed(1)+'%':side[k].toFixed(2)),row)}
  add('p','fury-note','Method: last 5/10/full venue sample; exponential recency weighting 0.85^game index; opponent ranking adjusts historical production by up to ±15%; shot/SOT correction bounded ±12%; optional xG correction ±10%; Offensive and Defensive Strength multipliers each bounded ±10%; original ranking adjustment ±8%. Strength scores share inputs with shots/goals and may double count; backtesting is required. These are experimental heuristics, not calibrated machine learning. Missing shots or xG are not invented.');
 };
+})();
+</script><script id="fury-strength-matchup-engine">
+(function(){
+ const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+ window.furyStrengthMatchupRender=function(data,home,away,homeLambda,awayLambda){
+  const host=document.getElementById('furyStrengthMatchupContent');if(!host)return;
+  host.replaceChildren();
+  if(!data?.available){const p=document.createElement('p');p.className='fury-note';p.textContent='Insufficient historical data to calculate offensive and defensive indices.';host.append(p);return;}
+  const text=(parent,tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;e.textContent=value;parent.append(e);return e};
+  const num=v=>Number.isFinite(v)?v.toFixed(1):'N/A';
+  const scenarios=[
+   {name:home,opponent:away,offense:data.h.os,defense:data.a.ds,factors:data.homeStrength,goals:homeLambda},
+   {name:away,opponent:home,offense:data.a.os,defense:data.h.ds,factors:data.awayStrength,goals:awayLambda}
+  ];
+  for(const m of scenarios){
+   const card=text(host,'article','fury-strength-card','');const heading=text(card,'h4','fury-strength-card-heading','');
+   const league=document.getElementById('leagueSelect')?.value||'';
+   const teamBadge=(team)=>{
+    const wrap=document.createElement('span');wrap.className='fury-strength-team';
+    if(typeof furyFindCrest==='function'){const url=furyFindCrest(team,league);if(url){const img=document.createElement('img');img.className='fury-strength-crest';img.src=url;img.alt=team+' logo';img.loading='lazy';img.onerror=()=>img.remove();wrap.append(img);}}
+    const name=document.createElement('span');name.textContent=team;wrap.append(name);return wrap;
+   };
+   heading.append(teamBadge(m.name),text(document.createDocumentFragment(),'span','fury-strength-versus','ATTACK VS DEFENSE'),teamBadge(m.opponent));
+   for(const [value,kind] of [[m.offense,'attack'],[m.defense,'defense']]){
+    const team=kind==='attack'?m.name:m.opponent;
+    const other=kind==='attack'?m.defense:m.offense;
+    const higher=Number.isFinite(value)&&Number.isFinite(other)?value>other:null;
+    const tied=Number.isFinite(value)&&Number.isFinite(other)&&Math.abs(value-other)<0.00001;
+    const tone=tied?'tie':higher===null?'unknown':higher?'higher':'lower';
+    const metric=text(card,'div','fury-strength-metric','');
+    const crest=text(metric,'span','fury-strength-bar-crest','');
+    const league=document.getElementById('leagueSelect')?.value||'';
+    if(typeof furyFindCrest==='function'){
+     const url=furyFindCrest(team,league);
+     if(url){const img=document.createElement('img');img.src=url;img.alt=team+' logo';img.loading='lazy';img.onerror=()=>img.remove();crest.append(img);}
+    }
+    const detail=text(metric,'div','fury-strength-bar-detail','');
+    const line=text(detail,'div','fury-strength-line','');
+    text(line,'span','fury-strength-metric-name',team+' '+(kind==='attack'?'Offense':'Defense'));
+    text(line,'b','fury-strength-value '+tone,num(value)+' / 100');
+    const track=text(detail,'div','fury-strength-track','');
+    const fill=text(track,'div','fury-strength-fill '+tone,'');
+    fill.style.width=(Number.isFinite(value)?clamp(value,0,100):0)+'%';
+   }
+   const result=text(card,'div','fury-strength-result','');
+   if(m.factors){
+    const combined=m.factors.combined;
+    text(result,'div','',`Attack ×${m.factors.offense.toFixed(3)} · Opponent defense ×${m.factors.defense.toFixed(3)}`);
+    text(result,'strong','',`Combined strength impact: ${combined>=1?'+':''}${((combined-1)*100).toFixed(1)}%`);
+   }else text(result,'div','','Strength adjustment unavailable');
+   if(Number.isFinite(m.goals))text(result,'div','','Final projected goals: '+m.goals.toFixed(2)+' (all model factors)');
+  }
+ };
 })();
 </script></body></html>
