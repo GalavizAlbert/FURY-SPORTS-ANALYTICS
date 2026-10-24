@@ -3240,9 +3240,19 @@ window.furyV2Compute=function(home,away,homeGames,awayGames){
   const observed=(attack.gf+defense.ga)/2,expected=(attack.xg+defense.xga)/2;
   return observed>0?clamp(1+.25*(expected/observed-1),.9,1.1):1;
  };
- const homeLambda=clamp(baseH*shooting(h,a)*xgFactor(h,a),.05,6);
- const awayLambda=clamp(baseA*shooting(a,h)*xgFactor(a,h),.05,6);
- return {available:true,h,a,homeLambda,awayLambda,baseH,baseA};
+ // Explicit strength contribution. 50 is league-neutral; above 50 = stronger.
+ // Offensive index raises own goals; opponent defensive index lowers them.
+ // A damped 10% cap per component limits double counting of goals/shots already
+ // included in the baseline and shooting factor. Missing indices are neutral.
+ const strengthFactor=(attack,defense)=>{
+  const offense=attack.os===null?1:clamp(1+.20*(attack.os-50)/50,.90,1.10);
+  const defenseMultiplier=defense.ds===null?1:clamp(1-.20*(defense.ds-50)/50,.90,1.10);
+  return {offense,defense:defenseMultiplier,combined:offense*defenseMultiplier};
+ };
+ const homeStrength=strengthFactor(h,a),awayStrength=strengthFactor(a,h);
+ const homeLambda=clamp(baseH*shooting(h,a)*xgFactor(h,a)*homeStrength.combined,.05,6);
+ const awayLambda=clamp(baseA*shooting(a,h)*xgFactor(a,h)*awayStrength.combined,.05,6);
+ return {available:true,h,a,homeLambda,awayLambda,baseH,baseA,homeStrength,awayStrength};
  }catch(e){console.warn('FURY 2.0 model:',e);return {available:false,reason:String(e.message||e)}}
 };
 window.furyV2Render=function(data,homeLambda,awayLambda,ranking){
@@ -3253,11 +3263,11 @@ window.furyV2Render=function(data,homeLambda,awayLambda,ranking){
  for(const [name,side] of [['HOME',h],['AWAY',a]])for(const [label,v,detail] of [['Offensive Strength',side.os,'0–100 · league-relative'],['Defensive Strength',side.ds,'0–100 · higher = stronger'],['Recent Form',side.form===null?null:side.form*100,'Recency-weighted · W/D/L'],['Opponent SOS',side.sos===null?null:side.sos*100,side.rankCoverage+'/'+side.rows.length+' historical ranks']]){
  const tile=add('div','fury-v2-tile','',grid);add('small','',name+' · '+label,tile);add('strong','',v===null?'N/A':v.toFixed(1),tile);add('em','',detail,tile);
  }
- const summary=add('p','fury-note','');summary.textContent=`Opponent-adjusted baseline: ${data.baseH.toFixed(2)} / ${data.baseA.toFixed(2)} · Shot/SOT + optional xG correction: ${data.homeLambda.toFixed(2)} / ${data.awayLambda.toFixed(2)} · After existing league-ranking factor: ${homeLambda.toFixed(2)} / ${awayLambda.toFixed(2)}. Strength indices are descriptive, not win probabilities.`;
+ const summary=add('p','fury-note','');summary.textContent=`Opponent-adjusted baseline: ${data.baseH.toFixed(2)} / ${data.baseA.toFixed(2)} · Offensive Strength multiplier: ×${data.homeStrength.offense.toFixed(3)} / ×${data.awayStrength.offense.toFixed(3)} · Opponent Defensive Strength multiplier: ×${data.homeStrength.defense.toFixed(3)} / ×${data.awayStrength.defense.toFixed(3)} · After shots/SOT, optional xG and strength: ${data.homeLambda.toFixed(2)} / ${data.awayLambda.toFixed(2)} · After league ranking: ${homeLambda.toFixed(2)} / ${awayLambda.toFixed(2)}. Indices are inputs to expected goals, not probabilities.`;
  const warning=add('p','fury-note'+(h.rankCoverage<h.rows.length||a.rankCoverage<a.rows.length?' fury-v2-warn':''),'');warning.textContent='Opponent ranks are reconstructed using only earlier loaded match records (minimum 3 prior matches per opponent); unavailable rankings remain neutral. SOS coverage: '+h.rankCoverage+'/'+h.rows.length+' home, '+a.rankCoverage+'/'+a.rows.length+' away. Rankings are approximate, not official historical tables. No future results are used for historical ranking.';
  const wrap=add('div','scroll','');const table=document.createElement('table');wrap.append(table);const thead=document.createElement('thead');table.append(thead);const tr=document.createElement('tr');thead.append(tr);for(const name of ['Metric (weighted / match)',h.team,a.team])add('th','',name,tr);const body=document.createElement('tbody');table.append(body);
  for(const [label,k] of [['Goals for','gf'],['Goals against','ga'],['Shots for','sh'],['Shots on target','sot'],['Shots allowed','sha'],['SOT allowed','sota'],['xG (when available)','xg'],['xGA (when available)','xga'],['Shot conversion','conversion']]){const row=add('tr','','',body);add('td','',label,row);for(const side of [h,a])add('td','',side[k]===null?'N/A':(k==='conversion'?(side[k]*100).toFixed(1)+'%':side[k].toFixed(2)),row)}
- add('p','fury-note','Method: last 5/10/full venue sample; exponential recency weighting 0.85^game index; opponent ranking adjusts historical production by up to ±15%; shot/SOT correction bounded ±12%; optional xG correction ±10%; original ranking adjustment ±8%. These are experimental heuristics, not calibrated machine learning. Missing shots or xG are not invented.');
+ add('p','fury-note','Method: last 5/10/full venue sample; exponential recency weighting 0.85^game index; opponent ranking adjusts historical production by up to ±15%; shot/SOT correction bounded ±12%; optional xG correction ±10%; Offensive and Defensive Strength multipliers each bounded ±10%; original ranking adjustment ±8%. Strength scores share inputs with shots/goals and may double count; backtesting is required. These are experimental heuristics, not calibrated machine learning. Missing shots or xG are not invented.');
 };
 })();
 </script></body></html>
