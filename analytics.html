@@ -3127,39 +3127,46 @@ const furyAiNumeric = value => { const x=Number(value);return Number.isFinite(x)
 function furyAiAvg(rows,key){const nums=rows.map(r=>r[key]).filter(v=>v!==null&&v!==undefined&&v!=='').map(Number).filter(Number.isFinite);return nums.length?Math.round(nums.reduce((a,b)=>a+b,0)/nums.length*100)/100:null;}
 function furyAiGames(team,venue){const count=Number(furyAiEl('matchPeriod')?.value||5);if(typeof venueGames!=='function')return [];return venueGames(team,venue,count).map(r=>({date:r.date,opponent:r.opponent,venue:r.venue,goals_for:r.goals_for,goals_against:r.goals_against,xg_for:r.xg_for,xg_against:r.xg_against,shots_for:r.shots_for,shots_against:r.shots_against,shots_on_target_for:r.shots_on_target_for,shots_on_target_against:r.shots_on_target_against,corners_for:r.corners_for,corners_against:r.corners_against}));}
 function furyAiMatchPayload(){const home=furyAiEl('homeTeam')?.value,away=furyAiEl('awayTeam')?.value;if(!home||!away||home===away)throw Error('Select two different teams first.');const homeGames=furyAiGames(home,'Home'),awayGames=furyAiGames(away,'Away');if(!homeGames.length||!awayGames.length)throw Error('Match history is unavailable for these teams.');return {source:'match-analysis',home_team:home,away_team:away,home_league:furyAiEl('homeLeague')?.value,away_league:furyAiEl('awayLeague')?.value,match_sample:furyAiEl('matchPeriod')?.selectedOptions?.[0]?.textContent,home_games:homeGames,away_games:awayGames,league_strength:{home:furyLeagueStrength(home,furyAiEl('homeLeague')?.value),away:furyLeagueStrength(away,furyAiEl('awayLeague')?.value),method:'Position among teams in loaded completed domestic match records; normalized 0-100; not official standings or cross-league quality',instruction:'League ranking is an additional factor in the existing model. For same-league teams with sufficient records, expected goals and derived Poisson probabilities already include the bounded ranking adjustment; do not apply it again. Distinguish ranking from overall form statistics',adjustment:furyRankingGoalAdjustment(home,away)},model:{projected_box_score_home:furyAiNumeric(furyAiEl('projectionHomeXg')?.textContent),projected_box_score_away:furyAiNumeric(furyAiEl('projectionAwayXg')?.textContent),most_likely_score:furyAiEl('projectionScoreline')?.textContent,home_win:furyAiEl('projectionWinHome')?.textContent,draw:furyAiEl('projectionDraw')?.textContent,away_win:furyAiEl('projectionWinAway')?.textContent,over_2_5:furyAiEl('projectionOver')?.textContent,btts_yes:furyAiEl('projectionBttsYes')?.textContent}};}
-function furyOpenMatchAnalysis(event){
-  // Navigate to the statistical Match Analysis page without invoking the AI endpoint.
-  const league=event.league;
+async function furyOpenMatchAnalysis(event){
+  // Each side may belong to a different domestic league. Wait until both selectors
+  // and their team lists have been populated before resolving the fixture.
+  showTab('match');
+  await ensureCrossLeagueMatchData();
+  const status=document.getElementById('matchStatus');
   const homeLeague=document.getElementById('homeLeague');
   const awayLeague=document.getElementById('awayLeague');
   if(!homeLeague||!awayLeague)return;
-  const available=[...homeLeague.options].some(o=>o.value===league)&&[...awayLeague.options].some(o=>o.value===league);
-  if(available){
-    homeLeague.value=league;
-    awayLeague.value=league;
-    homeLeague.dispatchEvent(new Event('change',{bubbles:true}));
-    awayLeague.dispatchEvent(new Event('change',{bubbles:true}));
-  }
-  const choose=(id,name)=>{
-    const el=document.getElementById(id);
-    if(!el)return false;
+  const options=Array.from(homeLeague.options).map(o=>o.value);
+  const matchTeam=(name,league)=>{
+    const teams=matchTeamsByLeague[league]||[];
     const wanted=furyModelClubKey(name,league);
-    const option=[...el.options].find(o=>o.value===name)
-      ||[...el.options].find(o=>o.value.toLowerCase()===String(name).toLowerCase())
-      ||[...el.options].find(o=>furyModelClubKey(o.value,league)===wanted);
-    if(!option)return false;
-    el.value=option.value;
-    el.dispatchEvent(new Event('change',{bubbles:true}));
-    return true;
+    return teams.find(t=>t===name)
+      ||teams.find(t=>t.toLowerCase()===String(name).toLowerCase())
+      ||teams.find(t=>furyModelClubKey(t,league)===wanted)
+      ||teams.find(t=>furyTeamKey(t)===furyTeamKey(name))||null;
   };
-  const homeFound=choose('homeTeam',event.home_team);
-  const awayFound=choose('awayTeam',event.away_team);
-  showTab('match');
-  if(homeFound&&awayFound)document.getElementById('analyzeButton')?.click();
-  else{
-    const status=document.getElementById('matchStatus');
-    if(status)status.textContent='Select the matching teams in the filters to complete this analysis.';
+  const findSide=(name,hint)=>{
+    const candidates=[hint,event.league,...options].filter((v,i,a)=>v&&options.includes(v)&&a.indexOf(v)===i);
+    for(const league of candidates){const team=matchTeam(name,league);if(team)return {league,team};}
+    return null;
+  };
+  const home=findSide(event.home_team,event.home_league||event.homeLeague);
+  const away=findSide(event.away_team,event.away_league||event.awayLeague);
+  if(!home||!away){
+    if(status)status.textContent='Unable to match '+(!home?event.home_team:event.away_team)+' with a loaded domestic league. Check that league data is available.';
+    document.querySelector('#matchTab .match-filter-panel')?.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
   }
+  homeLeague.value=home.league;
+  awayLeague.value=away.league;
+  // Populate both team lists once, after BOTH leagues are selected.
+  refreshCrossLeagueTeams();
+  const h=document.getElementById('homeTeam'),a=document.getElementById('awayTeam');
+  h.value=home.team;
+  a.value=away.team;
+  h.dispatchEvent(new Event('change',{bubbles:true}));
+  a.dispatchEvent(new Event('change',{bubbles:true}));
+  document.getElementById('analyzeButton')?.click();
   document.querySelector('#matchTab .match-filter-panel')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function furyAiFromOdds(event){const home=event.home_team,away=event.away_team;const homeLeague=furyAiEl('homeLeague'),awayLeague=furyAiEl('awayLeague');const hleague=event.league;const homeOption=[...homeLeague.options].find(o=>o.value===hleague);const awayOption=[...awayLeague.options].find(o=>o.value===hleague);if(homeOption&&awayOption){homeLeague.value=hleague;awayLeague.value=hleague;homeLeague.dispatchEvent(new Event('change'));awayLeague.dispatchEvent(new Event('change'));const h=furyAiEl('homeTeam'),a=furyAiEl('awayTeam');const hOpt=[...h.options].find(o=>o.value.toLowerCase()===String(home).toLowerCase());const aOpt=[...a.options].find(o=>o.value.toLowerCase()===String(away).toLowerCase());if(hOpt&&aOpt){h.value=hOpt.value;a.value=aOpt.value;furyAiEl('analyzeButton')?.click();}}
