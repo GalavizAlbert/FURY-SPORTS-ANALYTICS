@@ -1,0 +1,26 @@
+{
+  "id": "./index.html",
+  "name": "FURY SPORTS AI \u2014 Analytics",
+  "short_name": "FURY Analytics",
+  "description": "FURY Sports AI match analytics, team statistics, schedules, odds and projections",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080f1c",
+  "theme_color": "#080f1c",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
