@@ -1834,12 +1834,11 @@ function renderProjection(home,away,homeGames,awayGames){
   $('projectionPanel').querySelectorAll('.projection-market,.projection-scoreline,.projection-foot,.projection-odds-title,.projection-odds-grid').forEach(e=>e.hidden=false);
   $('projectionCornersMarket').hidden=!validCorners;
   const baseEh=Math.max(0,(hf+aa)/2),baseEa=Math.max(0,(af+ha)/2);
-  const sameLeague=$('homeLeague')?.value===$('awayLeague')?.value;
-  const shared=sameLeague?furyMatchAnalysisEngine(home,away,$('homeLeague').value,matchPool,Number($('matchPeriod')?.value||0),$('matchVenueOnly')?.checked===true):null;
-  const ranking=shared?.ranking||furyRankingGoalAdjustment(home,away);
-  const enhanced=shared?.enhanced||window.furyV2Compute?.(home,away,homeGames,awayGames);
-  const eh=shared?.eh??((enhanced?.available?enhanced.homeLambda:baseEh)*ranking.homeMultiplier);
-  const ea=shared?.ea??((enhanced?.available?enhanced.awayLambda:baseEa)*ranking.awayMultiplier);
+  // Both Match Analysis and Projections use the exact same calculation core.
+  const shared=furySharedProjectionEngine({home,away,homeLeague:$('homeLeague').value,
+    awayLeague:$('awayLeague').value,homeGames,awayGames,
+    contextRows:matchPool});
+  const ranking=shared?.ranking||furyRankingGoalAdjustment(home,away),enhanced=shared?.enhanced||null,eh=shared?.eh??baseEh,ea=shared?.ea??baseEa;
   if(window.furyV2Render)window.furyV2Render(enhanced,eh,ea,ranking);
   if(window.furyStrengthMatchupRender)window.furyStrengthMatchupRender(enhanced,home,away,eh,ea);
   const p=poissonProjection(eh,ea);
@@ -2546,24 +2545,34 @@ async function furyEnsureModels(events){
   await furyModelPending.get(league);
  }));
 }
-// Shared Match Analysis calculation engine for both full and compact projections.
-// Both consumers use identical venue selection, V2 factors, ranking and Poisson.
-function furyMatchAnalysisEngine(homeTeam,awayTeam,league,rows,venueCount=5,venueOnly=false){
- const pool=Array.isArray(rows)?rows:[];
- const key=name=>furyModelClubKey(name,league);
- const hk=key(homeTeam),ak=key(awayTeam);
- const forTeam=(club,venue)=>pool.filter(r=>key(r.team)===club&&(!venueOnly||String(r.venue||'').toLowerCase()===venue.toLowerCase()))
-   .sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
- const homeGames=forTeam(hk,'Home').slice(0,venueCount||undefined);
- const awayGames=forTeam(ak,'Away').slice(0,venueCount||undefined);
- if(!homeGames.length||!awayGames.length)return null;
+// Canonical calculation engine: both Match Analysis and fixture Projections.
+// UEFA is applied only when domestic leagues differ; domestic rank only when equal.
+function furySharedProjectionEngine({home,away,homeLeague,awayLeague,homeGames,awayGames,contextRows=[]}){
+ const pool=Array.isArray(contextRows)?contextRows:[];
  const teams=[...new Set(pool.map(r=>r.team).filter(Boolean))];
- const enhanced=window.furyV2Compute?.(homeTeam,awayTeam,homeGames,awayGames,{league,rows:pool,teams});
- if(!enhanced?.available)return null;
- const ranking=furyRankingFromRows(homeTeam,awayTeam,league,pool);
- const eh=enhanced.homeLambda*ranking.homeMultiplier;
- const ea=enhanced.awayLambda*ranking.awayMultiplier;
- return {eh,ea,probs:poissonProjection(eh,ea),homeN:homeGames.length,awayN:awayGames.length,ranking,enhanced};
+ const enhanced=window.furyV2Compute?.(home,away,homeGames,awayGames,
+   {league:homeLeague===awayLeague?homeLeague:null,rows:pool,teams});
+ const hf=avg(homeGames,'goals_for'),ha=avg(homeGames,'goals_against');
+ const af=avg(awayGames,'goals_for'),aa=avg(awayGames,'goals_against');
+ const baseEh=[hf,aa].every(Number.isFinite)?Math.max(0,(hf+aa)/2):null;
+ const baseEa=[af,ha].every(Number.isFinite)?Math.max(0,(af+ha)/2):null;
+ if(baseEh===null||baseEa===null)return null;
+ const ranking=furyRankingGoalAdjustmentForLeagues(home,away,homeLeague,awayLeague);
+ const eh=Math.max(0,(enhanced?.available?enhanced.homeLambda:baseEh)*ranking.homeMultiplier);
+ const ea=Math.max(0,(enhanced?.available?enhanced.awayLambda:baseEa)*ranking.awayMultiplier);
+ return {eh,ea,probs:poissonProjection(eh,ea),homeN:homeGames.length,awayN:awayGames.length,
+   ranking,enhanced,homeLeague,awayLeague};
+}
+function furyMatchAnalysisEngine(homeTeam,awayTeam,league,rows,venueCount=5,venueOnly=false,awayLeague=league){
+ const pool=Array.isArray(rows)?rows:[];
+ const key=(name,lg)=>furyModelClubKey(name,lg);
+ const forTeam=(name,lg,venue)=>pool.filter(r=>key(r.team,lg)===key(name,lg)&&
+   (!venueOnly||String(r.venue||'').toLowerCase()===venue.toLowerCase()))
+   .sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,venueCount||undefined);
+ const homeGames=forTeam(homeTeam,league,'Home'),awayGames=forTeam(awayTeam,awayLeague,'Away');
+ if(!homeGames.length||!awayGames.length)return null;
+ return furySharedProjectionEngine({home:homeTeam,away:awayTeam,homeLeague:league,awayLeague,
+   homeGames,awayGames,contextRows:pool});
 }
 function furyRankingFromRows(home,away,league,rows){
  const neutral={available:false,homeMultiplier:1,awayMultiplier:1};
@@ -2588,27 +2597,32 @@ function furyRankingFromRows(home,away,league,rows){
  return {available:true,homeMultiplier:1+factor,awayMultiplier:1-factor,homePosition:standings.indexOf(h)+1,awayPosition:standings.indexOf(a)+1};
 }
 function furyEstimateEvent(event){
- const cacheKey=[event.league,furyModelClubKey(event.home_team,event.league),furyModelClubKey(event.away_team,event.league),document.getElementById('matchPeriod')?.value??5].join('|');
- if(furyProjectionCache.has(cacheKey))return furyProjectionCache.get(cacheKey);
- const homeKey=furyModelClubKey(event.home_team,event.league),awayKey=furyModelClubKey(event.away_team,event.league);
- // Continental fixtures use each club's domestic historical matches, when available.
- const sources=event.league==='champions_league'?[...furyModelCache.entries()].filter(([lg])=>lg!=='champions_league'):[ [event.league,furyModelCache.get(event.league)] ];
- const collect=(key)=>{
-  for(const [lg,rows] of sources){if(!Array.isArray(rows)||!rows.length)continue;
-   const matched=rows.filter(r=>furyModelClubKey(r.team,lg)===key);
-   if(matched.length)return matched;
-  }
-  return [];
- };
- const homeRows=collect(homeKey),awayRows=collect(awayKey);
- if(!homeRows.length||!awayRows.length)return null;
- // Use the same loaded league pool and venue sample as Match Analysis.
- // The Match Analysis filter defaults to last 5 matches.
- const contextRows=sources.flatMap(([,rows])=>Array.isArray(rows)?rows:[]);
  const sample=Number(document.getElementById('matchPeriod')?.value??5);
- const model=furyMatchAnalysisEngine(homeRows[0].team,awayRows[0].team,event.league,contextRows,sample);
- if(!model)return null;
- const result={...model};furyProjectionCache.set(cacheKey,result);return result;
+ const venueOnly=document.getElementById('matchVenueOnly')?.checked===true;
+ const cacheKey=[event.league,event.home_team,event.away_team,sample,venueOnly].join('|');
+ if(furyProjectionCache.has(cacheKey))return furyProjectionCache.get(cacheKey);
+ const continental=event.league==='champions_league';
+ const sources=continental?[...furyModelCache.entries()].filter(([lg])=>lg!=='champions_league')
+   :[[event.league,furyModelCache.get(event.league)]];
+ const locate=(name)=>{
+  for(const [lg,rows] of sources){
+   if(!Array.isArray(rows)||!rows.length)continue;
+   const target=furyModelClubKey(name,lg);
+   const matches=rows.filter(r=>furyModelClubKey(r.team,lg)===target);
+   if(matches.length)return {league:lg,name:matches[0].team,rows:matches};
+  }
+  return null;
+ };
+ const h=locate(event.home_team),a=locate(event.away_team);
+ if(!h||!a)return null;
+ const take=(item,venue)=>item.rows.filter(r=>!venueOnly||String(r.venue||'').toLowerCase()===venue)
+   .sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).slice(0,sample||undefined);
+ const homeGames=take(h,'home'),awayGames=take(a,'away');
+ if(!homeGames.length||!awayGames.length)return null;
+ const result=furySharedProjectionEngine({home:h.name,away:a.name,homeLeague:h.league,
+   awayLeague:a.league,homeGames,awayGames,contextRows:[...h.rows,...a.rows]});
+ if(result)furyProjectionCache.set(cacheKey,result);
+ return result;
 }
 function furyOpenSelectedPick(c){
  const e=c.event;
@@ -3102,25 +3116,26 @@ function furyUefaLeagueStrength(league){return FURY_UEFA_LEAGUE_STRENGTH[league]
 
 // Additional factor, not a replacement for the venue-based goals model.
 // Strength difference ranges -1..1; symmetric adjustment capped at 8%.
-function furyRankingGoalAdjustment(home,away){
- const hl=document.getElementById('homeLeague')?.value,al=document.getElementById('awayLeague')?.value;
+function furyRankingGoalAdjustmentForLeagues(home,away,hl,al){
  const neutral={available:false,homeMultiplier:1,awayMultiplier:1};
  if(!hl||!al)return neutral;
  if(hl!==al){
-  const homeLeague=furyUefaLeagueStrength(hl),awayLeague=furyUefaLeagueStrength(al);
-  if(!homeLeague||!awayLeague)return neutral;
-  // Deliberately damped: 100 vs 0 would give only +/-8% xG, not a 100% change.
-  const delta=(homeLeague.strength-awayLeague.strength)/100;
-  const factor=.08*delta;
-  return {available:true,type:'cross-league',homeLeagueStrength:homeLeague.strength,
-   awayLeagueStrength:awayLeague.strength,homeMultiplier:1+factor,
-   awayMultiplier:1-factor,strengthDifference:homeLeague.strength-awayLeague.strength};
+  const h=furyUefaLeagueStrength(hl),a=furyUefaLeagueStrength(al);
+  if(!h||!a)return neutral;
+  const factor=.08*(h.strength-a.strength)/100;
+  return {available:true,type:'cross-league',homeLeagueStrength:h.strength,
+   awayLeagueStrength:a.strength,homeMultiplier:1+factor,awayMultiplier:1-factor,
+   strengthDifference:h.strength-a.strength};
  }
  const h=furyLeagueStrength(home,hl),a=furyLeagueStrength(away,al);
  if(!h||!a||h.total<2||a.total<2||h.played<3||a.played<3)return neutral;
- const delta=(h.strength-a.strength)/100;
- const factor=0.08*delta;
- return {available:true,homePosition:h.position,awayPosition:a.position,homeMultiplier:1+factor,awayMultiplier:1-factor,strengthDifference:h.strength-a.strength};
+ const factor=.08*(h.strength-a.strength)/100;
+ return {available:true,type:'domestic',homePosition:h.position,awayPosition:a.position,
+  homeMultiplier:1+factor,awayMultiplier:1-factor,strengthDifference:h.strength-a.strength};
+}
+function furyRankingGoalAdjustment(home,away){
+ return furyRankingGoalAdjustmentForLeagues(home,away,
+  document.getElementById('homeLeague')?.value,document.getElementById('awayLeague')?.value);
 }
 
 function furyUpdateLeagueComparison(){
