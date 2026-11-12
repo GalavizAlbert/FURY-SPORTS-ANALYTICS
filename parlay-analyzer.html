@@ -1,0 +1,286 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FURY | Parlay Coverage</title>
+<style>
+:root{font-family:Inter,system-ui,sans-serif;color:#ecf4ff;background:#081323}*{box-sizing:border-box}body{margin:0}header{padding:20px max(18px,calc((100vw - 1250px)/2));background:#101f33;border-bottom:1px solid #30455e}h1{margin:3px 0;font-size:25px}h2{font-size:18px;margin:0 0 14px}h3{margin:0;font-size:16px}.brand{color:#35ddc4;font-weight:900;letter-spacing:2px;font-size:12px}.muted{color:#a3b6cf;font-size:13px}main{max-width:1250px;margin:auto;padding:20px 14px 60px}.panel,.ticket{border:1px solid #30445c;border-radius:14px;background:#112138;padding:17px;margin-bottom:15px}.ticket{background:#0d1b2f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:13px}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{justify-content:space-between}.form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:9px;align-items:end}label{display:block;font-size:12px;color:#a8bdd6;margin-bottom:5px}input,select{background:#071528;border:1px solid #38526d;color:white;border-radius:8px;padding:10px;width:100%;min-width:0}button{cursor:pointer;background:#213b57;border:1px solid #3e5a74;border-radius:8px;color:#eff8ff;padding:9px 12px;font-weight:650}button:hover{background:#305474}.primary{background:#1bd4b3;color:#062521;border-color:#1bd4b3}.danger{color:#ffb1b8}.small{font-size:12px;padding:7px 9px}.match{padding:11px 0;border-top:1px solid #263e57}.leg{padding:11px;margin:10px 0;background:#152940;border:1px solid #30485f;border-radius:10px}.market{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.yn{display:flex;gap:5px}.yn button{flex:1}.yn .yes{background:#126c60;border-color:#20e0b8}.yn .no{background:#813a48;border-color:#ff8e9e}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.stat{padding:14px;border-radius:10px;background:#09182b;border:1px solid #30465d}.stat b{display:block;font-size:24px;margin-top:4px}.tag{padding:4px 8px;border-radius:30px;background:#243e58;font-size:12px}.good{color:#64e2ae}.bad{color:#ff9fa9}.warn{color:#ffd483}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;min-width:540px;font-size:13px}td,th{text-align:left;padding:10px;border-bottom:1px solid #2a4057}th{color:#adc4df}.note{font-size:12px;color:#b2c6dc;line-height:1.5} @media(max-width:680px){.form{grid-template-columns:1fr 1fr}.form>div:nth-child(3){grid-column:span 2}.form>button{grid-column:span 2}.grid{grid-template-columns:1fr}.market{grid-template-columns:1fr}header{padding:18px}h1{font-size:21px}}
+ .matrix-select{min-width:160px;max-width:220px;padding:8px;font-size:12px} #matrix th:first-child,#matrix td:first-child{position:sticky;left:0;background:#112138;z-index:1} #matrix th:nth-child(2),#matrix td:nth-child(2){min-width:180px} 
+/* Refreshed visual design */
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;background:#07111e;color:#eef6ff}
+body{background:radial-gradient(ellipse at 15% 0%,#123a4b 0%,transparent 36%),#07111e;min-height:100vh}
+header{background:linear-gradient(125deg,#0b2233,#112f40 55%,#09202e);border-bottom:1px solid #275e6b;box-shadow:0 12px 30px #0003}
+.brand{color:#4af4cb}h1{letter-spacing:-.8px;font-size:clamp(24px,3vw,35px)}
+.panel{background:linear-gradient(160deg,#11253a,#0d1c2d);border-color:#29465a;border-radius:18px;box-shadow:0 10px 28px #0002}
+.panel>h2,.panel .row h2{letter-spacing:-.35px}
+button{transition:background .15s,transform .15s;border-radius:10px}button:active{transform:scale(.98)}
+button.primary{background:linear-gradient(110deg,#20e1b4,#53dcb6);color:#072a28;border:0;box-shadow:0 4px 16px #16d1b23a}
+select,input{border-radius:10px;min-height:42px;background:#0a1b2c;border-color:#385870}
+select:focus,input:focus,button:focus-visible{outline:2px solid #42e4c4;outline-offset:2px}
+#matrix table{border-collapse:separate;border-spacing:0;min-width:1180px}
+#matrix th{background:#15344a;color:#cce3f2;position:sticky;top:0;z-index:2;white-space:nowrap}
+#matrix td{background:#0f2235}#matrix tr:nth-child(even) td{background:#12283b}
+#matrix th,#matrix td{padding:12px 10px;border-bottom:1px solid #2c4558}
+#matrix th:first-child,#matrix td:first-child{position:sticky;left:0;z-index:3;background:#163347}
+#matrix td:nth-child(2){font-weight:650;min-width:205px}
+#matrix .matrix-select{width:180px;min-width:180px;max-width:none;font-size:12px}
+#gameCoverage table{min-width:850px}#gameCoverage th{color:#8fe9d6}
+.stat{background:#0b1c2c;border-color:#285369;border-radius:12px}.stat b{color:#67e9d0}
+.ticket{border-radius:14px;background:#0b1d30}
+.mobile-matrix{display:none}.game-card{background:#0e2437;border:1px solid #305064;border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 5px 16px #0002}
+.game-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px}
+.game-card h3{font-size:17px;line-height:1.4;margin-top:6px;letter-spacing:-.3px}.versus{color:#7f9cb1;font-weight:400;font-size:13px}
+.kickoff{color:#68e6d0;font-size:12px;font-weight:750;letter-spacing:.3px}
+.pick-count{flex-shrink:0;background:#174436;color:#a1f6d9;border:1px solid #2b8069;padding:6px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.mobile-picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mobile-pick{min-width:0}
+.mobile-pick label{font-weight:800;color:#a8c8db;letter-spacing:.4px}.mobile-pick select{width:100%;font-size:13px;padding:9px 6px;min-height:44px}
+.mobile-pick select.has-pick{border-color:#30c9a9;background:#10382f;color:#c8ffe9;font-weight:650}
+.mobile-score{margin-top:13px;padding-top:12px;border-top:1px solid #294b60;display:flex;align-items:center;justify-content:space-between;color:#a8c3d4;font-size:12px}
+.mobile-score input{width:58px;text-align:center;min-height:39px;font-size:15px}
+@media(max-width:760px){header{padding:22px 16px}main{padding:14px 10px 45px}.panel{padding:14px 12px;border-radius:15px}.desktop-matrix{display:none}.mobile-matrix{display:block}.panel>.row.between{align-items:flex-start}.panel>.row.between h2{max-width:250px;font-size:17px}.panel>.row.between button{font-size:12px}#dateFilter{width:100%!important;min-width:0!important}.panel>.row:nth-child(2){gap:8px!important}.panel>.row:nth-child(2)>button{flex:1;min-height:44px}.panel>.row:nth-child(2)>div{width:100%}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat b{font-size:20px}#gameCoverage{overflow-x:auto}.muted{line-height:1.5}}
+@media(max-width:370px){.mobile-picks{grid-template-columns:1fr}.game-card h3{font-size:15px}}
+
+/* Home = green; Away = orange; Neutral = electric blue. Apply directly to selected dropdowns. */
+:root{--home:#11a86e;--away:#ff8b26;--neutral:#1677ff}
+#matrix select.matrix-select.pick-home,.mobile-pick select.pick-home{background:linear-gradient(120deg,#08764c,#13b97a)!important;border:1px solid #5ff0b1!important;color:#fff!important;box-shadow:0 4px 15px #11a86e55;font-weight:750}
+#matrix select.matrix-select.pick-away,.mobile-pick select.pick-away{background:linear-gradient(120deg,#b64c08,#ff8b26)!important;border:1px solid #ffc081!important;color:#fff!important;box-shadow:0 4px 15px #ff8b2655;font-weight:750}
+#matrix select.matrix-select.pick-neutral,.mobile-pick select.pick-neutral{background:linear-gradient(120deg,#0749c4,#1677ff)!important;border:1px solid #79bdff!important;color:#fff!important;box-shadow:0 4px 15px #1677ff55;font-weight:750}
+#matrix select.matrix-select:focus,.mobile-pick select:focus{outline:2px solid #d5e7ff;outline-offset:2px}
+#matrix .matrix-select option,.mobile-pick select option{background:#10243b;color:#fff}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 15px}.legend span{border-radius:8px;padding:7px 11px;font-size:12px;font-weight:750}.legend .home{background:#11a86e}.legend .away{background:#e16d10}.legend .neutral{background:#1677ff}
+
+.coverage-bars{min-width:240px;display:grid;gap:6px}.coverage-bar-row{display:grid;grid-template-columns:minmax(95px,auto) 1fr 43px;align-items:center;gap:7px;font-size:11px}.coverage-track{height:9px;background:#23374d;border-radius:20px;overflow:hidden}.coverage-fill{height:100%;border-radius:20px}.coverage-fill.home{background:#11a86e}.coverage-fill.draw{background:#1677ff}.coverage-fill.away{background:#ff8b26}.risk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.risk-card{border:1px solid #38506b;border-radius:12px;padding:14px;background:#0c1e32}.risk-card.warn{border-left:4px solid #ffb454}.risk-card.bad{border-left:4px solid #f26b7d}.risk-card.info{border-left:4px solid #1677ff}.risk-card h3{font-size:14px;margin:0 0 6px}.risk-card p{font-size:12px;color:#aec4dc;margin:0;line-height:1.55}@media(max-width:760px){#gameCoverage table{min-width:780px}.coverage-bars{min-width:210px}.risk-grid{grid-template-columns:1fr}}
+
+/* Horizontal parlay comparison */
+.parlay-strip-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 12px}
+.parlay-strip-head h2{margin:0}
+.parlay-strip{display:flex!important;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:3px 3px 15px;scrollbar-color:#365a7c #0b1b2d;align-items:stretch}
+.parlay-strip .parlay-compare{flex:0 0 228px;min-width:0;margin:0;padding:0;overflow:hidden;border:1px solid #35516e;border-radius:16px;background:linear-gradient(165deg,#142c46 0%,#0b1d31 85%);scroll-snap-align:start;box-shadow:0 10px 25px #0003;display:flex;flex-direction:column}
+.parlay-compare .compare-head{padding:15px 13px 12px;border-bottom:1px solid #2b4966;background:#162e49}
+.parlay-compare .compare-name{font-size:16px;font-weight:800;color:#fff}
+.parlay-compare .compare-count{font-size:11px;color:#d1e3f5;background:#2d4b68;padding:5px 8px;border-radius:30px;white-space:nowrap}
+.parlay-compare .compare-status{font-size:12px;margin-top:10px;display:inline-flex;align-items:center;gap:6px}
+.parlay-compare .compare-status:before{content:'';height:7px;width:7px;border-radius:50%;background:currentColor}
+.parlay-compare .compare-status.pending{color:#f5c77b}.parlay-compare .compare-status.won{color:#4ee5a9}.parlay-compare .compare-status.lost{color:#ff8297}.parlay-compare .compare-status.empty{color:#9bb2c9}
+.parlay-compare .compare-legs{padding:3px 11px 12px;flex:1}
+.parlay-compare .compare-leg{padding:11px 2px;border-bottom:1px solid #27445f}
+.parlay-compare .compare-leg:last-child{border-bottom:0}
+.parlay-compare .compare-game{font-size:12px;font-weight:750;line-height:1.35;color:#f0f7ff;margin-bottom:7px}
+.parlay-compare .pick-chip{display:inline-flex;max-width:100%;padding:5px 9px;border-radius:7px;font-size:11px;font-weight:750;line-height:1.3;white-space:normal;color:white}
+.parlay-compare .pick-chip.home{background:#087c55;border:1px solid #19bd85}.parlay-compare .pick-chip.away{background:#b75b0d;border:1px solid #f99b45}.parlay-compare .pick-chip.neutral{background:#135bd0;border:1px solid #448fff}
+.parlay-compare .compare-empty{padding:15px 3px;color:#a5bbd2;font-size:12px;line-height:1.5}
+@media(max-width:700px){.parlay-strip .parlay-compare{flex-basis:76vw;max-width:290px}.parlay-strip-head{align-items:flex-start;flex-direction:column;gap:5px}}
+@media(min-width:1550px){main{max-width:1560px}.parlay-strip .parlay-compare{flex:1 0 0;min-width:190px}}
+
+.team-flag{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:23px;height:17px;vertical-align:middle;margin-right:5px}.team-flag img{display:block;width:23px;height:16px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #ffffff30}.flag-emoji{font-size:19px;line-height:1}.compare-game .team-flag,.game-card h3 .team-flag{margin-right:4px}.coverage-bar-row>span:first-child{display:flex;align-items:center;white-space:nowrap;gap:2px}.coverage-bar-row>span:first-child .team-flag{width:20px;margin-right:3px}.coverage-bar-row>span:first-child .team-flag img{width:20px;height:14px}.compare-game,.game-card h3{line-height:1.6}
+</style></head><body><header><div class="brand">FURY SPORTS AI</div><h1>Parlay Coverage Analyzer</h1><div class="muted">52 fixtures · 6 parlays · Pacific Standard Time (PST)</div></header><main>
+<section class="panel"><div class="row between"><h2>UEFA Nations League · 52 Matches × 6 Parlays</h2><button onclick="loadMatrix()">Reset all selections</button></div><div class="row" style="margin:14px 0;gap:12px"><button class="primary" onclick="buildAllParlays()">Create / update all 6 parlays</button><button onclick="exportJSON()" class="small">Export JSON</button><div><label for="dateFilter">Filter matches by date</label><select id="dateFilter" onchange="changeDateFilter(this.value)" style="min-width:190px"><option value="all">All dates · 52 matches</option><option value="12-Nov">November 12</option><option value="13-Nov">November 13</option><option value="14-Nov">November 14</option><option value="15-Nov">November 15</option><option value="16-Nov">November 16</option><option value="17-Nov">November 17</option></select></div></div><p class="muted">All 52 listed fixtures from November 12–17, 2026 load automatically on first visit with empty selections. Fixtures are a preloaded schedule, not live-synced. Blank means excluded. Use the dropdown in each P1–P6 cell to select ML, double chance, totals, or spread. Blank means excluded. Enter final scores directly in the match table. All fixture times are displayed in PST (UTC−8).</p><div class="legend"><span class="home">Home selections</span><span class="away">Away selections</span><span class="neutral">Draw / Totals / 12</span></div><div id="matrix" class="scroll desktop-matrix"></div><div id="mobileMatrix" class="mobile-matrix"></div><div class="parlay-strip-head"><h2>Parlay lineup</h2><span class="muted">Swipe horizontally to compare P1–P6</span></div><div id="columnParlays" class="parlay-strip"></div><h2 style="margin-top:22px">Match-by-match outcome coverage</h2><p class="muted">Only games with at least one selection are displayed, respecting the date filter. Coverage is evaluated across all six columns. The main outcome and selection percentage show which result is most represented among parlays selecting the match, not its likelihood of winning. Match results (Home / Draw / Away) are checked separately from goal totals and spreads. Full parlay success also depends on every other selected match.</p><div id="gameCoverage" class="scroll"></div><h2 style="margin-top:24px">Coverage risk alerts</h2><div id="coverageAlerts" class="risk-grid"></div></section>
+<section class="panel"><h2>Overall parlay analysis</h2><div id="stats" class="stats"></div><p id="analysisNote" class="note"></p><div id="coverage" class="scroll"></div></section>
+<section class="panel"><h2>Result tracker</h2><div class="muted">Enter each game's final score above. The analyzer settles every selection and every parlay automatically.</div><div id="results"></div></section>
+<p class="note">Saved in this browser. No money, odds or stakes are used. Scenario analysis enumerates final scores 0–6 for each team (49 scorelines per game), with a safety limit of 2 games for exhaustive cross-game scoreline analysis. Higher-score outcomes and exact probabilities are not modeled.</p>
+</main><script>
+const KEY='fury_parlay_coverage_nations_v3';
+const fixtures=[["12-Nov","Türkiye","Belgium","18:00",["Belgium ML","Belgium X2","Türkiye X2","","",""]],["12-Nov","Armenia","Cyprus","18:00",["Armenia ML","","","","",""]],["12-Nov","Italy","France","20:45",["France ML","France X2","France ML","","",""]],["12-Nov","Czechia","Spain","20:45",["","","","","",""]],["12-Nov","England","Croatia","20:45",["","","","","",""]],["12-Nov","Albania","Finland","20:45",["","","","","",""]],["12-Nov","San Marino","Belarus","20:45",["","","","","",""]],["12-Nov","Montenegro","Latvia","20:45",["","","","","",""]],["13-Nov","Moldova","Kazakhstan","18:00",["","","","","",""]],["13-Nov","Netherlands","Greece","20:45",["","","","","",""]],["13-Nov","Serbia","Germany","20:45",["","","","","",""]],["13-Nov","Scotland","North Macedonia","20:45",["","","","","",""]],["13-Nov","Slovenia","Switzerland","20:45",["","","","","",""]],["13-Nov","Slovakia","Faroe Islands","20:45",["","","","","",""]],["13-Nov","Bulgaria","Iceland","20:45",["","","","","",""]],["13-Nov","Luxembourg","Estonia","20:45",["","","","","",""]],["13-Nov","Andorra","Gibraltar","20:45",["","","","","",""]],["13-Nov","Liechtenstein","Azerbaijan","20:45",["","","","","",""]],["14-Nov","Kosovo","Israel","15:00",["","","","","",""]],["14-Nov","Norway","Wales","18:00",["","","","","",""]],["14-Nov","Georgia","Hungary","18:00",["","","","","",""]],["14-Nov","Portugal","Denmark","20:45",["","","","","",""]],["14-Nov","Northern Ireland","Ukraine","20:45",["","","","","",""]],["14-Nov","Austria","Republic of Ireland","20:45",["","","","","",""]],["14-Nov","Romania","Poland","20:45",["","","","","",""]],["14-Nov","Sweden","Bosnia and Herzegovina","20:45",["","","","","",""]],["15-Nov","Cyprus","Montenegro","15:00",["","","","","",""]],["15-Nov","Latvia","Armenia","15:00",["","","","","",""]],["15-Nov","Belarus","Albania","18:00",["","","","","",""]],["15-Nov","Finland","San Marino","18:00",["","","","","",""]],["15-Nov","Belgium","Italy","20:45",["","","","","",""]],["15-Nov","France","Türkiye","20:45",["","","","","",""]],["15-Nov","Croatia","Czechia","20:45",["","","","","",""]],["15-Nov","Spain","England","20:45",["","","","","",""]],["16-Nov","Faroe Islands","Moldova","16:00",["","","","","",""]],["16-Nov","Kazakhstan","Slovakia","16:00",["","","","","",""]],["16-Nov","Estonia","Bulgaria","18:00",["","","","","",""]],["16-Nov","Iceland","Luxembourg","18:00",["","","","","",""]],["16-Nov","Lithuania","Liechtenstein","18:00",["","","","","",""]],["16-Nov","Germany","Netherlands","20:45",["","","","","",""]],["16-Nov","Greece","Serbia","20:45",["","","","","",""]],["16-Nov","North Macedonia","Slovenia","20:45",["","","","","",""]],["16-Nov","Switzerland","Scotland","20:45",["","","","","",""]],["16-Nov","Gibraltar","Malta","20:45",["","","","","",""]],["17-Nov","Denmark","Norway","20:45",["","","","","",""]],["17-Nov","Wales","Portugal","20:45",["","","","","",""]],["17-Nov","Hungary","Northern Ireland","20:45",["","","","","",""]],["17-Nov","Ukraine","Georgia","20:45",["","","","","",""]],["17-Nov","Israel","Austria","20:45",["","","","","",""]],["17-Nov","Republic of Ireland","Kosovo","20:45",["","","","","",""]],["17-Nov","Bosnia and Herzegovina","Romania","20:45",["","","","","",""]],["17-Nov","Poland","Sweden","20:45",["","","","","",""]]];
+function parsePick(pick,m){let p=pick.trim();if(!p)return null;let match=p.match(/^(.*?)\s+(ML|X2|1X|12)$/i);if(!match)return null;let team=match[1].trim().toLowerCase().replace('turkie','türkiye');let isHome=team===m.home.toLowerCase(),isAway=team===m.away.toLowerCase();if(!isHome&&!isAway)return null;let code=match[2].toUpperCase();return {id:uid(),match:m.id,market:code==='ML'?(isHome?'home':'away'):(code==='X2'||code==='1X')?(isHome?'away':'home'):'tie',line:1.5,side:code==='ML'?'Yes':'No'};}
+function loadMatrix(){if(!confirm('Clear ALL selections and final scores, and restore all 52 fixtures?'))return;state.parlays=Array.from({length:6},(_,i)=>({id:uid(),name:'Parlay '+(i+1),legs:[]}));seedFixtures();dateFilter='all';save()}
+function seedFixtures(){state.matches=fixtures.map(([date,home,away,time])=>({id:uid(),date,home,away,time,league:'UEFA Nations League',hs:'',as:''}));while(state.parlays.length<6)state.parlays.push({id:uid(),name:'Parlay '+(state.parlays.length+1),legs:[]});state.parlays.forEach(p=>p.legs=[]);}
+function matrixUpdate(mid,j,v){let m=getMatch(mid),p=state.parlays[j];p.legs=p.legs.filter(l=>l.match!==mid);let pick=parsePick(v,m);if(v.trim()&&!pick){alert('Use a team name followed by ML, X2, 1X, or 12. Example: Belgium X2');render();return}if(pick)p.legs.push(pick);save()}
+function displayPick(l,m){if(!l)return '';let home=m.home,away=m.away;if(l.market==='home'&&l.side==='Yes')return home+' ML';if(l.market==='away'&&l.side==='Yes')return away+' ML';if(l.market==='home'&&l.side==='No')return away+' X2';if(l.market==='away'&&l.side==='No')return home+' 1X';return marketLabel(l,m)+' '+l.side}
+function dropdownOptions(m){
+  const h=m.home,a=m.away;
+  return [
+    ['', '— Not included —'],
+    [h+' ML',h+' ML · Home win'],
+    [a+' ML',a+' ML · Away win'],
+    ['Draw ML','Draw · Tie'],
+    [h+' 1X',h+' 1X · Win or draw'],
+    [a+' X2',a+' X2 · Win or draw'],
+    ['12','12 · Either team wins'],
+    ['Over 1.5','Over 1.5 goals'],['Over 2.5','Over 2.5 goals'],['Over 3.5','Over 3.5 goals'],
+    ['Under 1.5','Under 1.5 goals'],['Under 2.5','Under 2.5 goals'],['Under 3.5','Under 3.5 goals'],
+    [h+' -1.5',h+' wins by 2+'],[a+' -1.5',a+' wins by 2+']
+  ];
+}
+function parseDropdown(value,m){
+  if(!value)return null;
+  const h=m.home,a=m.away;
+  const base={id:uid(),match:m.id,line:1.5,side:'Yes'};
+  if(value===h+' ML')return {...base,market:'home'};
+  if(value===a+' ML')return {...base,market:'away'};
+  if(value==='Draw ML')return {...base,market:'tie'};
+  if(value===h+' 1X')return {...base,market:'away',side:'No'};
+  if(value===a+' X2')return {...base,market:'home',side:'No'};
+  if(value==='12')return {...base,market:'tie',side:'No'};
+  let x=value.match(/^(Over|Under) (\d+\.5)$/);
+  if(x)return {...base,market:x[1].toLowerCase(),line:Number(x[2])};
+  if(value===h+' -1.5')return {...base,market:'homeSpread'};
+  if(value===a+' -1.5')return {...base,market:'awaySpread'};
+  return null;
+}
+function dropdownValue(l,m){
+  if(!l)return '';
+  const h=m.home,a=m.away;
+  if(l.market==='home'&&l.side==='Yes')return h+' ML';
+  if(l.market==='away'&&l.side==='Yes')return a+' ML';
+  if(l.market==='tie'&&l.side==='Yes')return 'Draw ML';
+  if(l.market==='away'&&l.side==='No')return h+' 1X';
+  if(l.market==='home'&&l.side==='No')return a+' X2';
+  if(l.market==='tie'&&l.side==='No')return '12';
+  if(['over','under'].includes(l.market))return l.market[0].toUpperCase()+l.market.slice(1)+' '+l.line;
+  if(l.market==='homeSpread'&&l.side==='Yes'&&Number(l.line)===1.5)return h+' -1.5';
+  if(l.market==='awaySpread'&&l.side==='Yes'&&Number(l.line)===1.5)return a+' -1.5';
+  return '';
+}
+function selectionColor(value,m){
+ if(!value)return '';
+ if(value===m.home+' ML'||value===m.home+' 1X'||value===m.home+' -1.5')return 'pick-home';
+ if(value===m.away+' ML'||value===m.away+' X2'||value===m.away+' -1.5')return 'pick-away';
+ return 'pick-neutral';
+}
+function dropdownUpdate(mid,j,v){
+  const m=getMatch(mid),p=state.parlays[j];
+  const replacement=parseDropdown(v,m);
+  p.legs=p.legs.filter(l=>l.match!==mid);
+  if(replacement)p.legs.push(replacement);
+  save();
+}
+let dateFilter='all';
+function changeDateFilter(value){dateFilter=value;renderMatrix();renderGameCoverage();}
+function toPST(cet){if(!/^\d{1,2}:\d{2}$/.test(cet||''))return cet||'—';const [h,m]=cet.split(':').map(Number);const hour=(h+15)%24;return String(hour).padStart(2,'0')+':'+String(m).padStart(2,'0');}
+
+/* Country flags use public FlagCDN images; emoji fallback works offline. */
+const COUNTRY_CODES={"Türkiye":"tr","Belgium":"be","Armenia":"am","Cyprus":"cy","Italy":"it","France":"fr","Czechia":"cz","Spain":"es","England":"gb-eng","Croatia":"hr","Albania":"al","Finland":"fi","San Marino":"sm","Belarus":"by","Montenegro":"me","Latvia":"lv","Moldova":"md","Kazakhstan":"kz","Netherlands":"nl","Greece":"gr","Serbia":"rs","Germany":"de","Scotland":"gb-sct","North Macedonia":"mk","Slovenia":"si","Switzerland":"ch","Slovakia":"sk","Faroe Islands":"fo","Bulgaria":"bg","Iceland":"is","Luxembourg":"lu","Estonia":"ee","Andorra":"ad","Gibraltar":"gi","Liechtenstein":"li","Azerbaijan":"az","Kosovo":"xk","Israel":"il","Norway":"no","Wales":"gb-wls","Georgia":"ge","Hungary":"hu","Portugal":"pt","Denmark":"dk","Northern Ireland":"gb-nir","Ukraine":"ua","Austria":"at","Republic of Ireland":"ie","Romania":"ro","Poland":"pl","Sweden":"se","Bosnia and Herzegovina":"ba","Lithuania":"lt","Malta":"mt"};
+function flagEmoji(code){if(!code)return '🏳️';if(code.startsWith('gb-'))return '🇬🇧';return [...code.toUpperCase()].map(c=>String.fromCodePoint(127397+c.charCodeAt(0))).join('')}
+function teamFlag(name){const code=COUNTRY_CODES[name];if(!code)return '<span class="flag-emoji">🏳️</span>';return `<span class="team-flag"><img src="https://flagcdn.com/w40/${code}.png" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"/><span class="flag-emoji" style="display:none">${flagEmoji(code)}</span></span>`}
+function flaggedTeam(name){return `${teamFlag(name)}<span>${escapeHTML(name)}</span>`}
+function flaggedMatch(m){return `${flaggedTeam(m.home)} <span class="versus">vs</span> ${flaggedTeam(m.away)}`}
+
+function renderMatrix(){
+  const filterControl=document.querySelector('#dateFilter');if(filterControl)filterControl.value=dateFilter;
+  const ps=state.parlays.slice(0,6);
+  document.querySelector('#matrix').innerHTML='<table><tr><th>Date</th><th>Match</th><th>PST</th>'+ps.map(p=>'<th>'+escapeHTML(p.name)+'</th>').join('')+'<th>Final score</th></tr>'+state.matches.filter(m=>dateFilter==='all'||m.date===dateFilter).map(m=>'<tr><td>'+escapeHTML(m.date||'—')+'</td><td>'+flaggedMatch(m)+'</td><td>'+escapeHTML(toPST(m.time))+'</td>'+ps.map((p,i)=>{
+    const leg=p.legs.find(l=>l.match===m.id),value=dropdownValue(leg,m);
+    const options=dropdownOptions(m);
+    if(leg&&!options.some(o=>o[0]===value))options.push([value||'custom','Custom selection (edit below)']);
+    return '<td><select class="matrix-select '+selectionColor(value,m)+'" aria-label="'+escapeHTML(p.name+' '+m.home+' vs '+m.away)+'" onchange="dropdownUpdate(\''+m.id+'\','+i+',this.value)">'+options.map(([v,label])=>'<option value="'+escapeHTML(v)+'" '+(v===value?'selected':'')+'>'+escapeHTML(label)+'</option>').join('')+'</select></td>';
+  }).join('')+'<td><div class="row" style="flex-wrap:nowrap"><input type="number" min="0" style="width:58px" aria-label="Home goals" value="'+m.hs+'" onchange="score(\''+m.id+'\',\'hs\',this.value)"><span>–</span><input type="number" min="0" style="width:58px" aria-label="Away goals" value="'+m.as+'" onchange="score(\''+m.id+'\',\'as\',this.value)"></div></td></tr>').join('')+'</table>';
+  document.querySelector('#mobileMatrix').innerHTML=state.matches.filter(m=>dateFilter==='all'||m.date===dateFilter).map(m=>{
+    const selected=ps.filter(p=>p.legs.some(l=>l.match===m.id)).length;
+    return `<article class="game-card"><div class="game-card-top"><div><div class="kickoff">${escapeHTML(m.date)} · ${escapeHTML(toPST(m.time))} PST</div><h3>${flaggedMatch(m)}</h3></div><span class="pick-count">${selected}/6 picks</span></div><div class="mobile-picks">${ps.map((p,i)=>{
+      const leg=p.legs.find(l=>l.match===m.id),value=dropdownValue(leg,m),options=dropdownOptions(m);
+      if(leg&&!options.some(o=>o[0]===value))options.push([value||'custom','Custom selection']);
+      return `<div class="mobile-pick"><label for="mobile-${m.id}-${i}">P${i+1}</label><select id="mobile-${m.id}-${i}" class="${selectionColor(value,m)}" onchange="dropdownUpdate('${m.id}',${i},this.value)">${options.map(([v,label])=>`<option value="${escapeHTML(v)}" ${v===value?'selected':''}>${escapeHTML(label)}</option>`).join('')}</select></div>`;
+    }).join('')}</div><div class="mobile-score"><span>Final score</span><div class="row"><input type="number" min="0" inputmode="numeric" aria-label="${escapeHTML(m.home)} goals" placeholder="–" value="${m.hs}" onchange="score('${m.id}','hs',this.value)"><span>:</span><input type="number" min="0" inputmode="numeric" aria-label="${escapeHTML(m.away)} goals" placeholder="–" value="${m.as}" onchange="score('${m.id}','as',this.value)"></div></div></article>`;
+  }).join('');
+}
+
+const uid=()=>Math.random().toString(36).slice(2,11);
+const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let state;try{state=JSON.parse(localStorage.getItem(KEY))}catch{}
+if(!state||!Array.isArray(state.matches)||!Array.isArray(state.parlays)){state={matches:[],parlays:Array.from({length:6},(_,i)=>({id:uid(),name:'Parlay '+(i+1),legs:[]}))};seedFixtures();localStorage.setItem(KEY,JSON.stringify(state));}
+const getMatch=id=>state.matches.find(m=>m.id===id);
+const getParlay=id=>state.parlays.find(p=>p.id===id);
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function addMatch(){const home=document.querySelector('#home').value.trim(),away=document.querySelector('#away').value.trim(),league=document.querySelector('#league').value.trim();if(!home||!away||home.toLowerCase()===away)return alert('Enter two different teams');state.matches.push({id:uid(),home,away,league,hs:'',as:''});document.querySelector('#home').value='';document.querySelector('#away').value='';save()}
+function removeMatch(id){if(!confirm('Remove game and its selections from all parlays?'))return;state.matches=state.matches.filter(m=>m.id!==id);state.parlays.forEach(p=>p.legs=p.legs.filter(l=>l.match!==id));save()}
+function score(id,side,val){let m=getMatch(id);m[side]=val===''?'':Math.max(0,Math.floor(Number(val)||0));save()}
+function addParlay(){state.parlays.push({id:uid(),name:'Parlay '+(state.parlays.length+1),legs:[]});save()}
+function removeParlay(id){if(!confirm('Delete this parlay?'))return;state.parlays=state.parlays.filter(p=>p.id!==id);save()}
+function duplicateParlay(id){let p=getParlay(id);state.parlays.push({id:uid(),name:p.name+' copy',legs:p.legs.map(l=>({...l,id:uid()}))});save()}
+function rename(id,name){getParlay(id).name=name;save()}
+function addLeg(id){let p=getParlay(id);if(!state.matches.length)return alert('Add a game to the match library first');p.legs.push({id:uid(),match:state.matches[0].id,market:'home',line:1.5,side:'Yes'});save()}
+function updateLeg(pid,lid,field,val){let leg=getParlay(pid).legs.find(l=>l.id===lid);leg[field]=field==='line'?Number(val):val;save()}
+function removeLeg(pid,lid){getParlay(pid).legs=getParlay(pid).legs.filter(l=>l.id!==lid);save()}
+const markets=[['home','Home team wins'],['away','Away team wins'],['tie','Tie'],['homeSpread','Home wins by more than X goals'],['awaySpread','Away wins by more than X goals'],['over','Over X total goals'],['under','Under X total goals']];
+function marketLabel(l,m){let h=m?.home||'Home',a=m?.away||'Away';return ({home:h+' wins',away:a+' wins',tie:'Tie',homeSpread:h+' wins by more than '+l.line+' goals',awaySpread:a+' wins by more than '+l.line+' goals',over:'Over '+l.line+' total goals',under:'Under '+l.line+' total goals'})[l.market]||l.market}
+function evalMarket(l,hs,as){let v;switch(l.market){case'home':v=hs>as;break;case'away':v=as>hs;break;case'tie':v=hs===as;break;case'homeSpread':v=hs-as>Number(l.line);break;case'awaySpread':v=as-hs>Number(l.line);break;case'over':v=hs+as>Number(l.line);break;case'under':v=hs+as<Number(l.line);break;default:return false}return l.side==='Yes'?v:!v}
+function ticketStatus(p){if(!p.legs.length)return'Empty';let pending=false;for(let l of p.legs){let m=getMatch(l.match);if(!m)return'Invalid';if(m.hs===''||m.as===''){pending=true;continue}if(!evalMarket(l,Number(m.hs),Number(m.as)))return'Lost'}return pending?'Pending':'Won'}
+function render(){
+renderMatrix();
+/* Removed standalone Match library. */
+/* document.querySelector('#matchList').innerHTML=state.matches.map(m=>`<div class="match"><div class="row between"><div><b>${flaggedMatch(m)}</b><div class="muted">${escapeHTML(m.league)}</div></div><button class="small danger" onclick="removeMatch('${m.id}')">Remove</button></div><div class="row" style="margin-top:8px"><label>Final score</label><input style="width:74px" aria-label="${escapeHTML(m.home)} goals" type="number" min="0" placeholder="Home" value="${m.hs}" onchange="score('${m.id}','hs',this.value)"><span>–</span><input style="width:74px" aria-label="${escapeHTML(m.away)} goals" type="number" min="0" placeholder="Away" value="${m.as}" onchange="score('${m.id}','as',this.value)"></div></div>`).join('')||'<p class="muted">Add your first game above.</p>'; */
+if(document.querySelector('#tickets')) document.querySelector('#tickets').innerHTML=state.parlays.map(p=>`<div class="ticket"><div class="row between"><input aria-label="Parlay name" style="max-width:170px;font-weight:750" value="${escapeHTML(p.name)}" onchange="rename('${p.id}',this.value)"><div class="row"><button class="small" onclick="duplicateParlay('${p.id}')">Copy</button><button class="small danger" onclick="removeParlay('${p.id}')">×</button></div></div><p class="muted">${p.legs.length} selections · <span class="${ticketStatus(p)==='Won'?'good':ticketStatus(p)==='Lost'?'bad':'warn'}">${ticketStatus(p)}</span> · ${new Set(p.legs.map(l=>l.match)).size} games</p>${p.legs.map(l=>{let m=getMatch(l.match);return `<div class="leg"><div class="row between"><b>${escapeHTML(m?m.home+' vs '+m.away:'Unknown game')}</b><button class="small danger" onclick="removeLeg('${p.id}','${l.id}')">Remove</button></div><div style="margin-top:8px"><label>Game</label><select onchange="updateLeg('${p.id}','${l.id}','match',this.value)">${state.matches.map(x=>`<option value="${x.id}" ${x.id===l.match?'selected':''}>${escapeHTML(x.home)} vs ${escapeHTML(x.away)}</option>`).join('')}</select></div><div class="market"><div><label>Market</label><select onchange="updateLeg('${p.id}','${l.id}','market',this.value)">${markets.map(([v,n])=>`<option value="${v}" ${v===l.market?'selected':''}>${escapeHTML(n)}</option>`).join('')}</select></div><div><label>Goal line (spread / total)</label><input type="number" min="0" step=".5" value="${l.line}" onchange="updateLeg('${p.id}','${l.id}','line',this.value)"></div></div><div class="row between" style="margin-top:10px"><span class="muted">${escapeHTML(marketLabel(l,m))}</span><div class="yn"><button class="${l.side==='Yes'?'yes':''}" onclick="updateLeg('${p.id}','${l.id}','side','Yes')">Yes</button><button class="${l.side==='No'?'no':''}" onclick="updateLeg('${p.id}','${l.id}','side','No')">No</button></div></div></div>`}).join('')}<button class="primary" onclick="addLeg('${p.id}')" style="width:100%">+ Add game / selection</button></div>`).join('');
+analyze();
+renderColumnParlays();
+renderGameCoverage();
+}
+function analyze(){const active=state.parlays.filter(p=>p.legs.length),ids=[...new Set(active.flatMap(p=>p.legs.map(l=>l.match)))].filter(id=>getMatch(id));const duplicates=new Set(),duplicateCount=active.filter(p=>{let k=p.legs.map(l=>[l.match,l.market,l.line,l.side].join(':')).sort().join('|');if(duplicates.has(k))return true;duplicates.add(k);return false}).length;
+const rows=[['Parlays',active.length],['Games used',ids.length],['Total selections',active.reduce((n,p)=>n+p.legs.length,0)],['Duplicate parlays',duplicateCount]];
+let possible=0,covered=0,overlap=0,examples=[],incompatible=[];
+for(let p of active){let groups={};for(let l of p.legs)(groups[l.match]??=[]).push(l);for(let [id,legs] of Object.entries(groups)){let valid=false;for(let h=0;h<=6&&!valid;h++)for(let a=0;a<=6;a++)if(legs.every(l=>evalMarket(l,h,a))){valid=true;break}if(!valid)incompatible.push(p.name+': '+(getMatch(id)?.home||id)+' vs '+(getMatch(id)?.away||''))}}
+if(ids.length>0&&ids.length<=2){possible=49**ids.length;for(let i=0;i<possible;i++){let n=i,scores={};for(let id of ids){let v=n%49;n=Math.floor(n/49);scores[id]=[Math.floor(v/7),v%7]}let winners=active.filter(p=>p.legs.every(l=>{let s=scores[l.match];return s&&evalMarket(l,...s)}));if(winners.length){covered++;if(winners.length>1)overlap++;if(examples.length<8)examples.push({scores,winners})}}rows.push(['Score scenarios covered',covered+' / '+possible],['Coverage in 0–6 range',(100*covered/possible).toFixed(2)+'%'],['Multiple parlays win',overlap]);}else rows.push(['Exact score coverage',ids.length>2?'Limit: 2 games':'Add selections']);
+document.querySelector('#stats').innerHTML=rows.map(([name,value])=>`<div class="stat"><span class="muted">${escapeHTML(name)}</span><b>${escapeHTML(value)}</b></div>`).join('');
+document.querySelector('#analysisNote').innerHTML=incompatible.length?'<span class="bad"><b>Conflicting selections:</b> '+incompatible.map(escapeHTML).join('; ')+'</span>':'No logically impossible combinations detected within the modeled 0–6 score range.';
+document.querySelector('#coverage').innerHTML=examples.length?'<h3>Examples of covered score scenarios</h3><table><tr><th>Final scores</th><th>Winning parlays</th></tr>'+examples.map(e=>`<tr><td>${ids.map(id=>{let m=getMatch(id),s=e.scores[id];return escapeHTML(m.home)+' '+s[0]+'–'+s[1]+' '+escapeHTML(m.away)}).join('<br>')}</td><td>${e.winners.map(p=>escapeHTML(p.name)).join(', ')}</td></tr>`).join('')+'</table>':'';
+document.querySelector('#results').innerHTML=state.parlays.map(p=>`<div class="row between match"><b>${escapeHTML(p.name)}</b><span class="${ticketStatus(p)==='Won'?'good':ticketStatus(p)==='Lost'?'bad':'warn'}">${ticketStatus(p)} (${p.legs.length} selections)</span></div>`).join('');
+}
+
+function buildAllParlays(){renderColumnParlays();document.querySelector('#columnParlays').scrollIntoView({behavior:'smooth',block:'start'});}
+function renderColumnParlays(){
+ const el=document.querySelector('#columnParlays');
+ const getPickColor=(l,m)=>{
+   if((l.market==='home'&&l.side==='Yes')||(l.market==='away'&&l.side==='No')||(l.market==='homeSpread'&&l.side==='Yes'))return 'home';
+   if((l.market==='away'&&l.side==='Yes')||(l.market==='home'&&l.side==='No')||(l.market==='awaySpread'&&l.side==='Yes'))return 'away';
+   return 'neutral';
+ };
+ el.innerHTML=state.parlays.slice(0,6).map((p,i)=>{
+   const legs=p.legs.filter(l=>getMatch(l.match));
+   const status=ticketStatus(p);
+   return `<article class="parlay-compare"><div class="compare-head"><div class="row between" style="gap:5px"><span class="compare-name">P${i+1} · ${escapeHTML(p.name)}</span><span class="compare-count">${legs.length} games</span></div><span class="compare-status ${status.toLowerCase()}">${escapeHTML(status)}</span></div><div class="compare-legs">${legs.length?legs.map(l=>{const m=getMatch(l.match);return `<div class="compare-leg"><div class="compare-game">${flaggedMatch(m)}</div><span class="pick-chip ${getPickColor(l,m)}">${escapeHTML(displayPick(l,m))}</span></div>`}).join(''):'<div class="compare-empty">No selections yet. Choose matches in the parlay columns above.</div>'}</div></article>`;
+ }).join('');
+}
+
+function renderGameCoverage(){
+ const el=document.querySelector('#gameCoverage');
+ const labels=['Home','Draw','Away'];
+ const canCover=(legs,outcome)=>{
+   for(let h=0;h<=6;h++)for(let a=0;a<=6;a++){
+     if((h>a?0:h===a?1:2)!==outcome)continue;
+     if(legs.every(l=>evalMarket(l,h,a)))return true;
+   }
+   return false;
+ };
+ const selectedMatches=state.matches.filter(m=>(dateFilter==='all'||m.date===dateFilter)&&state.parlays.slice(0,6).some(p=>p.legs.some(l=>l.match===m.id)));
+ const rows=[],alerts=[];
+ const active=state.parlays.slice(0,6).map((p,i)=>({p,i})).filter(x=>x.p.legs.length);
+ const signatureMap=new Map();
+ for(const {p,i} of active){
+   const signature=p.legs.map(l=>[l.match,l.market,l.line,l.side].join(':')).sort().join('|');
+   if(signatureMap.has(signature))alerts.push({kind:'info',title:'Duplicate parlays',body:'P'+(signatureMap.get(signature)+1)+' and P'+(i+1)+' have identical selections. They do not provide additional outcome diversity.'});
+   else signatureMap.set(signature,i);
+ }
+ for(const m of selectedMatches){
+   const selections=state.parlays.slice(0,6).map((p,i)=>({p,i,legs:p.legs.filter(l=>l.match===m.id)})).filter(x=>x.legs.length);
+   const matchLabels=[m.home,'Draw',m.away];
+   const counts=[0,1,2].map(outcome=>selections.filter(x=>canCover(x.legs,outcome)).length);
+   const covered=counts.filter(Boolean).length, missing=counts.map((v,i)=>v?null:matchLabels[i]).filter(Boolean);
+   const max=Math.max(...counts);
+   const leaders=counts.map((v,i)=>v===max&&v>0?matchLabels[i]:null).filter(Boolean);
+   const bars=counts.map((count,i)=>{
+     const pct=Math.round(1000*count/selections.length)/10;
+     const color=['home','draw','away'][i];
+     return `<div class="coverage-bar-row"><span>${i===1?escapeHTML(matchLabels[i]):flaggedTeam(matchLabels[i])}</span><div class="coverage-track"><div class="coverage-fill ${color}" style="width:${pct}%"></div></div><b>${pct}%</b></div>`;
+   }).join('');
+   const activeNames=selections.map(x=>'P'+(x.i+1)).join(', ');
+   const critical=counts.map((v,i)=>v===0?matchLabels[i]:null).filter(Boolean);
+   if(critical.length){
+     alerts.push({kind:covered===1?'bad':'warn',title:'Uncovered result · '+m.home+' vs '+m.away,body:critical.join(' / ')+' is not covered by any parlay selecting this game. Those results would eliminate every parlay containing this match.'});
+   }
+   const sameResult=counts.findIndex(v=>v===selections.length);
+   if(sameResult!==-1&&selections.length>=2){
+     alerts.push({kind:'warn',title:'Shared exposure · '+m.home+' vs '+m.away,body:'All '+selections.length+' parlays selecting this game cover '+matchLabels[sameResult]+'. This concentration may reduce diversification; see the other outcome bars for what is missing.'});
+   }
+   const settled=m.hs!==''&&m.as!=='';
+   rows.push(`<tr><td>${escapeHTML(m.date||'')}</td><td><b>${flaggedMatch(m)}</b></td><td>${escapeHTML(activeNames)}</td><td>${escapeHTML(leaders.join(' / ')||'None')}</td><td><div class="coverage-bars">${bars}</div></td><td><b class="${covered===3?'good':'warn'}">${covered}/3</b></td><td>${escapeHTML(missing.join(', ')||'None')}</td><td>${settled?escapeHTML(m.hs+'–'+m.as):'Pending'}</td></tr>`);
+ }
+ // A match can eliminate every active parlay only if each active parlay contains it and its pick fails.
+ for(const m of selectedMatches){
+   const everyone=active.length>0&&active.every(x=>x.p.legs.some(l=>l.match===m.id));
+   if(!everyone)continue;
+   const outcomes=[0,1,2].filter(o=>active.every(x=>!canCover(x.p.legs.filter(l=>l.match===m.id),o)));
+   if(outcomes.length)alerts.push({kind:'bad',title:'All-parlay failure point · '+m.home+' vs '+m.away,body:outcomes.map(o=>[m.home,'Draw',m.away][o]).join(' / ')+' would eliminate all '+active.length+' active parlays, based on their selections for this match.'});
+ }
+ el.innerHTML='<table><thead><tr><th>Date</th><th>Match</th><th>Parlays</th><th>Main outcome</th><th>Team / Draw coverage</th><th>1X2 covered</th><th>Missing</th><th>Final</th></tr></thead><tbody>'+(rows.join('')||'<tr><td colspan="8" class="muted">No matches with selections for this date.</td></tr>')+'</tbody></table><p class="note">Each bar shows the share of parlays selecting that match that are compatible with the outcome. Bars can add up to more than 100% because double-chance and other markets can cover multiple results. These are selection coverage percentages, not outcome probabilities. Spread/total compatibility is evaluated using scores 0–6 per team.</p>';
+ const target=document.querySelector('#coverageAlerts');
+ target.innerHTML=alerts.length?alerts.map(a=>`<div class="risk-card ${a.kind}"><h3>${escapeHTML(a.title)}</h3><p>${escapeHTML(a.body)}</p></div>`).join(''):'<div class="risk-card info"><h3>No coverage alerts</h3><p>Add selections across P1–P6 to identify missing outcomes, identical parlays, and shared result exposure.</p></div>';
+}
+
+function exportJSON(){let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fury-parlay-coverage.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+render();
+</script></body></html>
