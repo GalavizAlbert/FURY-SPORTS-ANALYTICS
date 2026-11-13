@@ -360,6 +360,30 @@ async function captureParlays(){
   text('Expected payouts are user-entered amounts',margin,163,15,'#b6c9db',500);
   const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(n));
   const colorFor=(l,m)=>((l.market==='home'&&l.side==='Yes')||(l.market==='away'&&l.side==='No')||(l.market==='homeSpread'&&l.side==='Yes'))?'#13b97a':((l.market==='away'&&l.side==='Yes')||(l.market==='home'&&l.side==='No')||(l.market==='awaySpread'&&l.side==='Yes'))?'#ff9b4b':'#4698ff';
+  // Preload flags with CORS so they are embedded in the actual exported PNG.
+  const flagNames=[...new Set(parlays.flatMap(p=>p.legs.map(l=>getMatch(l.match)).filter(Boolean).flatMap(m=>[m.home,m.away])))];
+  const flagImages=new Map();
+  await Promise.all(flagNames.map(async name=>{
+   const code=COUNTRY_CODES[name];if(!code)return;
+   const img=new Image();img.crossOrigin='anonymous';
+   try{
+    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src='https://flagcdn.com/w80/'+code+'.png';});
+    flagImages.set(name,img);
+   }catch(e){/* Emoji fallback if offline or remote flag is unavailable. */}
+  }));
+  const drawFlag=(name,x,y)=>{
+   const img=flagImages.get(name);
+   if(img){ctx.drawImage(img,x,y,23,16);}
+   else{text(flagEmoji(COUNTRY_CODES[name]),x,y+15,17,'#ffffff',600);}
+  };
+  const drawMatchWithFlags=(m,x,y,maxWidth)=>{
+   // Each team gets its own flag in the saved image, not just on the web page.
+   const half=(maxWidth-18)/2;
+   drawFlag(m.home,x,y-14);drawFlag(m.away,x+half+9,y-14);
+   const short=(name,limit)=>{ctx.font='700 12px system-ui';let t=name;while(t.length>2&&ctx.measureText(t).width>limit)t=t.slice(0,-2)+'…';return t;};
+   text(short(m.home,half-29),x+27,y,12,'#f2f7ff',750);
+   text(short(m.away,half-29),x+half+36,y,12,'#f2f7ff',750);
+  };
   parlays.forEach((p,i)=>{
    const x=margin+i*(cardW+gap),y=185,legs=p.legs.filter(l=>getMatch(l.match)),status=ticketStatus(p);
    round(x,y,cardW,height-y-28,14,'#10263b','#34536c');round(x,y,cardW,118,14,'#17364e');
@@ -372,7 +396,7 @@ async function captureParlays(){
    legs.forEach((l,j)=>{
     const m=getMatch(l.match),ly=y+132+j*105,result=legResult(l,m);
     round(x+9,ly,cardW-18,96,9,result==='lost'?'#3c2130':result==='won'?'#103a31':'#0b1c2e',result==='lost'?'#ae4b65':result==='won'?'#287d61':'#28475f');
-    wrap(m.home+' vs '+m.away,x+19,ly+22,cardW-38,14,'#f2f7ff',750,19,2);
+    drawMatchWithFlags(m,x+19,ly+24,cardW-38);
     wrap(displayPick(l,m),x+19,ly+60,cardW-38,13,colorFor(l,m),800,17,1);
     const resultText=result==='pending'?'PENDING':result==='won'?'WON':'LOST';
     text(resultText+(result==='pending'?'':'  '+m.hs+'–'+m.as),x+19,ly+84,11,result==='lost'?'#ff9aac':result==='won'?'#72edb5':'#c7b58e',800);
