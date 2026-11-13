@@ -159,7 +159,7 @@ label{color:#c0d0e0;font-weight:650}.legend{gap:7px}.legend span{border-radius:7
 <section class="panel"><h2>Overall parlay analysis</h2><div id="stats" class="stats"></div><p id="analysisNote" class="note"></p><div id="coverage" class="scroll"></div></section>
 <section class="panel"><h2>Result tracker · Failure breakdown</h2><div class="muted">See exactly which selections lost, the final score, and why each parlay failed. Enter scores in the match table above; results update automatically.</div><div id="results"></div></section>
 <p class="note">Local backup plus optional authenticated Supabase synchronization. No money, odds or stakes are used. Scenario analysis enumerates final scores 0–6 for each team (49 scorelines per game), with a safety limit of 2 games for exhaustive cross-game scoreline analysis. Higher-score outcomes and exact probabilities are not modeled.</p>
-</main><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script>
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script>
 const KEY='fury_parlay_coverage_nations_v3';
 const fixtures=[["12-Nov","Türkiye","Belgium","18:00",["Belgium ML","Belgium X2","Türkiye X2","","",""]],["12-Nov","Armenia","Cyprus","18:00",["Armenia ML","","","","",""]],["12-Nov","Italy","France","20:45",["France ML","France X2","France ML","","",""]],["12-Nov","Czechia","Spain","20:45",["","","","","",""]],["12-Nov","England","Croatia","20:45",["","","","","",""]],["12-Nov","Albania","Finland","20:45",["","","","","",""]],["12-Nov","San Marino","Belarus","20:45",["","","","","",""]],["12-Nov","Montenegro","Latvia","20:45",["","","","","",""]],["13-Nov","Moldova","Kazakhstan","18:00",["","","","","",""]],["13-Nov","Netherlands","Greece","20:45",["","","","","",""]],["13-Nov","Serbia","Germany","20:45",["","","","","",""]],["13-Nov","Scotland","North Macedonia","20:45",["","","","","",""]],["13-Nov","Slovenia","Switzerland","20:45",["","","","","",""]],["13-Nov","Slovakia","Faroe Islands","20:45",["","","","","",""]],["13-Nov","Bulgaria","Iceland","20:45",["","","","","",""]],["13-Nov","Luxembourg","Estonia","20:45",["","","","","",""]],["13-Nov","Andorra","Gibraltar","20:45",["","","","","",""]],["13-Nov","Liechtenstein","Azerbaijan","20:45",["","","","","",""]],["14-Nov","Kosovo","Israel","15:00",["","","","","",""]],["14-Nov","Norway","Wales","18:00",["","","","","",""]],["14-Nov","Georgia","Hungary","18:00",["","","","","",""]],["14-Nov","Portugal","Denmark","20:45",["","","","","",""]],["14-Nov","Northern Ireland","Ukraine","20:45",["","","","","",""]],["14-Nov","Austria","Republic of Ireland","20:45",["","","","","",""]],["14-Nov","Romania","Poland","20:45",["","","","","",""]],["14-Nov","Sweden","Bosnia and Herzegovina","20:45",["","","","","",""]],["15-Nov","Cyprus","Montenegro","15:00",["","","","","",""]],["15-Nov","Latvia","Armenia","15:00",["","","","","",""]],["15-Nov","Belarus","Albania","18:00",["","","","","",""]],["15-Nov","Finland","San Marino","18:00",["","","","","",""]],["15-Nov","Belgium","Italy","20:45",["","","","","",""]],["15-Nov","France","Türkiye","20:45",["","","","","",""]],["15-Nov","Croatia","Czechia","20:45",["","","","","",""]],["15-Nov","Spain","England","20:45",["","","","","",""]],["16-Nov","Faroe Islands","Moldova","16:00",["","","","","",""]],["16-Nov","Kazakhstan","Slovakia","16:00",["","","","","",""]],["16-Nov","Estonia","Bulgaria","18:00",["","","","","",""]],["16-Nov","Iceland","Luxembourg","18:00",["","","","","",""]],["16-Nov","Lithuania","Liechtenstein","18:00",["","","","","",""]],["16-Nov","Germany","Netherlands","20:45",["","","","","",""]],["16-Nov","Greece","Serbia","20:45",["","","","","",""]],["16-Nov","North Macedonia","Slovenia","20:45",["","","","","",""]],["16-Nov","Switzerland","Scotland","20:45",["","","","","",""]],["16-Nov","Gibraltar","Malta","20:45",["","","","","",""]],["17-Nov","Denmark","Norway","20:45",["","","","","",""]],["17-Nov","Wales","Portugal","20:45",["","","","","",""]],["17-Nov","Hungary","Northern Ireland","20:45",["","","","","",""]],["17-Nov","Ukraine","Georgia","20:45",["","","","","",""]],["17-Nov","Israel","Austria","20:45",["","","","","",""]],["17-Nov","Republic of Ireland","Kosovo","20:45",["","","","","",""]],["17-Nov","Bosnia and Herzegovina","Romania","20:45",["","","","","",""]],["17-Nov","Poland","Sweden","20:45",["","","","","",""]]];
 function parsePick(pick,m){let p=pick.trim();if(!p)return null;let match=p.match(/^(.*?)\s+(ML|X2|1X|12)$/i);if(!match)return null;let team=match[1].trim().toLowerCase().replace('turkie','türkiye');let isHome=team===m.home.toLowerCase(),isAway=team===m.away.toLowerCase();if(!isHome&&!isAway)return null;let code=match[2].toUpperCase();return {id:uid(),match:m.id,market:code==='ML'?(isHome?'home':'away'):(code==='X2'||code==='1X')?(isHome?'away':'home'):'tie',line:1.5,side:code==='ML'?'Yes':'No'};}
@@ -332,49 +332,66 @@ function setExpectedPayout(index,value){
 }
 async function captureParlays(){
  const button=document.getElementById('shareParlaysBtn');
- if(typeof html2canvas!=='function'){alert('PNG renderer could not load. Check your internet connection.');return;}
- let exportNode=null;
- const oldText=button.textContent;
- button.disabled=true;
+ const original=button.textContent;button.disabled=true;button.textContent='Creating image…';
  try{
-  button.textContent='Preparing image…';
-  const source=document.getElementById('columnParlays');
-  if(!source||!source.children.length)throw Error('Parlay cards are not ready.');
-  exportNode=document.createElement('div');exportNode.className='parlay-export';
-  const brandRow=document.createElement('div');brandRow.className='parlay-export-brand';
-  const logo=document.querySelector('header .fs-logo').cloneNode(true);
-  logo.className='parlay-export-logo';logo.alt='FS logo';
-  const title=document.createElement('div');title.className='parlay-export-title';title.textContent='FURY SPORTS AI · PARLAY LINEUP';
-  brandRow.append(logo,title);exportNode.appendChild(brandRow);
-  const subtitle=document.createElement('div');subtitle.className='parlay-export-subtitle';subtitle.textContent='Five-parlay overview · Expected payouts are user-entered amounts';exportNode.appendChild(subtitle);
-  const cards=document.createElement('div');cards.className='parlay-export-grid';
-  state.parlays.slice(0,5).forEach((p,i)=>{
-   const original=source.children[i];if(!original)return;
-   const copy=original.cloneNode(true);
-   const input=copy.querySelector('.payout-entry input');
-   if(input){const display=document.createElement('div');display.className='export-payout';display.textContent=p.expectedPayout==null?'Not entered':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(p.expectedPayout);input.closest('.payout-entry')?.replaceWith(display);}
-   // External flag images can hang html2canvas on mobile. Use local emoji fallback in the export.
-   copy.querySelectorAll('.team-flag').forEach(flag=>{
-    const fallback=flag.querySelector('.flag-emoji');
-    const emoji=document.createElement('span');emoji.textContent=fallback?.textContent||'⚽';emoji.style.fontSize='16px';
-    flag.replaceWith(emoji);
+  // Draw directly onto a canvas instead of screenshotting DOM; reliable on iOS Safari/Chrome.
+  const parlays=state.parlays.slice(0,5), width=1500, margin=28, gap=12, cardW=(width-2*margin-4*gap)/5;
+  const maxLegs=Math.max(1,...parlays.map(p=>p.legs.filter(l=>getMatch(l.match)).length));
+  const height=Math.max(520,192+maxLegs*105+80);
+  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+  const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas is unavailable.');
+  const round=(x,y,w,h,r,fill,stroke)=>{ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke();}};
+  const text=(t,x,y,size=16,color='#eff7ff',weight=500)=>{ctx.font=`${weight} ${size}px system-ui,-apple-system,sans-serif`;ctx.fillStyle=color;ctx.fillText(String(t),x,y);};
+  const wrap=(value,x,y,maxWidth,size=15,color='#f0f7ff',weight=600,lineHeight=21,maxLines=3)=>{
+    ctx.font=`${weight} ${size}px system-ui,-apple-system,sans-serif`;
+    const words=String(value).split(/\s+/);let line='',lines=[];
+    for(const word of words){const trial=line?line+' '+word:word;if(ctx.measureText(trial).width>maxWidth&&line){lines.push(line);line=word;}else line=trial;}
+    if(line)lines.push(line);
+    lines.slice(0,maxLines).forEach((l,i)=>text(l,x,y+i*lineHeight,size,color,weight));
+    return Math.min(lines.length,maxLines)*lineHeight;
+  };
+  ctx.fillStyle='#07111e';ctx.fillRect(0,0,width,height);
+  round(18,18,width-36,116,20,'#10273b','#2d536a');
+  const logo=document.querySelector('header .fs-logo');
+  if(logo?.complete&&logo.naturalWidth){ctx.drawImage(logo,38,36,76,76);}
+  else{round(38,36,76,76,16,'#10314b','#3284b4');text('FS',48,87,43,'#62d5ff',850);}
+  text('FURY SPORTS AI',132,68,27,'#60dbf7',850);
+  text('PARLAY LINEUP  •  5-PARLAY OVERVIEW',132,101,20,'#f0f7ff',700);
+  text('Expected payouts are user-entered amounts',margin,163,15,'#b6c9db',500);
+  const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(n));
+  const colorFor=(l,m)=>((l.market==='home'&&l.side==='Yes')||(l.market==='away'&&l.side==='No')||(l.market==='homeSpread'&&l.side==='Yes'))?'#13b97a':((l.market==='away'&&l.side==='Yes')||(l.market==='home'&&l.side==='No')||(l.market==='awaySpread'&&l.side==='Yes'))?'#ff9b4b':'#4698ff';
+  parlays.forEach((p,i)=>{
+   const x=margin+i*(cardW+gap),y=185,legs=p.legs.filter(l=>getMatch(l.match)),status=ticketStatus(p);
+   round(x,y,cardW,height-y-28,14,'#10263b','#34536c');round(x,y,cardW,118,14,'#17364e');
+   text('PARLAY '+(i+1),x+14,y+27,13,'#8edbec',800);
+   text(status.toUpperCase(),x+cardW-14-ctx.measureText(status.toUpperCase()).width,y+27,13,status==='Lost'?'#ff9aab':status==='Won'?'#6ce9b4':'#f0c980',750);
+   wrap(p.name,x+14,y+53,cardW-28,18,'#ffffff',800,23,1);
+   text('EXPECTED PAYOUT',x+14,y+77,11,'#a7c4d7',700);
+   text(p.expectedPayout==null?'Not entered':money(p.expectedPayout),x+14,y+105,23,'#6fe8cb',850);
+   if(!legs.length)wrap('No selections yet',x+14,y+153,cardW-28,14,'#a8bfd0');
+   legs.forEach((l,j)=>{
+    const m=getMatch(l.match),ly=y+132+j*105,result=legResult(l,m);
+    round(x+9,ly,cardW-18,96,9,result==='lost'?'#3c2130':result==='won'?'#103a31':'#0b1c2e',result==='lost'?'#ae4b65':result==='won'?'#287d61':'#28475f');
+    wrap(m.home+' vs '+m.away,x+19,ly+22,cardW-38,14,'#f2f7ff',750,19,2);
+    wrap(displayPick(l,m),x+19,ly+60,cardW-38,13,colorFor(l,m),800,17,1);
+    const resultText=result==='pending'?'PENDING':result==='won'?'WON':'LOST';
+    text(resultText+(result==='pending'?'':'  '+m.hs+'–'+m.as),x+19,ly+84,11,result==='lost'?'#ff9aac':result==='won'?'#72edb5':'#c7b58e',800);
    });
-   cards.appendChild(copy);
   });
-  exportNode.appendChild(cards);document.body.appendChild(exportNode);
-  // Only the embedded FS logo remains: avoid awaiting external image decoding indefinitely.
-  await Promise.race([logo.decode?.().catch(()=>{})||Promise.resolve(),new Promise(resolve=>setTimeout(resolve,1200))]);
-  button.textContent='Rendering PNG…';
-  const render=html2canvas(exportNode,{backgroundColor:'#07111e',scale:1,useCORS:false,allowTaint:false,logging:false,windowWidth:1450,imageTimeout:1500,scrollX:0,scrollY:0});
-  const canvas=await Promise.race([render,new Promise((_,reject)=>setTimeout(()=>reject(Error('Rendering timed out on this device. Try Chrome or Safari, or reduce the number of selections.')),18000))]);
-  button.textContent='Saving image…';
-  const blob=await Promise.race([new Promise(resolve=>canvas.toBlob(resolve,'image/png')),new Promise((_,reject)=>setTimeout(()=>reject(Error('PNG conversion timed out.')),6000))]);
-  if(!blob)throw Error('Unable to generate PNG');
-  const url=URL.createObjectURL(blob),link=document.createElement('a');
-  link.href=url;link.download='FURY_Parlay_Lineup.png';document.body.appendChild(link);link.click();link.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),15000);
+  button.textContent='Saving PNG…';
+  const blob=await new Promise((resolve,reject)=>{canvas.toBlob(b=>b?resolve(b):reject(Error('Could not encode image')),'image/png');});
+  const filename='FURY_Parlay_Lineup.png';
+  if(navigator.share&&navigator.canShare){
+   const file=new File([blob],filename,{type:'image/png'});
+   if(navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:'FURY SPORTS AI · Parlay Lineup'});return;}
+    catch(e){if(e.name==='AbortError')return;}
+   }
+  }
+  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=filename;
+  document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
  }catch(err){alert('Image capture failed: '+(err?.message||String(err)));}
- finally{exportNode?.remove();button.disabled=false;button.textContent=oldText;}
+ finally{button.disabled=false;button.textContent=original;}
 }
 
 function renderColumnParlays(){
