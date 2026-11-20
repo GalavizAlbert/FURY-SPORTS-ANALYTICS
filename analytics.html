@@ -1297,6 +1297,49 @@ td,.player-table-wrap td,#teamsTab .player-table-wrap td,#matchTab .player-table
 .player-hero:after{border-color:#34d39944}
 .league-sidebar a:hover,.league-sidebar button:hover{background-color:#1c3528;color:#6ee7b7}
 :focus-visible{outline-color:#34d399}
+</style><style id="fury-projections-emerald-parlay-button">
+/* Match the emerald pill used for the protected schedule feed. */
+#projectionsTab .fury-parlay-add, .fury-parlay-pickbar .fury-parlay-add {
+  background:#173b2b !important;
+  border:1px solid #27694b !important;
+  color:#6ee7b7 !important;
+  border-radius:30px !important;
+  font-weight:800 !important;
+  box-shadow:none !important;
+  transition:background .2s,border-color .2s,box-shadow .2s !important;
+}
+#projectionsTab .fury-parlay-add:hover, .fury-parlay-pickbar .fury-parlay-add:hover {
+  background:#205039 !important;
+  border-color:#34d399 !important;
+  box-shadow:0 0 0 2px #10b98122 !important;
+}
+#projectionsTab .fury-parlay-add:focus-visible, .fury-parlay-pickbar .fury-parlay-add:focus-visible {outline:2px solid #34d399;outline-offset:2px}
+</style><style id="fury-projections-emerald-cards">
+/* Projections cards: consistent with emerald badge and parlay action. */
+#projectionsTab .fury-matchai-card{background:linear-gradient(145deg,#17251d 0%,#101a15 65%,#111f18 100%)!important;border:1px solid #30523c!important;color:#edf9f1!important;box-shadow:0 5px 20px #00000022;transition:border-color .2s,box-shadow .2s,transform .2s}
+#projectionsTab .fury-matchai-card:hover{border-color:#39895e!important;box-shadow:0 8px 25px #00000030,0 0 0 1px #10b98122}
+#projectionsTab .fury-matchai-meta{color:#86cfa7!important}
+#projectionsTab .fury-matchai-score strong{color:#f0fff5!important}
+#projectionsTab .fury-matchai-score small{color:#6ee7b7!important}
+#projectionsTab .fury-matchai-xg,#projectionsTab .fury-matchai-market-head{color:#a9c9b4!important}
+#projectionsTab .fury-matchai-metric{background:#14291d!important;border-color:#30513b!important}
+#projectionsTab .fury-matchai-metric small,#projectionsTab .fury-matchai-odd small{color:#a7c6b0!important}
+#projectionsTab .fury-matchai-metric strong{color:#d1fae5!important}
+#projectionsTab .fury-matchai-market{border-color:#304b39!important}
+#projectionsTab .fury-matchai-market-values{color:#e6f7eb!important}
+#projectionsTab .fury-matchai-bar{background:#263a2e!important}
+#projectionsTab .fury-matchai-bar span:first-child{background:#10b981!important}
+#projectionsTab .fury-matchai-bar.three span:nth-child(2){background:#6b9c80!important}
+#projectionsTab .fury-matchai-odd{background:#193124!important;border-color:#315841!important}
+#projectionsTab .fury-matchai-odd strong{color:#d1fae5!important}
+#projectionsTab .fury-matchai-unavailable{color:#a8c8b1!important}
+#projectionsTab .fury-matchai-action{background:linear-gradient(110deg,#065f46,#059669)!important;border:1px solid #2c9e71!important;color:#f0fff5!important}
+#projectionsTab .fury-matchai-action:hover{background:linear-gradient(110deg,#047857,#10b981)!important;border-color:#6ee7b7!important}
+/* Keep light mode readable rather than forcing dark cards. */
+html[data-fury-theme="light"] #projectionsTab .fury-matchai-card{background:linear-gradient(145deg,#fff,#eef9f1)!important;border-color:#b6d9c2!important;color:#173527!important}
+html[data-fury-theme="light"] #projectionsTab .fury-matchai-score strong,html[data-fury-theme="light"] #projectionsTab .fury-matchai-metric strong,html[data-fury-theme="light"] #projectionsTab .fury-matchai-odd strong,html[data-fury-theme="light"] #projectionsTab .fury-matchai-market-values{color:#173527!important}
+html[data-fury-theme="light"] #projectionsTab .fury-matchai-meta,html[data-fury-theme="light"] #projectionsTab .fury-matchai-xg,html[data-fury-theme="light"] #projectionsTab .fury-matchai-market-head,html[data-fury-theme="light"] #projectionsTab .fury-matchai-metric small,html[data-fury-theme="light"] #projectionsTab .fury-matchai-odd small{color:#426b52!important}
+html[data-fury-theme="light"] #projectionsTab .fury-matchai-metric,html[data-fury-theme="light"] #projectionsTab .fury-matchai-odd{background:#f3faf5!important;border-color:#c4dfcc!important}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
