@@ -1265,7 +1265,39 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 #matchaiTab .venue-switch input:checked+.venue-switch-track:before{transform:translateX(20px)}
 #matchaiTab .venue-switch input:focus-visible+.venue-switch-track{outline:3px solid #70d9ff;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){#matchaiTab .venue-switch-track,#matchaiTab .venue-switch-track:before{transition:none}}
-</style><style id="fury-parlay-ui">.fury-parlay-pickbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.75fr) auto;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #36516a}.fury-parlay-pickbar select{min-width:0;width:100%;padding:9px;font-size:12px;background:#10273e;color:#eef7ff}.fury-parlay-add{background:linear-gradient(115deg,#0b91bc,#20b69d);border:1px solid #5dddc7;color:white;font-weight:800;white-space:nowrap}.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}#parlayTab{min-width:0}#furyParlayFrame{display:block}@media(max-width:800px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.fury-parlay-pickbar{grid-template-columns:1fr 1fr}.fury-parlay-add{grid-column:1/-1}}@media(max-width:450px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="fury-parlay-parent-scroll-fix">#parlayTab th{position:static!important;top:auto!important}</style></head>
+</style><style id="fury-parlay-ui">.fury-parlay-pickbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.75fr) auto;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #36516a}.fury-parlay-pickbar select{min-width:0;width:100%;padding:9px;font-size:12px;background:#10273e;color:#eef7ff}.fury-parlay-add{background:linear-gradient(115deg,#0b91bc,#20b69d);border:1px solid #5dddc7;color:white;font-weight:800;white-space:nowrap}.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}#parlayTab{min-width:0}#furyParlayFrame{display:block}@media(max-width:800px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.fury-parlay-pickbar{grid-template-columns:1fr 1fr}.fury-parlay-add{grid-column:1/-1}}@media(max-width:450px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="fury-parlay-parent-scroll-fix">#parlayTab th{position:static!important;top:auto!important}</style><style id="fury-emerald-theme">
+/* FURY Emerald / Buckets-inspired palette — presentation-only overrides */
+:root{color-scheme:dark;--bg:#090d0d;--panel:#141b1a;--line:#293833;--txt:#edf7f2;--muted:#9aaea5;--blue:#10b981;--orange:#f2b66d;--green:#34d399;--primary:#10b981;--accent:#10b981}
+html,body{background:#090d0d;color:#edf7f2}
+body{background-image:radial-gradient(ellipse at 75% -20%,rgba(16,185,129,.09),transparent 55%)}
+.panel,.tile,.league-switch,.league-sidebar,.player-filter-panel,#teamsTab .team-center-panel,#matchTab .match-center-panel,.player-layout .panel,.player-detail,.team-metric-card,.player-kpis .tile,.projection,.projection-market,.player-hero,#matchTab .match-center-projection{background:#141b1a;border-color:#2a3933;color:#edf7f2}
+.league-switch,.league-sidebar,.player-hero,#matchTab .match-center-projection{background:linear-gradient(135deg,#17231e,#101715)}
+.player-kpis .tile,#teamsTab .team-metric-card,.team-metric-card{background:linear-gradient(145deg,#1b2922,#121a17)}
+.player-kpis .tile:before,#teamsTab .team-metric-card:before{background:linear-gradient(90deg,#059669,#6ee7b7)}
+.tabs{background:#101715;border-color:#2a3933}.tabs button{color:#aabeb4}.tabs button:hover{background:#1b3328;color:#eafff4;border-color:#27694b}.tabs button.active{background:linear-gradient(115deg,#047857,#10b981);border-color:#34d399;color:#fff;box-shadow:0 4px 16px #10b98133}
+button{background:#176b4d;border-color:#2b8563}button:hover{border-color:#34d399}
+select,input,textarea,.league-switch select,.player-filter-panel .controls select,.player-filter-panel .controls input,.player-filter-panel .controls button{background:#1a2721;border-color:#355045;color:#edf7f2}
+select:focus,input:focus,textarea:focus,.player-filter-panel .controls select:focus,.player-filter-panel .controls input:focus{border-color:#34d399;outline-color:#10b98155;box-shadow:0 0 0 3px #10b9811c}
+#matchTab .match-filter-panel .controls button{background:linear-gradient(110deg,#047857,#10b981);border-color:#34d399}
+.league-switch label,.filter-eyebrow,.player-eyebrow,.player-panel-kicker,.pd-header .hint:first-child,.team-leader-num,.team-pill,.filter-chip,.player-hero-tag{color:#6ee7b7}
+.team-pill,.filter-chip,.player-hero-tag{background:#173b2b;border-color:#27694b}
+.brand-sports{background:linear-gradient(120deg,#10b981 10%,#d1fae5 55%,#34d399 100%);background-clip:text;-webkit-background-clip:text;color:#34d399}
+th,.player-table-wrap th,#teamsTab .player-table-wrap th,#matchTab .player-table-wrap th,.pd-table th{background:#1d2a23;color:#b5c9bd;border-color:#2a3933}
+td,.player-table-wrap td,#teamsTab .player-table-wrap td,#matchTab .player-table-wrap td{border-color:#28382f}
+.player-table-wrap tbody tr:nth-child(even),#teamsTab #teamRows tr:nth-child(even),.pd-table tbody tr:nth-child(even){background:#18241d}
+.player-table-wrap tbody tr:hover,#teamsTab #teamRows tr:hover,#teamRows tr:hover{background:#203a2b}
+.player-table-wrap,.pd-table,.pd-chart,.pd-filters,.pd-kpis,.team-metric-card,.projection-odds-grid>div,#matchTab .projection-odds-grid>div{border-color:#304638;background-color:#15221b}
+.pd-chart,.player-table-wrap{background:#101814}
+.pd-player-link,.team-leader button:hover,.team-rank-click:hover,#teamRows td:first-child,.player-table-wrap td:nth-child(7),.player-table-wrap td:nth-child(9){color:#6ee7b7}
+.team-meter>div,#teamRanking .rank .fill,#teamsTab #teamRanking .rank .fill,.player-layout #playerRanking .rank .fill{background:linear-gradient(90deg,#059669,#6ee7b7)}
+.fill,.bar1{background:#10b981}.track,.team-meter,.projection-bar{background:#293a30}
+.projection-team-icon{background:#1a3327;border-color:#2e7654;color:#a7f3d0}
+.projection-caption,.projection-corners-hero small,.team-leader-value,.player-table-wrap td:last-child{color:#34d399}
+.projection-market{background:#101814}.projection-odds-grid>div{background:#1a2820}
+.player-hero:after{border-color:#34d39944}
+.league-sidebar a:hover,.league-sidebar button:hover{background-color:#1c3528;color:#6ee7b7}
+:focus-visible{outline-color:#34d399}
+</style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
 <div class="fury-side-scroll">
