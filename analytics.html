@@ -1265,82 +1265,72 @@ html[data-fury-theme="light"] :is(.error,.bad){color:#aa293a!important}
 #matchaiTab .venue-switch input:checked+.venue-switch-track:before{transform:translateX(20px)}
 #matchaiTab .venue-switch input:focus-visible+.venue-switch-track{outline:3px solid #70d9ff;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){#matchaiTab .venue-switch-track,#matchaiTab .venue-switch-track:before{transition:none}}
-</style><style id="fury-parlay-ui">.fury-parlay-pickbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.75fr) auto;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #36516a}.fury-parlay-pickbar select{min-width:0;width:100%;padding:9px;font-size:12px;background:#10273e;color:#eef7ff}.fury-parlay-add{background:linear-gradient(115deg,#0b91bc,#20b69d);border:1px solid #5dddc7;color:white;font-weight:800;white-space:nowrap}.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}#parlayTab{min-width:0}#furyParlayFrame{display:block}@media(max-width:800px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.fury-parlay-pickbar{grid-template-columns:1fr 1fr}.fury-parlay-add{grid-column:1/-1}}@media(max-width:450px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="fury-parlay-parent-scroll-fix">#parlayTab th{position:static!important;top:auto!important}</style><style id="fury-emerald-theme">
-/* FURY Emerald / Buckets-inspired palette — presentation-only overrides */
-:root{color-scheme:dark;--bg:#090d0d;--panel:#141b1a;--line:#293833;--txt:#edf7f2;--muted:#9aaea5;--blue:#10b981;--orange:#f2b66d;--green:#34d399;--primary:#10b981;--accent:#10b981}
-html,body{background:#090d0d;color:#edf7f2}
-body{background-image:radial-gradient(ellipse at 75% -20%,rgba(16,185,129,.09),transparent 55%)}
-.panel,.tile,.league-switch,.league-sidebar,.player-filter-panel,#teamsTab .team-center-panel,#matchTab .match-center-panel,.player-layout .panel,.player-detail,.team-metric-card,.player-kpis .tile,.projection,.projection-market,.player-hero,#matchTab .match-center-projection{background:#141b1a;border-color:#2a3933;color:#edf7f2}
-.league-switch,.league-sidebar,.player-hero,#matchTab .match-center-projection{background:linear-gradient(135deg,#17231e,#101715)}
-.player-kpis .tile,#teamsTab .team-metric-card,.team-metric-card{background:linear-gradient(145deg,#1b2922,#121a17)}
-.player-kpis .tile:before,#teamsTab .team-metric-card:before{background:linear-gradient(90deg,#059669,#6ee7b7)}
-.tabs{background:#101715;border-color:#2a3933}.tabs button{color:#aabeb4}.tabs button:hover{background:#1b3328;color:#eafff4;border-color:#27694b}.tabs button.active{background:linear-gradient(115deg,#047857,#10b981);border-color:#34d399;color:#fff;box-shadow:0 4px 16px #10b98133}
-button{background:#176b4d;border-color:#2b8563}button:hover{border-color:#34d399}
-select,input,textarea,.league-switch select,.player-filter-panel .controls select,.player-filter-panel .controls input,.player-filter-panel .controls button{background:#1a2721;border-color:#355045;color:#edf7f2}
-select:focus,input:focus,textarea:focus,.player-filter-panel .controls select:focus,.player-filter-panel .controls input:focus{border-color:#34d399;outline-color:#10b98155;box-shadow:0 0 0 3px #10b9811c}
-#matchTab .match-filter-panel .controls button{background:linear-gradient(110deg,#047857,#10b981);border-color:#34d399}
-.league-switch label,.filter-eyebrow,.player-eyebrow,.player-panel-kicker,.pd-header .hint:first-child,.team-leader-num,.team-pill,.filter-chip,.player-hero-tag{color:#6ee7b7}
-.team-pill,.filter-chip,.player-hero-tag{background:#173b2b;border-color:#27694b}
-.brand-sports{background:linear-gradient(120deg,#10b981 10%,#d1fae5 55%,#34d399 100%);background-clip:text;-webkit-background-clip:text;color:#34d399}
-th,.player-table-wrap th,#teamsTab .player-table-wrap th,#matchTab .player-table-wrap th,.pd-table th{background:#1d2a23;color:#b5c9bd;border-color:#2a3933}
-td,.player-table-wrap td,#teamsTab .player-table-wrap td,#matchTab .player-table-wrap td{border-color:#28382f}
-.player-table-wrap tbody tr:nth-child(even),#teamsTab #teamRows tr:nth-child(even),.pd-table tbody tr:nth-child(even){background:#18241d}
-.player-table-wrap tbody tr:hover,#teamsTab #teamRows tr:hover,#teamRows tr:hover{background:#203a2b}
-.player-table-wrap,.pd-table,.pd-chart,.pd-filters,.pd-kpis,.team-metric-card,.projection-odds-grid>div,#matchTab .projection-odds-grid>div{border-color:#304638;background-color:#15221b}
-.pd-chart,.player-table-wrap{background:#101814}
-.pd-player-link,.team-leader button:hover,.team-rank-click:hover,#teamRows td:first-child,.player-table-wrap td:nth-child(7),.player-table-wrap td:nth-child(9){color:#6ee7b7}
-.team-meter>div,#teamRanking .rank .fill,#teamsTab #teamRanking .rank .fill,.player-layout #playerRanking .rank .fill{background:linear-gradient(90deg,#059669,#6ee7b7)}
-.fill,.bar1{background:#10b981}.track,.team-meter,.projection-bar{background:#293a30}
-.projection-team-icon{background:#1a3327;border-color:#2e7654;color:#a7f3d0}
-.projection-caption,.projection-corners-hero small,.team-leader-value,.player-table-wrap td:last-child{color:#34d399}
-.projection-market{background:#101814}.projection-odds-grid>div{background:#1a2820}
-.player-hero:after{border-color:#34d39944}
-.league-sidebar a:hover,.league-sidebar button:hover{background-color:#1c3528;color:#6ee7b7}
-:focus-visible{outline-color:#34d399}
-</style><style id="fury-projections-emerald-parlay-button">
-/* Match the emerald pill used for the protected schedule feed. */
-#matchaiTab .fury-parlay-add {
-  background:#173b2b !important;
-  border:1px solid #27694b !important;
-  color:#6ee7b7 !important;
-  border-radius:30px !important;
-  font-weight:800 !important;
-  box-shadow:none !important;
-  transition:background .2s,border-color .2s,box-shadow .2s !important;
+</style><style id="fury-parlay-ui">.fury-parlay-pickbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.75fr) auto;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #36516a}.fury-parlay-pickbar select{min-width:0;width:100%;padding:9px;font-size:12px;background:#10273e;color:#eef7ff}.fury-parlay-add{background:linear-gradient(115deg,#0b91bc,#20b69d);border:1px solid #5dddc7;color:white;font-weight:800;white-space:nowrap}.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}#parlayTab{min-width:0}#furyParlayFrame{display:block}@media(max-width:800px){.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.fury-parlay-pickbar{grid-template-columns:1fr 1fr}.fury-parlay-add{grid-column:1/-1}}@media(max-width:450px){.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><style id="fury-parlay-parent-scroll-fix">#parlayTab th{position:static!important;top:auto!important}</style>
+<style id="fury-projections-emerald-gradient-v3">
+/* Scoped to the real Projections tab; applies to dynamically generated cards. */
+#matchaiTab .fury-matchai-card {
+ position:relative;isolation:isolate;overflow:hidden;
+ background:radial-gradient(ellipse at 100% 0%,rgba(52,211,153,.25),transparent 52%),radial-gradient(ellipse at 0% 100%,rgba(6,95,70,.38),transparent 55%),linear-gradient(128deg,#172d2b 0%,#10231f 47%,#091714 100%)!important;
+ border:1px solid #347c61!important;border-radius:19px!important;
+ box-shadow:0 12px 30px rgba(0,0,0,.24),inset 0 1px 0 rgba(167,243,208,.10)!important;
+ transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease!important;
 }
-#matchaiTab .fury-parlay-add:hover {
-  background:#205039 !important;
-  border-color:#34d399 !important;
-  box-shadow:0 0 0 2px #10b98122 !important;
-}
-#matchaiTab .fury-parlay-add:focus-visible {outline:2px solid #34d399;outline-offset:2px}
-</style><style id="fury-projections-emerald-cards">
-/* Projections cards: consistent with emerald badge and parlay action. */
-#matchaiTab .fury-matchai-card{background:linear-gradient(145deg,#17251d 0%,#101a15 65%,#111f18 100%)!important;border:1px solid #30523c!important;color:#edf9f1!important;box-shadow:0 5px 20px #00000022;transition:border-color .2s,box-shadow .2s,transform .2s}
-#matchaiTab .fury-matchai-card:hover{border-color:#39895e!important;box-shadow:0 8px 25px #00000030,0 0 0 1px #10b98122}
-#matchaiTab .fury-matchai-meta{color:#86cfa7!important}
-#matchaiTab .fury-matchai-score strong{color:#f0fff5!important}
-#matchaiTab .fury-matchai-score small{color:#6ee7b7!important}
-#matchaiTab .fury-matchai-xg,#matchaiTab .fury-matchai-market-head{color:#a9c9b4!important}
-#matchaiTab .fury-matchai-metric{background:#14291d!important;border-color:#30513b!important}
-#matchaiTab .fury-matchai-metric small,#matchaiTab .fury-matchai-odd small{color:#a7c6b0!important}
-#matchaiTab .fury-matchai-metric strong{color:#d1fae5!important}
-#matchaiTab .fury-matchai-market{border-color:#304b39!important}
-#matchaiTab .fury-matchai-market-values{color:#e6f7eb!important}
-#matchaiTab .fury-matchai-bar{background:#263a2e!important}
-#matchaiTab .fury-matchai-bar span:first-child{background:#10b981!important}
-#matchaiTab .fury-matchai-bar.three span:nth-child(2){background:#6b9c80!important}
-#matchaiTab .fury-matchai-odd{background:#193124!important;border-color:#315841!important}
-#matchaiTab .fury-matchai-odd strong{color:#d1fae5!important}
-#matchaiTab .fury-matchai-unavailable{color:#a8c8b1!important}
-#matchaiTab .fury-matchai-action{background:linear-gradient(110deg,#065f46,#059669)!important;border:1px solid #2c9e71!important;color:#f0fff5!important}
-#matchaiTab .fury-matchai-action:hover{background:linear-gradient(110deg,#047857,#10b981)!important;border-color:#6ee7b7!important}
-/* Keep light mode readable rather than forcing dark cards. */
-html[data-fury-theme="light"] #matchaiTab .fury-matchai-card{background:linear-gradient(145deg,#fff,#eef9f1)!important;border-color:#b6d9c2!important;color:#173527!important}
-html[data-fury-theme="light"] #matchaiTab .fury-matchai-score strong,html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric strong,html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd strong,html[data-fury-theme="light"] #matchaiTab .fury-matchai-market-values{color:#173527!important}
-html[data-fury-theme="light"] #matchaiTab .fury-matchai-meta,html[data-fury-theme="light"] #matchaiTab .fury-matchai-xg,html[data-fury-theme="light"] #matchaiTab .fury-matchai-market-head,html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric small,html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd small{color:#426b52!important}
-html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric,html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd{background:#f3faf5!important;border-color:#c4dfcc!important}
-</style></head>
+#matchaiTab .fury-matchai-card::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#047857,#34d399 50%,#a7f3d0);pointer-events:none}
+#matchaiTab .fury-matchai-card:hover{transform:translateY(-3px);border-color:#6ee7b7!important;box-shadow:0 17px 36px rgba(0,0,0,.35),0 0 22px rgba(16,185,129,.15)!important}
+#matchaiTab .fury-matchai-meta{color:#a6d9c5!important}
+#matchaiTab .fury-matchai-score small,#matchaiTab .fury-matchai-xg{color:#8bf0c1!important}
+#matchaiTab .fury-matchai-metric{background:linear-gradient(145deg,rgba(24,75,58,.92),rgba(9,37,30,.92))!important;border-color:#326d55!important}
+#matchaiTab .fury-matchai-metric small{color:#a8d8c2!important}
+#matchaiTab .fury-matchai-metric strong{color:#e8fff3!important}
+#matchaiTab .fury-matchai-market{border-top-color:#346d57!important}
+#matchaiTab .fury-matchai-market-head{color:#b5ddca!important}
+#matchaiTab .fury-matchai-bar{background:#234438!important}
+#matchaiTab .fury-matchai-bar span:first-child{background:linear-gradient(90deg,#059669,#34d399)!important}
+#matchaiTab .fury-matchai-bar.three span:nth-child(2){background:#94a3b8!important}
+#matchaiTab .fury-matchai-odd{background:linear-gradient(145deg,#1b4938,#102e27)!important;border-color:#37775b!important}
+#matchaiTab .fury-matchai-odd small{color:#b4d9c5!important}
+#matchaiTab .fury-matchai-odd strong{color:#e7fff1!important}
+#matchaiTab .fury-matchai-action{background:linear-gradient(110deg,#065f46,#10b981 60%,#34d399)!important;border:1px solid #6ee7b7!important;color:#f7fffa!important;box-shadow:0 4px 15px rgba(16,185,129,.22)!important}
+#matchaiTab .fury-parlay-add{background:linear-gradient(110deg,#064e3b,#059669 55%,#34d399)!important;border:1px solid #6ee7b7!important;color:#fff!important;font-weight:800;box-shadow:0 4px 15px rgba(16,185,129,.22)!important}
+#matchaiTab .fury-matchai-action:hover,#matchaiTab .fury-parlay-add:hover{filter:brightness(1.13);box-shadow:0 6px 22px rgba(16,185,129,.32)!important}
+#matchaiTab .fury-matchai-card .fury-matchai-team,#matchaiTab .fury-matchai-score strong{color:#f5fff9!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-card{background:radial-gradient(ellipse at 100% 0%,#b5f2d7,transparent 60%),linear-gradient(130deg,#f5fff9,#d9f2e5)!important;border-color:#76b99a!important;color:#163b2c!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-card .fury-matchai-team,html[data-fury-theme="light"] #matchaiTab .fury-matchai-score strong{color:#123a2b!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric{background:linear-gradient(135deg,#e0f8eb,#c5e9d7)!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric strong{color:#14533b!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd{background:linear-gradient(135deg,#d3f2e2,#b8e6d0)!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd strong{color:#15543c!important}
+@media(prefers-reduced-motion:reduce){#matchaiTab .fury-matchai-card{transition:none!important}#matchaiTab .fury-matchai-card:hover{transform:none}}
+</style>
+<style id="fury-projections-lightblue-primary-v4">
+/* Light blue is the primary Projections accent; emerald is secondary. */
+#matchaiTab .fury-matchai-card{background:radial-gradient(ellipse at 100% 0%,rgba(67,186,246,.30),transparent 54%),radial-gradient(ellipse at 0% 100%,rgba(17,116,170,.27),transparent 58%),linear-gradient(128deg,#183c56 0%,#102b42 48%,#0a1b2d 100%)!important;border-color:#3c91c3!important;box-shadow:0 12px 32px #0005,inset 0 1px 0 #a7e9ff18!important}
+#matchaiTab .fury-matchai-card::before{background:linear-gradient(90deg,#1678b5,#43baf6 55%,#a1e8ff)!important}
+#matchaiTab .fury-matchai-card:hover{border-color:#8cddff!important;box-shadow:0 17px 38px #0006,0 0 24px #43baf62e!important}
+#matchaiTab .fury-matchai-meta{color:#b1d6ee!important}
+#matchaiTab .fury-matchai-score small,#matchaiTab .fury-matchai-xg{color:#77d9ff!important}
+#matchaiTab .fury-matchai-metric{background:linear-gradient(145deg,#1d5274,#12334e)!important;border-color:#3a7ba5!important}
+#matchaiTab .fury-matchai-metric small{color:#badcf0!important}
+#matchaiTab .fury-matchai-metric strong{color:#f1fbff!important}
+#matchaiTab .fury-matchai-market{border-top-color:#3b759b!important}
+#matchaiTab .fury-matchai-market-head{color:#c2e4f7!important}
+#matchaiTab .fury-matchai-bar{background:#26485f!important}
+#matchaiTab .fury-matchai-bar span:first-child{background:linear-gradient(90deg,#158bc6,#61d5ff)!important}
+#matchaiTab .fury-matchai-odd{background:linear-gradient(145deg,#1d5071,#12344f)!important;border-color:#3a7ba5!important}
+#matchaiTab .fury-matchai-odd small{color:#badcf0!important}
+#matchaiTab .fury-matchai-odd strong{color:#f1fbff!important}
+#matchaiTab .fury-matchai-action{background:linear-gradient(110deg,#116caa,#269fd6 60%,#64d5fa)!important;border-color:#8cddff!important;color:white!important;box-shadow:0 4px 16px #43baf633!important}
+#matchaiTab .fury-parlay-add{background:linear-gradient(110deg,#0d6d9c,#22a8d2 60%,#56d3e7)!important;border-color:#84e2f5!important;color:white!important;box-shadow:0 4px 16px #43baf633!important}
+#matchaiTab .fury-matchai-action:hover,#matchaiTab .fury-parlay-add:hover{box-shadow:0 7px 23px #43baf650!important}
+#matchaiTab .fury-matchai-card .fury-matchai-team,#matchaiTab .fury-matchai-score strong{color:#f4fbff!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-card{background:radial-gradient(ellipse at 100% 0%,#b4e9ff,transparent 60%),linear-gradient(130deg,#f6fcff,#dceffc)!important;border-color:#7dbbdb!important;color:#163a53!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-card .fury-matchai-team,html[data-fury-theme="light"] #matchaiTab .fury-matchai-score strong{color:#143b55!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric{background:linear-gradient(135deg,#e3f5ff,#cbe7f8)!important;border-color:#99c9e5!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric strong{color:#174f72!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd{background:linear-gradient(135deg,#def2ff,#c4e4f6)!important;border-color:#99c9e5!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd strong{color:#174f72!important}
+</style>
+</head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
 <div class="fury-side-scroll">
