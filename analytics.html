@@ -1330,6 +1330,37 @@ html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric strong{color:#174
 html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd{background:linear-gradient(135deg,#def2ff,#c4e4f6)!important;border-color:#99c9e5!important}
 html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd strong{color:#174f72!important}
 </style>
+<style id="fury-projections-probability-bars-v5">
+#matchaiTab .fury-matchai-bar{height:12px!important;width:100%;border-radius:6px;background:#18242e!important;box-shadow:inset 0 1px 3px #0005}
+#matchaiTab .fury-matchai-bar span{flex-shrink:0;transition:width .3s ease}
+#matchaiTab .fury-matchai-bar span.prob-high{background:linear-gradient(90deg,#059669,#34d399)!important}
+#matchaiTab .fury-matchai-bar span.prob-low{background:linear-gradient(90deg,#dc2626,#fb7185)!important}
+#matchaiTab .fury-matchai-bar span.prob-neutral{background:#94a3b8!important}
+#matchaiTab .fury-matchai-market-values .prob-high{color:#6ee7b7!important}
+#matchaiTab .fury-matchai-market-values .prob-low{color:#fda4af!important}
+#matchaiTab .fury-matchai-market-values .prob-neutral{color:#cbd5e1!important}
+#matchaiTab .fury-matchai-market{padding:8px 0!important}
+#matchaiTab .fury-matchai-market-values{margin-bottom:5px!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-market-values .prob-high{color:#047857!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-market-values .prob-low{color:#b91c1c!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-market-values .prob-neutral{color:#475569!important}
+</style>
+<style id="fury-projections-midnight-graphite-v6">
+#matchaiTab .fury-matchai-card{background:linear-gradient(135deg,#222d39 0%,#151b23 65%,#121820 100%)!important;border-color:#354454!important;box-shadow:0 8px 24px #0005!important}
+#matchaiTab .fury-matchai-card::before{background:linear-gradient(90deg,#1678b5,#38bdf8,#a1e8ff)!important}
+#matchaiTab .fury-matchai-card:hover{border-color:#38bdf8!important;box-shadow:0 10px 28px #0006!important}
+#matchaiTab .fury-matchai-meta,#matchaiTab .fury-matchai-market-head{color:#a9b9cb!important}
+#matchaiTab .fury-matchai-metric,#matchaiTab .fury-matchai-odd{background:linear-gradient(145deg,#283440,#1c252f)!important;border-color:#354454!important}
+#matchaiTab .fury-matchai-metric small,#matchaiTab .fury-matchai-odd small{color:#a9b9cb!important}
+#matchaiTab .fury-matchai-market{border-top-color:#354454!important}
+#matchaiTab .fury-parlay-add{background:linear-gradient(110deg,#064e3b,#047857)!important;border-color:#10b981!important;color:#d1fae5!important;box-shadow:0 4px 12px #10b98122!important}
+#matchaiTab .fury-parlay-add:hover{box-shadow:0 5px 16px #10b98144!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-card{background:linear-gradient(135deg,#f8fafc,#e2e8f0)!important;border-color:#aab8c7!important;color:#172334!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-metric,html[data-fury-theme="light"] #matchaiTab .fury-matchai-odd{background:linear-gradient(145deg,#f1f5f9,#e2e8f0)!important;border-color:#cbd5e1!important}
+html[data-fury-theme="light"] #matchaiTab :is(.fury-matchai-meta,.fury-matchai-market-head,.fury-matchai-metric small,.fury-matchai-odd small){color:#475569!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-market{border-top-color:#cbd5e1!important}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-bar{background:#cbd5e1!important}
+</style>
 </head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -2816,7 +2847,7 @@ function furyCompactMarket(title,labels,values){
  const heading=document.createElement('div');heading.className='fury-matchai-market-head';heading.textContent=title;
  const nums=document.createElement('div');nums.className='fury-matchai-market-values';
  const bar=document.createElement('div');bar.className='fury-matchai-bar'+(values.length===3?' three':'');
- values.forEach((value,i)=>{const v=Math.max(0,Math.min(1,Number(value)||0));const label=document.createElement('span');label.textContent=labels[i]+' '+(100*v).toFixed(1)+'%';nums.append(label);const segment=document.createElement('span');segment.style.width=(v*100)+'%';bar.append(segment)});
+ values.forEach((value,i)=>{const v=Math.max(0,Math.min(1,Number(value)||0));const label=document.createElement('span');label.textContent=labels[i]+' '+(100*v).toFixed(1)+'%';nums.append(label);const segment=document.createElement('span');segment.style.width=(v*100)+'%';const rival=Number(values[values.length===3?(i===0?2:0):1-i])||0;segment.className=values.length===3&&i===1?'prob-neutral':Math.abs(v-rival)<1e-9?'prob-neutral':v>rival?'prob-high':'prob-low';label.classList.add(segment.className);bar.append(segment)});
  market.append(heading,nums,bar);return market;
 }
 function furyProjectionMissingReason(e){
