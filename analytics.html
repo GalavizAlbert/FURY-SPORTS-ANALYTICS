@@ -1371,6 +1371,18 @@ html #matchaiTab .fury-matchai-card > .fury-projection-actions{display:grid!impo
 html #matchaiTab .fury-matchai-card > .fury-projection-actions > button{box-sizing:border-box!important;position:static!important;inset:auto!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:100%!important;height:48px!important;min-height:48px!important;max-height:48px!important;margin:0!important;padding:5px 4px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;line-height:1.2!important;font-size:11px!important;font-weight:800!important;box-shadow:none!important;transform:none!important;}
 html #matchaiTab .fury-matchai-card > .fury-projection-actions > .fury-matchai-action{grid-column:1!important;grid-row:1!important;background:#28566e!important;color:white!important;border:1px solid #426a7d!important;}
 html #matchaiTab .fury-matchai-card > .fury-projection-actions > .fury-parlay-add{grid-column:2!important;grid-row:1!important;background:#28634f!important;color:white!important;border:1px solid #427862!important;}
+</style><style id="fury-favorite-crest-style">
+#matchaiTab .fury-matchai-card .fury-matchai-team{gap:5px;align-self:stretch;justify-content:flex-start;padding-top:5px;font-size:12px}
+#matchaiTab .fury-matchai-team img,#matchaiTab .fury-matchai-team .fury-matchai-logo-fallback{width:40px;height:40px;box-sizing:content-box;padding:5px;border:2px solid transparent;border-radius:50%;object-fit:contain;flex:none}
+#matchaiTab .fury-matchai-team.fury-model-favorite img,#matchaiTab .fury-matchai-team.fury-model-favorite .fury-matchai-logo-fallback{border-color:var(--favorite-ring,#34d399);background:rgba(16,185,129,.08);box-shadow:0 0 var(--favorite-radius,0px) rgba(52,211,153,var(--favorite-glow,0));outline:var(--favorite-outline,0px) solid var(--favorite-ring,#34d399)}
+#matchaiTab .fury-matchai-team.fury-model-favorite>span:not(.fury-matchai-logo-fallback):not(.fury-favorite-badge){color:#6ee7b7!important}
+#matchaiTab .fury-favorite-badge{font-size:9px;font-weight:800;line-height:1.3;letter-spacing:.1px;color:#a7f3d0!important;background:#174536;border:1px solid #32795b;border-radius:20px;padding:3px 6px;text-align:center;max-width:100%}
+html[data-fury-theme="light"] #matchaiTab .fury-matchai-team.fury-model-favorite>span:not(.fury-matchai-logo-fallback):not(.fury-favorite-badge){color:#047857!important}
+html[data-fury-theme="light"] #matchaiTab .fury-favorite-badge{background:#dcfce7;color:#166534!important;border-color:#86cfa7}
+@media(max-width:450px){#matchaiTab .fury-matchai-team img,#matchaiTab .fury-matchai-team .fury-matchai-logo-fallback{width:35px;height:35px;padding:4px}#matchaiTab .fury-favorite-badge{font-size:8px}}
+#matchaiTab .fury-matchai-team[data-favorite-tier="4"] img,#matchaiTab .fury-matchai-team[data-favorite-tier="4"] .fury-matchai-logo-fallback{animation:furyFavoritePulse 3s ease-in-out infinite}
+@keyframes furyFavoritePulse{0%,100%{box-shadow:0 0 15px rgba(52,211,153,.38)}50%{box-shadow:0 0 24px rgba(52,211,153,.62)}}
+@media(prefers-reduced-motion:reduce){#matchaiTab .fury-matchai-team[data-favorite-tier="4"] img,#matchaiTab .fury-matchai-team[data-favorite-tier="4"] .fury-matchai-logo-fallback{animation:none!important}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
 <aside aria-label="Sports analytics navigation" class="fury-side-panel" id="furySidePanel">
@@ -2896,13 +2908,26 @@ function furyRenderMatchAiCards(){
   const league=document.createElement('span');league.textContent=(oddsLeagueLabels[e.league]||e.league)+' · MATCH PROJECTION';
   const kickoff=document.createElement('span');kickoff.textContent=oddsKickoff(e);meta.append(league,kickoff);
   const fixture=document.createElement('div');fixture.className='fury-matchai-fixture';
-  const addTeam=name=>{const team=document.createElement('div');team.className='fury-matchai-team';const logos=furyProjectionCrestCandidates(name,e.league);const logo=logos[0]||'';const fallback=document.createElement('span');fallback.className='fury-matchai-logo-fallback';fallback.textContent=String(name||'?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();if(logo){const img=document.createElement('img');img.src=logo;img.alt=name+' logo';img.loading='lazy';let attempt=0;img.onerror=()=>{attempt++;if(attempt<logos.length)img.src=logos[attempt];else img.replaceWith(fallback)};team.append(img)}else{team.append(fallback)}const label=document.createElement('span');label.textContent=name||'Unknown';team.append(label);fixture.append(team)};
-  addTeam(e.home_team);
+  const addTeam=(name,side)=>{const team=document.createElement('div');team.className='fury-matchai-team';const logos=furyProjectionCrestCandidates(name,e.league);const logo=logos[0]||'';const fallback=document.createElement('span');fallback.className='fury-matchai-logo-fallback';fallback.textContent=String(name||'?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();if(logo){const img=document.createElement('img');img.src=logo;img.alt=name+' logo';img.loading='lazy';let attempt=0;img.onerror=()=>{attempt++;if(attempt<logos.length)img.src=logos[attempt];else img.replaceWith(fallback)};team.append(img)}else{team.append(fallback)}const label=document.createElement('span');label.textContent=name||'Unknown';team.append(label);
+  const probs=model?.probs;
+  if(probs && [probs.home,probs.draw,probs.away].every(Number.isFinite)){
+    const win=probs[side], rival=probs[side==='home'?'away':'home'];
+    if(win>=.4 && win>rival && win>probs.draw){
+      team.classList.add('fury-model-favorite');
+      const tier=win>=.7?4:win>=.6?3:win>=.5?2:1;
+      team.dataset.favoriteTier=String(tier);
+      const [ring,radius,glow,outline]=[['#39866e','0px',0,'0px'],['#10b981','0px',0,'0px'],['#34d399','14px',.38,'1px'],['#6ee7b7','23px',.58,'2px']][tier-1];
+      team.style.setProperty('--favorite-ring',ring);team.style.setProperty('--favorite-radius',radius);team.style.setProperty('--favorite-glow',String(glow));team.style.setProperty('--favorite-outline',outline);
+      const badge=document.createElement('span');badge.className='fury-favorite-badge';badge.textContent='★ FAVORITE · '+(win*100).toFixed(1)+'%';badge.title='Highest model outcome probability, not a guaranteed result';if(tier===4)team.append(badge);
+    }
+  }
+  fixture.append(team)};
+  addTeam(e.home_team,'home');
   const score=document.createElement('div');score.className='fury-matchai-score';
   const scoreNum=document.createElement('strong');const scoreNote=document.createElement('small');
   if(model){const [h,a]=furyCompactScore(model.eh,model.ea);scoreNum.textContent=h+' – '+a;scoreNote.textContent='Poisson projected score'}
   else{scoreNum.textContent='— : —';scoreNote.textContent='Model unavailable'}
-  score.append(scoreNum,scoreNote);fixture.append(score);addTeam(e.away_team);
+  score.append(scoreNum,scoreNote);fixture.append(score);addTeam(e.away_team,'away');
   card.append(meta,fixture);
   if(model){
    const xg=document.createElement('div');xg.className='fury-matchai-xg';xg.textContent=`Expected goals: ${model.eh.toFixed(2)} – ${model.ea.toFixed(2)} · ${(model.eh+model.ea).toFixed(2)} total · ${document.getElementById('matchAiVenueOnly').checked?'Home/Away':'Overall'} sample ${model.homeN}/${model.awayN}`;card.append(xg);
