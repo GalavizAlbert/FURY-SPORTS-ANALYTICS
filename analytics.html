@@ -1374,14 +1374,15 @@ html #matchaiTab .fury-matchai-card > .fury-projection-actions > .fury-parlay-ad
 </style><style id="fury-favorite-crest-style">
 #matchaiTab .fury-matchai-card .fury-matchai-team{gap:5px;align-self:stretch;justify-content:flex-start;padding-top:5px;font-size:12px}
 #matchaiTab .fury-matchai-team img,#matchaiTab .fury-matchai-team .fury-matchai-logo-fallback{width:40px;height:40px;box-sizing:content-box;padding:5px;border:2px solid transparent;border-radius:50%;object-fit:contain;flex:none}
-#matchaiTab .fury-matchai-team.fury-model-favorite img,#matchaiTab .fury-matchai-team.fury-model-favorite .fury-matchai-logo-fallback{border-color:var(--favorite-ring,#34d399);background:rgba(16,185,129,.08);box-shadow:0 0 var(--favorite-radius,0px) rgba(52,211,153,var(--favorite-glow,0));outline:var(--favorite-outline,0px) solid var(--favorite-ring,#34d399)}
+#matchaiTab .fury-matchai-team.fury-model-favorite img,#matchaiTab .fury-matchai-team.fury-model-favorite .fury-matchai-logo-fallback{border-color:transparent;background:transparent;box-shadow:none;outline:none;filter:drop-shadow(0 0 var(--favorite-radius,3px) var(--favorite-ring,#34d399)) drop-shadow(0 0 2px rgba(52,211,153,var(--favorite-glow,.3)))}
+#matchaiTab .fury-matchai-team img{border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;border-color:transparent!important}
 #matchaiTab .fury-matchai-team.fury-model-favorite>span:not(.fury-matchai-logo-fallback):not(.fury-favorite-badge){color:#6ee7b7!important}
 #matchaiTab .fury-favorite-badge{font-size:9px;font-weight:800;line-height:1.3;letter-spacing:.1px;color:#a7f3d0!important;background:#174536;border:1px solid #32795b;border-radius:20px;padding:3px 6px;text-align:center;max-width:100%}
 html[data-fury-theme="light"] #matchaiTab .fury-matchai-team.fury-model-favorite>span:not(.fury-matchai-logo-fallback):not(.fury-favorite-badge){color:#047857!important}
 html[data-fury-theme="light"] #matchaiTab .fury-favorite-badge{background:#dcfce7;color:#166534!important;border-color:#86cfa7}
 @media(max-width:450px){#matchaiTab .fury-matchai-team img,#matchaiTab .fury-matchai-team .fury-matchai-logo-fallback{width:35px;height:35px;padding:4px}#matchaiTab .fury-favorite-badge{font-size:8px}}
 #matchaiTab .fury-matchai-team[data-favorite-tier="4"] img,#matchaiTab .fury-matchai-team[data-favorite-tier="4"] .fury-matchai-logo-fallback{animation:furyFavoritePulse 3s ease-in-out infinite}
-@keyframes furyFavoritePulse{0%,100%{box-shadow:0 0 15px rgba(52,211,153,.38)}50%{box-shadow:0 0 24px rgba(52,211,153,.62)}}
+@keyframes furyFavoritePulse{0%,100%{filter:drop-shadow(0 0 5px #34d399) drop-shadow(0 0 8px #10b98188)}50%{filter:drop-shadow(0 0 7px #6ee7b7) drop-shadow(0 0 13px #10b981aa)}}
 @media(prefers-reduced-motion:reduce){#matchaiTab .fury-matchai-team[data-favorite-tier="4"] img,#matchaiTab .fury-matchai-team[data-favorite-tier="4"] .fury-matchai-logo-fallback{animation:none!important}}
 </style></head>
 <body class="fury-side-closed"><div class="fury-side-backdrop" id="furySideBackdrop"></div>
@@ -2916,7 +2917,7 @@ function furyRenderMatchAiCards(){
       team.classList.add('fury-model-favorite');
       const tier=win>=.7?4:win>=.6?3:win>=.5?2:1;
       team.dataset.favoriteTier=String(tier);
-      const [ring,radius,glow,outline]=[['#39866e','0px',0,'0px'],['#10b981','0px',0,'0px'],['#34d399','14px',.38,'1px'],['#6ee7b7','23px',.58,'2px']][tier-1];
+      const [ring,radius,glow,outline]=[['#39866e','2px',.15,'0px'],['#10b981','3px',.28,'0px'],['#34d399','5px',.45,'0px'],['#6ee7b7','7px',.65,'0px']][tier-1];
       team.style.setProperty('--favorite-ring',ring);team.style.setProperty('--favorite-radius',radius);team.style.setProperty('--favorite-glow',String(glow));team.style.setProperty('--favorite-outline',outline);
       const badge=document.createElement('span');badge.className='fury-favorite-badge';badge.textContent='★ FAVORITE · '+(win*100).toFixed(1)+'%';badge.title='Highest model outcome probability, not a guaranteed result';if(tier===4)team.append(badge);
     }
